@@ -1,0 +1,16 @@
+! dijet production card
+
+Main:numberOfEvents = 100
+
+Beams:idA = 2212 ! first incoming beam is a 2212, i.e. a proton.
+Beams:idB = 2212 ! second beam is also a proton.
+
+Beams:eCM = 13000. ! the cm energy of collisions.
+
+! turn on processes
+HardQCD:gg2gg  = on 
+HardQCD:gg2qqbar = on 
+HardQCD:qg2qg = on 
+HardQCD:qq2qq = on 
+HardQCD:qqbar2gg = on 
+HardQCD:qqbar2qqbarNew = on 
