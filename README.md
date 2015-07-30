@@ -20,14 +20,17 @@ After checking out the code which allows you to see this README, you must instal
 # Running EventGeneration
 ################################
 This is the first state of analysis in which the Pythia8 event generator is used to produce a set of events for any process you wish and perform the subsequent shower and hadronization to produce a set of final state particles that can then be used for analysis via jet building.
-### Where : 
+#### Where : 
 Ana_EventGeneration
-### How : 
+#### How : 
 $ source compile.sh
 
 $ ./MakeNTupleFromPythia 1 pythia_wz.root
 
+#### What :
 This will generate 500 events and save to the pythia_wz.root output file a flat ntuple that contains truth vectors of the relevant particles (W,Z) for truth tagging later along with vector<double> branches for all of the truth particles with final state particles.
+
+#### TODO :
 
 ################################
 # Running NTupling
@@ -40,12 +43,20 @@ $ source compile.sh
 
 $ ./NTupler 1 pythia\_wz.root NTuple\_wz.root
 
+#### What :
 This will process the 500 events generated with the MakeNTupleFromPythia code and do the following:
 1) run jet finding on the truth constituents 
 2) determine truth flavor of jets via dR matching using the truth 4-vectors from the (W,Z)
 3) calculate basic TJet volatility for these jets
 
 The output will be saved in the file NTuple_wz.root
+
+#### TODO :
+1) Implement some scheme to model pileup contributions to the input\_particles list by creating a new input\_particles\_with\_pileup list or something like this.
+
+2) Implement scheme to create new container of input particles that mimicks a toy calorimeter.
+
+3) Implement analysis tools/code previously developed by Alex to calculate further telescoped quantities.
 
 ################################
 # Running MiniNTupleAnalysis
@@ -56,6 +67,13 @@ Ana_MiniNTupleAnalysis
 ### How : 
 $ python MakeROCS.py
 
+#### What :
+These scripts should be made to produce final plots and results that are presentable and adhere to some sort of style guideline to make them easily interpretable.
+
+#### TODO:
+1) Make this code work with new inputs from the previous stage
+
+#### NOTE :
 As it currently stands, this requires that you obtain an additional directory from outside of GitHub that contains the root files that will be read in.  This directory is housed on DropBox at:
 
 https://www.dropbox.com/sh/hfu09io74gswafp/AACf_8KucJmvTsDB-1iQ_JeDa?dl=0
