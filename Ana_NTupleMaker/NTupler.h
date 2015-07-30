@@ -100,10 +100,15 @@ double Truth_tjet1;
 double Truth_tjet2;
 double Truth_tau1;
 double Truth_tau2;
+double Truth_t_tau1;
+double Truth_t_tau2;
 double Truth_c2;
 double Truth_d2;
+double Truth_t_c2;
 
 //extra functions
 vector<PseudoJet> ToyCalorimeter(vector<PseudoJet> truth_particles);
+double T_Nsubjettiness(double N, PseudoJet& input, double beta_min, double beta_max);
+double T_EnergyCorrelator(double N, PseudoJet& input, double beta_min, double beta_max);
 
 #endif

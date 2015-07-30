@@ -86,6 +86,13 @@ int main(){
   treeout->Branch("Truth_m",      &Truth_m);
   treeout->Branch("Truth_tjet1",  &Truth_tjet1);
   treeout->Branch("Truth_tjet2",  &Truth_tjet2);
+  treeout->Branch("Truth_tau1",   &Truth_tau1);
+  treeout->Branch("Truth_tau2",   &Truth_tau2);
+  treeout->Branch("Truth_t_tau1", &Truth_t_tau1);
+  treeout->Branch("Truth_t_tau2", &Truth_t_tau2);
+  treeout->Branch("Truth_c2",     &Truth_c2);
+  treeout->Branch("Truth_d2",     &Truth_d2);
+  treeout->Branch("Truth_t_c2",   &Truth_t_c2);
 
 
 //   treeout->Branch("TruthAK10Trim_pt",  &TruthAK10Trim_pt);
@@ -265,8 +272,11 @@ int main(){
       Truth_tjet2  = tjetvar_2axis;
       Truth_tau1   = nsub1(inclusive_jets[ijet]);
       Truth_tau2   = nsub2(inclusive_jets[ijet]);
+      Truth_t_tau1 = T_Nsubjettiness(1, inclusive_jets[ijet], 1., 2.);
+      Truth_t_tau2 = T_Nsubjettiness(2, inclusive_jets[ijet], 1., 2.);
       Truth_c2     = ecfC2(inclusive_jets[ijet]);
       Truth_d2     = ecfD2(inclusive_jets[ijet]);
+      Truth_t_c2   = T_EnergyCorrelator(2, inclusive_jets[ijet], 0.1, 2.);
 
       cout<<"FillingJet: flav="<<Truth_flavor<<"  pt="<<Truth_pt<<"  m="<<Truth_m<<"  tjet1="<<Truth_tjet1<<" tjet2= "<<Truth_tjet2<<endl;
 
@@ -295,34 +305,64 @@ int main(){
 /// Calorimeter Simulation
 ///=========================================
 vector<PseudoJet> ToyCalorimeter(vector<PseudoJet> truth_particles) {
-	const double pi = 3.14159265359;
-	const double etaLim = 5.0;
-	const int nEta = 100;
-	const int nPhi = 63;
-	double dEta = 2*etaLim/nEta;
-	double dPhi = 2*pi/nPhi;
-	
-	double tower[nEta][nPhi];
-	for (int i = 0; i < nEta; i++)  for (int j = 0; j < nPhi; j++)  tower[i][j] = -0.001;
-	
-	vector<fastjet::PseudoJet> cell_particles;
-	for (int p=0; p < (int)truth_particles.size(); p++) {
-		fastjet::PseudoJet part = truth_particles.at(p);
-	
-		int etaCell = int((part.eta()+etaLim)/dEta);
-		int phiCell = int(part.phi()/dPhi);
-		if (etaCell >= 0 && etaCell < nEta && phiCell >=0 && phiCell < nPhi){
-			tower[etaCell][phiCell] += part.e();
-		}
-	}
-	
-	for (int i = 0; i < nEta; i++)  for (int j = 0; j < nPhi; j++) {
-		if (tower[i][j] > 0) {
-			double etaLocal = -etaLim + dEta*(i+0.5);
-			double phiLocal = dPhi*(j+0.5);
-			double thetaLocal = 2*atan(exp(-etaLocal));
-			cell_particles.push_back(fastjet::PseudoJet(sin(thetaLocal)*cos(phiLocal),sin(thetaLocal)*sin(phiLocal),cos(thetaLocal),1)*tower[i][j]);
-		}
-	}
-	return cell_particles;
+  const double pi = 3.14159265359;
+  const double etaLim = 5.0;
+  const int nEta = 100;
+  const int nPhi = 63;
+  double dEta = 2*etaLim/nEta;
+  double dPhi = 2*pi/nPhi;
+  
+  double tower[nEta][nPhi];
+  for (int i = 0; i < nEta; i++)  for (int j = 0; j < nPhi; j++)  tower[i][j] = -0.001;
+  
+  vector<fastjet::PseudoJet> cell_particles;
+  for (int p=0; p < (int)truth_particles.size(); p++) {
+    fastjet::PseudoJet part = truth_particles.at(p);
+  
+    int etaCell = int((part.eta()+etaLim)/dEta);
+    int phiCell = int(part.phi()/dPhi);
+    if (etaCell >= 0 && etaCell < nEta && phiCell >=0 && phiCell < nPhi){
+      tower[etaCell][phiCell] += part.e();
+    }
+  }
+  
+  for (int i = 0; i < nEta; i++)  for (int j = 0; j < nPhi; j++) {
+    if (tower[i][j] > 0) {
+      double etaLocal = -etaLim + dEta*(i+0.5);
+      double phiLocal = dPhi*(j+0.5);
+      double thetaLocal = 2*atan(exp(-etaLocal));
+      cell_particles.push_back(fastjet::PseudoJet(sin(thetaLocal)*cos(phiLocal),sin(thetaLocal)*sin(phiLocal),cos(thetaLocal),1)*tower[i][j]);
+    }
+  }
+  return cell_particles;
+}
+
+
+///=========================================
+/// Telescoping N-subjettiness 
+///=========================================
+double T_Nsubjettiness(int N, PseudoJet& input, double beta_min, double beta_max) {
+  vector<double> taus; taus.clear();
+  for (int i = 0; i < 20; i++) {
+    double beta = beta_min + i*(beta_max - beta_min)/(20-1);
+    fastjet::contrib::UnnormalizedMeasure nsubMeasure(beta);
+    fastjet::contrib::Nsubjettiness nsub(N, fastjet::contrib::WTA_KT_Axes, nsubMeasure);
+    taus.push_back(nsub(input));
+  }
+  // getVolatility function provided by TelescopingJets
+  return getVolatility(taus);
+}
+
+///=========================================
+/// Telescoping Energy Correlators 
+///=========================================
+double T_EnergyCorrelator(int N, PseudoJet& input, double beta_min, double beta_max) {
+  vector<double> ecfs; ecfs.clear();
+  for (int i = 0; i < 20; i++) {
+    double beta = beta_min + i*(beta_max - beta_min)/(20-1);
+    fastjet::contrib::EnergyCorrelatorDoubleRatio ecf(N, beta);
+    ecfs.push_back(ecf(input));
+  }
+  // getVolatility function provided by TelescopingJets
+  return getVolatility(ecfs);
 }
