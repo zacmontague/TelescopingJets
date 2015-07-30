@@ -98,7 +98,12 @@ double Truth_phi;
 double Truth_m;
 double Truth_tjet1;
 double Truth_tjet2;
+double Truth_tau1;
+double Truth_tau2;
+double Truth_c2;
+double Truth_d2;
 
-
+//extra functions
+vector<PseudoJet> ToyCalorimeter(vector<PseudoJet> truth_particles);
 
 #endif

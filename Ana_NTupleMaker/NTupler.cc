@@ -148,6 +148,7 @@ int main(){
     //make pseudocalorimeter cells
     //////////////////////////////////////////////
     //TODO
+    vector<PseudoJet> calo_cells = ToyCalorimeter(input_particles);
 
     //////////////////////////////////////////////
     // get the resulting jets ordered in pt
@@ -178,8 +179,17 @@ int main(){
     }
     TelescopingJets tjet(axes_def,r_values);
 
+    //////////////////////////////////////////////
+    //Setup calculations for other algorithms
+    //////////////////////////////////////////////
+    //N-subjettiness
+    fastjet::contrib::UnnormalizedMeasure nsubMeasure(1.);
+    fastjet::contrib::Nsubjettiness nsub1(1, fastjet::contrib::WTA_KT_Axes, nsubMeasure);
+    fastjet::contrib::Nsubjettiness nsub2(2, fastjet::contrib::WTA_KT_Axes, nsubMeasure);
 
-
+    //Energy correlation functions
+    fastjet::contrib::EnergyCorrelatorDoubleRatio ecfC2(2, 1.);
+    fastjet::contrib::EnergyCorrelatorD2 ecfD2(1.);
 
     //////////////////////////////////////////////
     // Filtering with a pt cut as for trimming (arXiv:0912.1342)
@@ -253,6 +263,10 @@ int main(){
       Truth_m      = jettemp.M();
       Truth_tjet1  = tjetvar_1axis;
       Truth_tjet2  = tjetvar_2axis;
+      Truth_tau1   = nsub1(inclusive_jets[ijet]);
+      Truth_tau2   = nsub2(inclusive_jets[ijet]);
+      Truth_c2     = ecfC2(inclusive_jets[ijet]);
+      Truth_d2     = ecfD2(inclusive_jets[ijet]);
 
       cout<<"FillingJet: flav="<<Truth_flavor<<"  pt="<<Truth_pt<<"  m="<<Truth_m<<"  tjet1="<<Truth_tjet1<<" tjet2= "<<Truth_tjet2<<endl;
 
@@ -275,4 +289,40 @@ int main(){
 
   return 0;
 
+}
+
+///=========================================
+/// Calorimeter Simulation
+///=========================================
+vector<PseudoJet> ToyCalorimeter(vector<PseudoJet> truth_particles) {
+	const double pi = 3.14159265359;
+	const double etaLim = 5.0;
+	const int nEta = 100;
+	const int nPhi = 63;
+	double dEta = 2*etaLim/nEta;
+	double dPhi = 2*pi/nPhi;
+	
+	double tower[nEta][nPhi];
+	for (int i = 0; i < nEta; i++)  for (int j = 0; j < nPhi; j++)  tower[i][j] = -0.001;
+	
+	vector<fastjet::PseudoJet> cell_particles;
+	for (int p=0; p < (int)truth_particles.size(); p++) {
+		fastjet::PseudoJet part = truth_particles.at(p);
+	
+		int etaCell = int((part.eta()+etaLim)/dEta);
+		int phiCell = int(part.phi()/dPhi);
+		if (etaCell >= 0 && etaCell < nEta && phiCell >=0 && phiCell < nPhi){
+			tower[etaCell][phiCell] += part.e();
+		}
+	}
+	
+	for (int i = 0; i < nEta; i++)  for (int j = 0; j < nPhi; j++) {
+		if (tower[i][j] > 0) {
+			double etaLocal = -etaLim + dEta*(i+0.5);
+			double phiLocal = dPhi*(j+0.5);
+			double thetaLocal = 2*atan(exp(-etaLocal));
+			cell_particles.push_back(fastjet::PseudoJet(sin(thetaLocal)*cos(phiLocal),sin(thetaLocal)*sin(phiLocal),cos(thetaLocal),1)*tower[i][j]);
+		}
+	}
+	return cell_particles;
 }
