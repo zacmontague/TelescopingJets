@@ -1,0 +1,3 @@
+export FJINSTALL=/Users/meehan/work/TelescopingJets/fastjet-3.1.1
+export ROOTPATH=/Users/meehan/work/root
+g++ -o NTupler NTupler.cc  TelescopingJets.cc -w -I$ROOTPATH/include -L$ROOTPATH/lib -lGui -lCore -lCint -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad  -lTree -lRint -lPostscript -lMatrix -lPhysics -lMathCore -lThread -lpthread -Wl,-rpath,$ROOTPATH/lib -lm -ldl -pthread -m64 -I$ROOTPATH/include `$FJINSTALL/fastjet-config --cxxflags --libs --plugins` -lNsubjettiness
