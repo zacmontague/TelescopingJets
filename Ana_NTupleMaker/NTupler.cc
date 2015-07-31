@@ -22,7 +22,23 @@ output : Anything you want - but being logical
 
 #include "NTupler.h"
 
-int main(){
+int main(int argc, char* argv[]){
+
+
+  //exit if you dont pass a run card
+  if(argc<4){
+    cout<<"You need to specify more arguments"<<endl;
+    return 1;
+  }
+
+  //process
+  int ProcessType = atoi(argv[1]);
+
+  //inputfile
+  string InputFile = argv[2];
+
+  //outputfile
+  string OutputFile = argv[3];
 
   //debug flag
   bool debug=false;
@@ -31,8 +47,7 @@ int main(){
   //INPUT
   //////////////////////////////////////////////
   //get input file and tree
-  TString infilename="../Ana_EventGeneration/output_WprimeWZ.root";
-  filein = new TFile( infilename );
+  filein = new TFile( InputFile.c_str() );
   treein = (TTree*)filein->Get( "tree" );
   treein->Print();
 
@@ -43,25 +58,25 @@ int main(){
   treein->SetBranchAddress("fspart_phi",&fspart_phi);
   treein->SetBranchAddress("fspart_m",  &fspart_m);
 
-  treein->SetBranchAddress("truth_quark1_pt",  &truth_quark1_pt);
-  treein->SetBranchAddress("truth_quark1_eta", &truth_quark1_eta);
-  treein->SetBranchAddress("truth_quark1_phi", &truth_quark1_phi);
-  treein->SetBranchAddress("truth_quark1_m",   &truth_quark1_m);
+  treein->SetBranchAddress("truth_q1_pt",  &truth_q1_pt);
+  treein->SetBranchAddress("truth_q1_eta", &truth_q1_eta);
+  treein->SetBranchAddress("truth_q1_phi", &truth_q1_phi);
+  treein->SetBranchAddress("truth_q1_m",   &truth_q1_m);
 
-  treein->SetBranchAddress("truth_quark2_pt",  &truth_quark2_pt);
-  treein->SetBranchAddress("truth_quark2_eta", &truth_quark2_eta);
-  treein->SetBranchAddress("truth_quark2_phi", &truth_quark2_phi);
-  treein->SetBranchAddress("truth_quark2_m",   &truth_quark2_m);
+  treein->SetBranchAddress("truth_q2_pt",  &truth_q2_pt);
+  treein->SetBranchAddress("truth_q2_eta", &truth_q2_eta);
+  treein->SetBranchAddress("truth_q2_phi", &truth_q2_phi);
+  treein->SetBranchAddress("truth_q2_m",   &truth_q2_m);
 
-  treein->SetBranchAddress("truth_top1_pt",  &truth_top1_pt);
-  treein->SetBranchAddress("truth_top1_eta", &truth_top1_eta);
-  treein->SetBranchAddress("truth_top1_phi", &truth_top1_phi);
-  treein->SetBranchAddress("truth_top1_m",   &truth_top1_m);
+  treein->SetBranchAddress("truth_t1_pt",  &truth_t1_pt);
+  treein->SetBranchAddress("truth_t1_eta", &truth_t1_eta);
+  treein->SetBranchAddress("truth_t1_phi", &truth_t1_phi);
+  treein->SetBranchAddress("truth_t1_m",   &truth_t1_m);
 
-  treein->SetBranchAddress("truth_top2_pt",  &truth_top2_pt);
-  treein->SetBranchAddress("truth_top2_eta", &truth_top2_eta);
-  treein->SetBranchAddress("truth_top2_phi", &truth_top2_phi);
-  treein->SetBranchAddress("truth_top2_m",   &truth_top2_m);
+  treein->SetBranchAddress("truth_t2_pt",  &truth_t2_pt);
+  treein->SetBranchAddress("truth_t2_eta", &truth_t2_eta);
+  treein->SetBranchAddress("truth_t2_phi", &truth_t2_phi);
+  treein->SetBranchAddress("truth_t2_m",   &truth_t2_m);
 
   treein->SetBranchAddress("truth_W_pt",  &truth_W_pt);
   treein->SetBranchAddress("truth_W_eta", &truth_W_eta);
@@ -77,28 +92,98 @@ int main(){
   //////////////////////////////////////////////
   //OUTPUT
   //////////////////////////////////////////////
+  fileout = new TFile( OutputFile.c_str() ,"RECREATE");
+
   treeout = new TTree("treeout","treeout");
 
-  treeout->Branch("Truth_flavor", &Truth_flavor);
-  treeout->Branch("Truth_pt",     &Truth_pt);
-  treeout->Branch("Truth_eta",    &Truth_eta);
-  treeout->Branch("Truth_phi",    &Truth_phi);
-  treeout->Branch("Truth_m",      &Truth_m);
-  treeout->Branch("Truth_tjet1",  &Truth_tjet1);
-  treeout->Branch("Truth_tjet2",  &Truth_tjet2);
-  treeout->Branch("Truth_tau1",   &Truth_tau1);
-  treeout->Branch("Truth_tau2",   &Truth_tau2);
-  treeout->Branch("Truth_t_tau1", &Truth_t_tau1);
-  treeout->Branch("Truth_t_tau2", &Truth_t_tau2);
-  treeout->Branch("Truth_c2",     &Truth_c2);
-  treeout->Branch("Truth_d2",     &Truth_d2);
-  treeout->Branch("Truth_t_c2",   &Truth_t_c2);
+  treeout->Branch("NumberOfVertices",    &NumberOfVertices);
+
+  treeout->Branch("TruthRaw_flavor",        &TruthRaw_flavor);
+  treeout->Branch("TruthRaw_pt",            &TruthRaw_pt);
+  treeout->Branch("TruthRaw_eta",           &TruthRaw_eta);
+  treeout->Branch("TruthRaw_phi",           &TruthRaw_phi);
+  treeout->Branch("TruthRaw_m",             &TruthRaw_m);
+  treeout->Branch("TruthRaw_Tau1",          &TruthRaw_Tau1);
+  treeout->Branch("TruthRaw_Tau2",          &TruthRaw_Tau2);
+  treeout->Branch("TruthRaw_Tau21",         &TruthRaw_Tau21);
+  treeout->Branch("TruthRaw_C2",            &TruthRaw_C2);
+  treeout->Branch("TruthRaw_D2",            &TruthRaw_D2);
+  treeout->Branch("TruthRaw_C3",            &TruthRaw_C3);
+  treeout->Branch("TruthRaw_TJet_m1",       &TruthRaw_TJet_m1);
+  treeout->Branch("TruthRaw_TJet_m2",       &TruthRaw_TJet_m2);
+  treeout->Branch("TruthRaw_TJet_Tau1",     &TruthRaw_TJet_Tau1);
+  treeout->Branch("TruthRaw_TJet_Tau2",     &TruthRaw_TJet_Tau2);
+  treeout->Branch("TruthRaw_TJet_Tau21",    &TruthRaw_TJet_Tau21);
+  treeout->Branch("TruthRaw_TJet_C2",       &TruthRaw_TJet_C2);
+  treeout->Branch("TruthRaw_TJet_D2",       &TruthRaw_TJet_D2);
+  treeout->Branch("TruthRaw_TJet_C3",       &TruthRaw_TJet_C3);
+
+  treeout->Branch("TruthPileup_flavor",        &TruthPileup_flavor);
+  treeout->Branch("TruthPileup_pt",            &TruthPileup_pt);
+  treeout->Branch("TruthPileup_eta",           &TruthPileup_eta);
+  treeout->Branch("TruthPileup_phi",           &TruthPileup_phi);
+  treeout->Branch("TruthPileup_m",             &TruthPileup_m);
+  treeout->Branch("TruthPileup_Tau1",          &TruthPileup_Tau1);
+  treeout->Branch("TruthPileup_Tau2",          &TruthPileup_Tau2);
+  treeout->Branch("TruthPileup_Tau21",         &TruthPileup_Tau21);
+  treeout->Branch("TruthPileup_C2",            &TruthPileup_C2);
+  treeout->Branch("TruthPileup_D2",            &TruthPileup_D2);
+  treeout->Branch("TruthPileup_C3",            &TruthPileup_C3);
+  treeout->Branch("TruthPileup_TJet_m1",       &TruthPileup_TJet_m1);
+  treeout->Branch("TruthPileup_TJet_m2",       &TruthPileup_TJet_m2);
+  treeout->Branch("TruthPileup_TJet_Tau1",     &TruthPileup_TJet_Tau1);
+  treeout->Branch("TruthPileup_TJet_Tau2",     &TruthPileup_TJet_Tau2);
+  treeout->Branch("TruthPileup_TJet_Tau21",    &TruthPileup_TJet_Tau21);
+  treeout->Branch("TruthPileup_TJet_C2",       &TruthPileup_TJet_C2);
+  treeout->Branch("TruthPileup_TJet_D2",       &TruthPileup_TJet_D2);
+  treeout->Branch("TruthPileup_TJet_C3",       &TruthPileup_TJet_C3);
+
+  treeout->Branch("RecoRaw_flavor",        &RecoRaw_flavor);
+  treeout->Branch("RecoRaw_pt",            &RecoRaw_pt);
+  treeout->Branch("RecoRaw_eta",           &RecoRaw_eta);
+  treeout->Branch("RecoRaw_phi",           &RecoRaw_phi);
+  treeout->Branch("RecoRaw_m",             &RecoRaw_m);
+  treeout->Branch("RecoRaw_Tau1",          &RecoRaw_Tau1);
+  treeout->Branch("RecoRaw_Tau2",          &RecoRaw_Tau2);
+  treeout->Branch("RecoRaw_Tau21",         &RecoRaw_Tau21);
+  treeout->Branch("RecoRaw_C2",            &RecoRaw_C2);
+  treeout->Branch("RecoRaw_D2",            &RecoRaw_D2);
+  treeout->Branch("RecoRaw_C3",            &RecoRaw_C3);
+  treeout->Branch("RecoRaw_TJet_m1",       &RecoRaw_TJet_m1);
+  treeout->Branch("RecoRaw_TJet_m2",       &RecoRaw_TJet_m2);
+  treeout->Branch("RecoRaw_TJet_Tau1",     &RecoRaw_TJet_Tau1);
+  treeout->Branch("RecoRaw_TJet_Tau2",     &RecoRaw_TJet_Tau2);
+  treeout->Branch("RecoRaw_TJet_Tau21",    &RecoRaw_TJet_Tau21);
+  treeout->Branch("RecoRaw_TJet_C2",       &RecoRaw_TJet_C2);
+  treeout->Branch("RecoRaw_TJet_D2",       &RecoRaw_TJet_D2);
+  treeout->Branch("RecoRaw_TJet_C3",       &RecoRaw_TJet_C3);
+
+  treeout->Branch("RecoPileup_flavor",        &RecoPileup_flavor);
+  treeout->Branch("RecoPileup_pt",            &RecoPileup_pt);
+  treeout->Branch("RecoPileup_eta",           &RecoPileup_eta);
+  treeout->Branch("RecoPileup_phi",           &RecoPileup_phi);
+  treeout->Branch("RecoPileup_m",             &RecoPileup_m);
+  treeout->Branch("RecoPileup_Tau1",          &RecoPileup_Tau1);
+  treeout->Branch("RecoPileup_Tau2",          &RecoPileup_Tau2);
+  treeout->Branch("RecoPileup_Tau21",         &RecoPileup_Tau21);
+  treeout->Branch("RecoPileup_C2",            &RecoPileup_C2);
+  treeout->Branch("RecoPileup_D2",            &RecoPileup_D2);
+  treeout->Branch("RecoPileup_C3",            &RecoPileup_C3);
+  treeout->Branch("RecoPileup_TJet_m1",       &RecoPileup_TJet_m1);
+  treeout->Branch("RecoPileup_TJet_m2",       &RecoPileup_TJet_m2);
+  treeout->Branch("RecoPileup_TJet_Tau1",     &RecoPileup_TJet_Tau1);
+  treeout->Branch("RecoPileup_TJet_Tau2",     &RecoPileup_TJet_Tau2);
+  treeout->Branch("RecoPileup_TJet_Tau21",    &RecoPileup_TJet_Tau21);
+  treeout->Branch("RecoPileup_TJet_C2",       &RecoPileup_TJet_C2);
+  treeout->Branch("RecoPileup_TJet_D2",       &RecoPileup_TJet_D2);
+  treeout->Branch("RecoPileup_TJet_C3",       &RecoPileup_TJet_C3);
 
 
-//   treeout->Branch("TruthAK10Trim_pt",  &TruthAK10Trim_pt);
-//   treeout->Branch("TruthAK10Trim_eta", &TruthAK10Trim_eta);
-//   treeout->Branch("TruthAK10Trim_phi", &TruthAK10Trim_phi);
-//   treeout->Branch("TruthAK10Trim_m",   &TruthAK10Trim_m);
+  ////////////////////////////////
+  //random number generator for pileup
+  ////////////////////////////////
+  TRandom3 *rand_pileup = new TRandom3();
+
 
   //////////////////////////////////////////////
   //main event loop
@@ -112,12 +197,10 @@ int main(){
       if(jentry>1)
         continue;
 
-    cout<<jentry<<endl;
+    cout<<"Event: "<<jentry<<endl;
 
     filein->cd();
     treein->GetEntry(jentry);
-
-    if(debug) cout<<"TruthTop: "<<truth_top1_m<<"  "<<truth_top2_m<<endl;
 
     ///////////////////////////////////////////////////
     //read in all final state particles for jet building from pythia input
@@ -149,54 +232,83 @@ int main(){
     //////////////////////////////////////////////
     //make new input particles collection with pileup
     //////////////////////////////////////////////
-    //TODO
+    vector<PseudoJet> input_particles_Pileup;
+    input_particles_Pileup.clear();
+    for(int ipart=0; ipart<n_fspart; ipart++){
+      input_particles_Pileup.push_back(input_particles.at(ipart));
+    }
+
+    int n_pileup_vertices      = rand_pileup->Poisson(10);
+    int n_particles_per_vertex = 5;
+
+    NumberOfVertices = n_pileup_vertices;
+
+    int n_pileup_particles = n_pileup_vertices*n_particles_per_vertex;
+    for(int ipart=0; ipart<n_pileup_particles; ipart++){
+
+      double m  = 0.0;
+      double px = rand_pileup->Gaus(0,5.0);
+      double py = rand_pileup->Gaus(0,5.0);
+      double pz = rand_pileup->Gaus(0,5.0);
+      double E  = pow( m*m + px*px + py*py + pz*pz , 0.5);
+
+      if(debug) cout<<"Pileup: "<<ipart<<"  "<<px<<"  "<<py<<"  "<<pz<<"  "<<E<<endl;
+
+      input_particles_Pileup.push_back(PseudoJet(px,py,pz,E));
+
+    }
+
 
     //////////////////////////////////////////////
     //make pseudocalorimeter cells
     //////////////////////////////////////////////
-    //TODO
-    vector<PseudoJet> calo_cells = ToyCalorimeter(input_particles);
+    vector<PseudoJet> calo_cells        = ToyCalorimeter(input_particles);
+    vector<PseudoJet> calo_cells_Pileup = ToyCalorimeter(input_particles_Pileup);
+
 
     //////////////////////////////////////////////
     // get the resulting jets ordered in pt
     //////////////////////////////////////////////
-    double R = 1.0;
-    fastjet::JetDefinition jet_def(fastjet::antikt_algorithm, R);
-    fastjet::ClusterSequence clust_seq(input_particles, jet_def);
-    double ptmin = 5.0;
-    vector<fastjet::PseudoJet> inclusive_jets = sorted_by_pt(clust_seq.inclusive_jets(ptmin));
+    fastjet::JetDefinition jet_def(fastjet::antikt_algorithm, 1.0);
 
-    // label the columns
-    cout<<"jet#  pt  eta  phi  mass"<<endl;
-    cout<<"Inclusive"<<endl;
-    // print out the details for each jet
-    for (unsigned int i = 0; i < inclusive_jets.size(); i++) {
-      cout<<i<<"  "<<inclusive_jets[i].pt()<<"  "<<inclusive_jets[i].eta()<<"  "<<inclusive_jets[i].phi()<<"  "<<inclusive_jets[i].m()<<endl;
+    fastjet::ClusterSequence clust_seq_TruthRaw(input_particles, jet_def);
+    vector<fastjet::PseudoJet> inclusive_jets_TruthRaw = sorted_by_pt(clust_seq_TruthRaw.inclusive_jets(5.0));
+
+
+    if(debug){
+      // label the columns
+      cout<<"jet#  pt  eta  phi  mass"<<endl;
+      cout<<"Inclusive"<<endl;
+      // print out the details for each jet
+      for (unsigned int i = 0; i < inclusive_jets_TruthRaw.size(); i++) {
+        cout<<i<<"  "<<inclusive_jets_TruthRaw[i].pt()
+               <<"  "<<inclusive_jets_TruthRaw[i].eta()
+               <<"  "<<inclusive_jets_TruthRaw[i].phi()
+               <<"  "<<inclusive_jets_TruthRaw[i].m()<<endl;
+      }
     }
 
-
-
     //////////////////////////////////////////////
-    //Testing the Telescoping Jets contrib - setup done here
+    //Setup tools for substructure calculation
     //////////////////////////////////////////////
+
+    //Telescoping jets
     fastjet::contrib::KT_Axes axes_def;
     std::vector<double> r_values;
     for(int i=0; i < 20; i++){
       r_values.push_back( 0.1+i*(0.6-0.1)/(20-1) );
     }
-    TelescopingJets tjet(axes_def,r_values);
+    TelescopingJets T_Mass(axes_def,r_values);
 
-    //////////////////////////////////////////////
-    //Setup calculations for other algorithms
-    //////////////////////////////////////////////
     //N-subjettiness
     fastjet::contrib::UnnormalizedMeasure nsubMeasure(1.);
-    fastjet::contrib::Nsubjettiness nsub1(1, fastjet::contrib::WTA_KT_Axes, nsubMeasure);
-    fastjet::contrib::Nsubjettiness nsub2(2, fastjet::contrib::WTA_KT_Axes, nsubMeasure);
+    fastjet::contrib::Nsubjettiness nsub1(1, fastjet::contrib::WTA_KT_Axes(), nsubMeasure);
+    fastjet::contrib::Nsubjettiness nsub2(2, fastjet::contrib::WTA_KT_Axes(), nsubMeasure);
 
     //Energy correlation functions
-    fastjet::contrib::EnergyCorrelatorDoubleRatio ecfC2(2, 1.);
+    fastjet::contrib::EnergyCorrelatorC2 ecfC2(1.);
     fastjet::contrib::EnergyCorrelatorD2 ecfD2(1.);
+    fastjet::contrib::EnergyCorrelatorDoubleRatio ecfC3(2, 1.);
 
     //////////////////////////////////////////////
     // Filtering with a pt cut as for trimming (arXiv:0912.1342)
@@ -219,66 +331,73 @@ int main(){
     /////////////////////////////////////////////
     //Get truth objects for truth matching
     /////////////////////////////////////////////
+    TLorentzVector truth_q1;
+    truth_q1.SetPtEtaPhiM(truth_q1_pt,truth_q1_eta,truth_q1_phi,truth_q1_m);
+    TLorentzVector truth_q2;
+    truth_q2.SetPtEtaPhiM(truth_q2_pt,truth_q2_eta,truth_q2_phi,truth_q2_m);
     TLorentzVector truth_W;
     truth_W.SetPtEtaPhiM(truth_W_pt,truth_W_eta,truth_W_phi,truth_W_m);
     TLorentzVector truth_Z;
     truth_Z.SetPtEtaPhiM(truth_Z_pt,truth_Z_eta,truth_Z_phi,truth_Z_m);
+    TLorentzVector truth_t1;
+    truth_t1.SetPtEtaPhiM(truth_t1_pt,truth_t1_eta,truth_t1_phi,truth_t1_m);
+    TLorentzVector truth_t2;
+    truth_t2.SetPtEtaPhiM(truth_t2_pt,truth_t2_eta,truth_t2_phi,truth_t2_m);
 
-
-    //fill output ntuple
-    Truth_pt  = 64.0;
-    Truth_eta = 64.0;
-    Truth_phi = 64.0;
-    Truth_m   = 64.0;
-
-    if(inclusive_jets.size()>0){
-      Truth_pt  = inclusive_jets.at(0).pt();
-      Truth_eta = inclusive_jets.at(0).eta();
-      Truth_phi = inclusive_jets.at(0).phi();
-      Truth_m   = inclusive_jets.at(0).m();
-      treeout->Fill();
-    }
-
-
-    for(int ijet=0; ijet<inclusive_jets.size(); ijet++){
+    /////////////////////////////
+    //TruthRaw
+    /////////////////////////////
+    for(int ijet=0; ijet<inclusive_jets_TruthRaw.size(); ijet++){
       TLorentzVector jettemp;
-      jettemp.SetPtEtaPhiM(inclusive_jets.at(ijet).pt(),inclusive_jets.at(ijet).eta(),inclusive_jets.at(ijet).phi(),inclusive_jets.at(ijet).m());
+      jettemp.SetPtEtaPhiM(inclusive_jets_TruthRaw.at(ijet).pt(),
+                           inclusive_jets_TruthRaw.at(ijet).eta(),
+                           inclusive_jets_TruthRaw.at(ijet).phi(),
+                           inclusive_jets_TruthRaw.at(ijet).m());
 
       /////////////////////////////////
       //Getting truth label for filling into ntuple
       /////////////////////////////////
-      cout<<"DeltaR: "<<endl
-          <<"W:  "<<jettemp.DeltaR(truth_W)<<endl
-          <<"Z:  "<<jettemp.DeltaR(truth_Z)<<endl;
-
-      jetflavor = -1;
-      if(jettemp.DeltaR(truth_W)<0.8){
-        jetflavor = 1;
+      if(debug){
+        cout<<"DeltaR: "<<endl
+            <<"q1:  "<<jettemp.DeltaR(truth_q1)<<endl
+            <<"q2:  "<<jettemp.DeltaR(truth_q2)<<endl
+            <<"W:   "<<jettemp.DeltaR(truth_W)<<endl
+            <<"Z:   "<<jettemp.DeltaR(truth_Z)<<endl
+            <<"t1:  "<<jettemp.DeltaR(truth_t1)<<endl
+            <<"t2:  "<<jettemp.DeltaR(truth_t2)<<endl;
       }
-      if(jettemp.DeltaR(truth_Z)<0.8){
-        jetflavor = 2;
-      }
+      int jetflavor = -1;
+      if(jettemp.DeltaR(truth_q1)<0.8 || jettemp.DeltaR(truth_q2)<0.8){ jetflavor = 0; }
+      else if(jettemp.DeltaR(truth_W)<0.8){  jetflavor = 1; }
+      else if(jettemp.DeltaR(truth_Z)<0.8){  jetflavor = 2; }
+      else if(jettemp.DeltaR(truth_t1)<0.8 || jettemp.DeltaR(truth_t2)<0.8){ jetflavor = 3; }
+      else{ jetflavor = -1; }
 
-      //running basic tjets
-      tjetvar_1axis = tjet(1,inclusive_jets[ijet]);
-      tjetvar_2axis = tjet(2,inclusive_jets[ijet]);
+      /////////////////////////////////
+      //Fill variables that will go into ntuple
+      /////////////////////////////////
+      TruthRaw_flavor         = jetflavor;
+      TruthRaw_pt             = jettemp.Pt();
+      TruthRaw_eta            = jettemp.Eta();
+      TruthRaw_phi            = jettemp.Phi();
+      TruthRaw_m              = jettemp.M();
+      TruthRaw_Tau1           = nsub1(inclusive_jets_TruthRaw[ijet]);
+      TruthRaw_Tau2           = nsub2(inclusive_jets_TruthRaw[ijet]);
+      if(TruthRaw_Tau1!=0)
+        TruthRaw_Tau21        = TruthRaw_Tau2/TruthRaw_Tau1;
+      TruthRaw_C2             = ecfC2(inclusive_jets_TruthRaw[ijet]);
+      TruthRaw_D2             = ecfD2(inclusive_jets_TruthRaw[ijet]);
+      TruthRaw_C3             = ecfC3(inclusive_jets_TruthRaw[ijet]);
+      TruthRaw_TJet_m1        = T_Mass(1,inclusive_jets_TruthRaw[ijet]);
+      TruthRaw_TJet_m2        = T_Mass(2,inclusive_jets_TruthRaw[ijet]);
+      TruthRaw_TJet_Tau1      = T_Nsubjettiness(1, inclusive_jets_TruthRaw[ijet], 1., 2.);
+      TruthRaw_TJet_Tau2      = T_Nsubjettiness(2, inclusive_jets_TruthRaw[ijet], 1., 2.);
+      TruthRaw_TJet_Tau21     = T_NsubjettinessRatio(2, 1, inclusive_jets_TruthRaw[ijet], 1., 2.);
+      TruthRaw_TJet_C2        = T_EnergyCorrelator_C2(inclusive_jets_TruthRaw[ijet], 0.1, 2.);
+      TruthRaw_TJet_D2        = T_EnergyCorrelator_D2(inclusive_jets_TruthRaw[ijet], 0.1, 2.);
+      TruthRaw_TJet_C3        = T_EnergyCorrelator_C3(inclusive_jets_TruthRaw[ijet], 0.1, 2.);
 
-      Truth_flavor = jetflavor;
-      Truth_pt     = jettemp.Pt();
-      Truth_eta    = jettemp.Eta();
-      Truth_phi    = jettemp.Phi();
-      Truth_m      = jettemp.M();
-      Truth_tjet1  = tjetvar_1axis;
-      Truth_tjet2  = tjetvar_2axis;
-      Truth_tau1   = nsub1(inclusive_jets[ijet]);
-      Truth_tau2   = nsub2(inclusive_jets[ijet]);
-      Truth_t_tau1 = T_Nsubjettiness(1, inclusive_jets[ijet], 1., 2.);
-      Truth_t_tau2 = T_Nsubjettiness(2, inclusive_jets[ijet], 1., 2.);
-      Truth_c2     = ecfC2(inclusive_jets[ijet]);
-      Truth_d2     = ecfD2(inclusive_jets[ijet]);
-      Truth_t_c2   = T_EnergyCorrelator(2, inclusive_jets[ijet], 0.1, 2.);
-
-      cout<<"FillingJet: flav="<<Truth_flavor<<"  pt="<<Truth_pt<<"  m="<<Truth_m<<"  tjet1="<<Truth_tjet1<<" tjet2= "<<Truth_tjet2<<endl;
+      cout<<"FillingJet: flav="<<TruthRaw_flavor<<"  pt="<<TruthRaw_pt<<"  m="<<TruthRaw_m<<endl;
 
       treeout->Fill();
     }
@@ -286,16 +405,12 @@ int main(){
   }
 
 
-  TString outfilename="ntuple_WprimeWZ.root";
-  fileout = new TFile( outfilename ,"RECREATE");
+  /////////////////////////////////
+  //Write the output TTree to the OutputFile
+  /////////////////////////////////
+  fileout->cd();
   treeout->Write();
   fileout->Close();
-
-
-
-
-
-
 
   return 0;
 
@@ -311,21 +426,21 @@ vector<PseudoJet> ToyCalorimeter(vector<PseudoJet> truth_particles) {
   const int nPhi = 63;
   double dEta = 2*etaLim/nEta;
   double dPhi = 2*pi/nPhi;
-  
+
   double tower[nEta][nPhi];
   for (int i = 0; i < nEta; i++)  for (int j = 0; j < nPhi; j++)  tower[i][j] = -0.001;
-  
+
   vector<fastjet::PseudoJet> cell_particles;
   for (int p=0; p < (int)truth_particles.size(); p++) {
     fastjet::PseudoJet part = truth_particles.at(p);
-  
+
     int etaCell = int((part.eta()+etaLim)/dEta);
     int phiCell = int(part.phi()/dPhi);
     if (etaCell >= 0 && etaCell < nEta && phiCell >=0 && phiCell < nPhi){
       tower[etaCell][phiCell] += part.e();
     }
   }
-  
+
   for (int i = 0; i < nEta; i++)  for (int j = 0; j < nPhi; j++) {
     if (tower[i][j] > 0) {
       double etaLocal = -etaLim + dEta*(i+0.5);
@@ -339,28 +454,75 @@ vector<PseudoJet> ToyCalorimeter(vector<PseudoJet> truth_particles) {
 
 
 ///=========================================
-/// Telescoping N-subjettiness 
+/// Telescoping N-subjettiness
 ///=========================================
 double T_Nsubjettiness(int N, PseudoJet& input, double beta_min, double beta_max) {
   vector<double> taus; taus.clear();
   for (int i = 0; i < 20; i++) {
     double beta = beta_min + i*(beta_max - beta_min)/(20-1);
     fastjet::contrib::UnnormalizedMeasure nsubMeasure(beta);
-    fastjet::contrib::Nsubjettiness nsub(N, fastjet::contrib::WTA_KT_Axes, nsubMeasure);
+    fastjet::contrib::Nsubjettiness nsub(N, fastjet::contrib::WTA_KT_Axes(), nsubMeasure);
     taus.push_back(nsub(input));
   }
   // getVolatility function provided by TelescopingJets
   return getVolatility(taus);
 }
 
+double T_NsubjettinessRatio(int N_num, int N_den, PseudoJet& input, double beta_min, double beta_max) {
+  vector<double> taus; taus.clear();
+  for (int i = 0; i < 20; i++) {
+
+    double beta = beta_min + i*(beta_max - beta_min)/(20-1);
+
+    fastjet::contrib::UnnormalizedMeasure nsubMeasure(beta);
+
+    fastjet::contrib::Nsubjettiness nsub_num(N_num, fastjet::contrib::WTA_KT_Axes(), nsubMeasure);
+    fastjet::contrib::Nsubjettiness nsub_den(N_den, fastjet::contrib::WTA_KT_Axes(), nsubMeasure);
+
+    double num=nsub_num(input);
+    double den=nsub_den(input);
+
+    if(den!=0)
+      taus.push_back(num/den);
+    else
+      taus.push_back(-1.0);
+
+  }
+  // getVolatility function provided by TelescopingJets
+  return getVolatility(taus);
+}
+
+
 ///=========================================
-/// Telescoping Energy Correlators 
+/// Telescoping Energy Correlators
 ///=========================================
-double T_EnergyCorrelator(int N, PseudoJet& input, double beta_min, double beta_max) {
+double T_EnergyCorrelator_C2(PseudoJet& input, double beta_min, double beta_max) {
   vector<double> ecfs; ecfs.clear();
   for (int i = 0; i < 20; i++) {
     double beta = beta_min + i*(beta_max - beta_min)/(20-1);
-    fastjet::contrib::EnergyCorrelatorDoubleRatio ecf(N, beta);
+    fastjet::contrib::EnergyCorrelatorC2 ecf(beta);
+    ecfs.push_back(ecf(input));
+  }
+  // getVolatility function provided by TelescopingJets
+  return getVolatility(ecfs);
+}
+
+double T_EnergyCorrelator_D2(PseudoJet& input, double beta_min, double beta_max) {
+  vector<double> ecfs; ecfs.clear();
+  for (int i = 0; i < 20; i++) {
+    double beta = beta_min + i*(beta_max - beta_min)/(20-1);
+    fastjet::contrib::EnergyCorrelatorD2 ecf(beta);
+    ecfs.push_back(ecf(input));
+  }
+  // getVolatility function provided by TelescopingJets
+  return getVolatility(ecfs);
+}
+
+double T_EnergyCorrelator_C3(PseudoJet& input, double beta_min, double beta_max) {
+  vector<double> ecfs; ecfs.clear();
+  for (int i = 0; i < 20; i++) {
+    double beta = beta_min + i*(beta_max - beta_min)/(20-1);
+    fastjet::contrib::EnergyCorrelatorDoubleRatio ecf(3, beta);
     ecfs.push_back(ecf(input));
   }
   // getVolatility function provided by TelescopingJets

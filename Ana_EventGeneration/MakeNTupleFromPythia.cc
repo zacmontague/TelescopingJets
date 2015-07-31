@@ -269,7 +269,8 @@ int main(int argc, char* argv[]){
       if(debug) cout<<acceptevent<<endl;
 
       //only save particles to output ttree if they are final state particles
-      if(pythia.event[iPart].status()>=81 && pythia.event[iPart].status()<=99){
+      //this is the method recommended by Yang-Ting
+      if(pythia.event[iPart].isFinal()){
         if(debug) {
           if(iEvent%10==0){
             cout<<pythia.event[iPart].status()<<"  "
