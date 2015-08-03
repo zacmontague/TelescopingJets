@@ -94,7 +94,7 @@ int main(int argc, char* argv[]){
   //////////////////////////////////////////////
   fileout = new TFile( OutputFile.c_str() ,"RECREATE");
 
-  treeout = new TTree("treeout","treeout");
+  treeout = new TTree("JetTree","JetTree");
 
   treeout->Branch("NumberOfVertices",    &NumberOfVertices);
 
@@ -178,6 +178,85 @@ int main(int argc, char* argv[]){
   treeout->Branch("RecoPileup_TJet_D2",       &RecoPileup_TJet_D2);
   treeout->Branch("RecoPileup_TJet_C3",       &RecoPileup_TJet_C3);
 
+  treeout->Branch("TruthRawTrim_flavor",        &TruthRawTrim_flavor);
+  treeout->Branch("TruthRawTrim_pt",            &TruthRawTrim_pt);
+  treeout->Branch("TruthRawTrim_eta",           &TruthRawTrim_eta);
+  treeout->Branch("TruthRawTrim_phi",           &TruthRawTrim_phi);
+  treeout->Branch("TruthRawTrim_m",             &TruthRawTrim_m);
+  treeout->Branch("TruthRawTrim_Tau1",          &TruthRawTrim_Tau1);
+  treeout->Branch("TruthRawTrim_Tau2",          &TruthRawTrim_Tau2);
+  treeout->Branch("TruthRawTrim_Tau21",         &TruthRawTrim_Tau21);
+  treeout->Branch("TruthRawTrim_C2",            &TruthRawTrim_C2);
+  treeout->Branch("TruthRawTrim_D2",            &TruthRawTrim_D2);
+  treeout->Branch("TruthRawTrim_C3",            &TruthRawTrim_C3);
+  treeout->Branch("TruthRawTrim_TJet_m1",       &TruthRawTrim_TJet_m1);
+  treeout->Branch("TruthRawTrim_TJet_m2",       &TruthRawTrim_TJet_m2);
+  treeout->Branch("TruthRawTrim_TJet_Tau1",     &TruthRawTrim_TJet_Tau1);
+  treeout->Branch("TruthRawTrim_TJet_Tau2",     &TruthRawTrim_TJet_Tau2);
+  treeout->Branch("TruthRawTrim_TJet_Tau21",    &TruthRawTrim_TJet_Tau21);
+  treeout->Branch("TruthRawTrim_TJet_C2",       &TruthRawTrim_TJet_C2);
+  treeout->Branch("TruthRawTrim_TJet_D2",       &TruthRawTrim_TJet_D2);
+  treeout->Branch("TruthRawTrim_TJet_C3",       &TruthRawTrim_TJet_C3);
+
+  treeout->Branch("TruthPileupTrim_flavor",        &TruthPileupTrim_flavor);
+  treeout->Branch("TruthPileupTrim_pt",            &TruthPileupTrim_pt);
+  treeout->Branch("TruthPileupTrim_eta",           &TruthPileupTrim_eta);
+  treeout->Branch("TruthPileupTrim_phi",           &TruthPileupTrim_phi);
+  treeout->Branch("TruthPileupTrim_m",             &TruthPileupTrim_m);
+  treeout->Branch("TruthPileupTrim_Tau1",          &TruthPileupTrim_Tau1);
+  treeout->Branch("TruthPileupTrim_Tau2",          &TruthPileupTrim_Tau2);
+  treeout->Branch("TruthPileupTrim_Tau21",         &TruthPileupTrim_Tau21);
+  treeout->Branch("TruthPileupTrim_C2",            &TruthPileupTrim_C2);
+  treeout->Branch("TruthPileupTrim_D2",            &TruthPileupTrim_D2);
+  treeout->Branch("TruthPileupTrim_C3",            &TruthPileupTrim_C3);
+  treeout->Branch("TruthPileupTrim_TJet_m1",       &TruthPileupTrim_TJet_m1);
+  treeout->Branch("TruthPileupTrim_TJet_m2",       &TruthPileupTrim_TJet_m2);
+  treeout->Branch("TruthPileupTrim_TJet_Tau1",     &TruthPileupTrim_TJet_Tau1);
+  treeout->Branch("TruthPileupTrim_TJet_Tau2",     &TruthPileupTrim_TJet_Tau2);
+  treeout->Branch("TruthPileupTrim_TJet_Tau21",    &TruthPileupTrim_TJet_Tau21);
+  treeout->Branch("TruthPileupTrim_TJet_C2",       &TruthPileupTrim_TJet_C2);
+  treeout->Branch("TruthPileupTrim_TJet_D2",       &TruthPileupTrim_TJet_D2);
+  treeout->Branch("TruthPileupTrim_TJet_C3",       &TruthPileupTrim_TJet_C3);
+
+  treeout->Branch("RecoRawTrim_flavor",        &RecoRawTrim_flavor);
+  treeout->Branch("RecoRawTrim_pt",            &RecoRawTrim_pt);
+  treeout->Branch("RecoRawTrim_eta",           &RecoRawTrim_eta);
+  treeout->Branch("RecoRawTrim_phi",           &RecoRawTrim_phi);
+  treeout->Branch("RecoRawTrim_m",             &RecoRawTrim_m);
+  treeout->Branch("RecoRawTrim_Tau1",          &RecoRawTrim_Tau1);
+  treeout->Branch("RecoRawTrim_Tau2",          &RecoRawTrim_Tau2);
+  treeout->Branch("RecoRawTrim_Tau21",         &RecoRawTrim_Tau21);
+  treeout->Branch("RecoRawTrim_C2",            &RecoRawTrim_C2);
+  treeout->Branch("RecoRawTrim_D2",            &RecoRawTrim_D2);
+  treeout->Branch("RecoRawTrim_C3",            &RecoRawTrim_C3);
+  treeout->Branch("RecoRawTrim_TJet_m1",       &RecoRawTrim_TJet_m1);
+  treeout->Branch("RecoRawTrim_TJet_m2",       &RecoRawTrim_TJet_m2);
+  treeout->Branch("RecoRawTrim_TJet_Tau1",     &RecoRawTrim_TJet_Tau1);
+  treeout->Branch("RecoRawTrim_TJet_Tau2",     &RecoRawTrim_TJet_Tau2);
+  treeout->Branch("RecoRawTrim_TJet_Tau21",    &RecoRawTrim_TJet_Tau21);
+  treeout->Branch("RecoRawTrim_TJet_C2",       &RecoRawTrim_TJet_C2);
+  treeout->Branch("RecoRawTrim_TJet_D2",       &RecoRawTrim_TJet_D2);
+  treeout->Branch("RecoRawTrim_TJet_C3",       &RecoRawTrim_TJet_C3);
+
+  treeout->Branch("RecoPileupTrim_flavor",        &RecoPileupTrim_flavor);
+  treeout->Branch("RecoPileupTrim_pt",            &RecoPileupTrim_pt);
+  treeout->Branch("RecoPileupTrim_eta",           &RecoPileupTrim_eta);
+  treeout->Branch("RecoPileupTrim_phi",           &RecoPileupTrim_phi);
+  treeout->Branch("RecoPileupTrim_m",             &RecoPileupTrim_m);
+  treeout->Branch("RecoPileupTrim_Tau1",          &RecoPileupTrim_Tau1);
+  treeout->Branch("RecoPileupTrim_Tau2",          &RecoPileupTrim_Tau2);
+  treeout->Branch("RecoPileupTrim_Tau21",         &RecoPileupTrim_Tau21);
+  treeout->Branch("RecoPileupTrim_C2",            &RecoPileupTrim_C2);
+  treeout->Branch("RecoPileupTrim_D2",            &RecoPileupTrim_D2);
+  treeout->Branch("RecoPileupTrim_C3",            &RecoPileupTrim_C3);
+  treeout->Branch("RecoPileupTrim_TJet_m1",       &RecoPileupTrim_TJet_m1);
+  treeout->Branch("RecoPileupTrim_TJet_m2",       &RecoPileupTrim_TJet_m2);
+  treeout->Branch("RecoPileupTrim_TJet_Tau1",     &RecoPileupTrim_TJet_Tau1);
+  treeout->Branch("RecoPileupTrim_TJet_Tau2",     &RecoPileupTrim_TJet_Tau2);
+  treeout->Branch("RecoPileupTrim_TJet_Tau21",    &RecoPileupTrim_TJet_Tau21);
+  treeout->Branch("RecoPileupTrim_TJet_C2",       &RecoPileupTrim_TJet_C2);
+  treeout->Branch("RecoPileupTrim_TJet_D2",       &RecoPileupTrim_TJet_D2);
+  treeout->Branch("RecoPileupTrim_TJet_C3",       &RecoPileupTrim_TJet_C3);
 
   ////////////////////////////////
   //random number generator for pileup
@@ -193,14 +272,17 @@ int main(int argc, char* argv[]){
 
   for (Long64_t jentry=0; jentry<nEvents; jentry++) {
 
-    if(debug)
-      if(jentry>1)
-        continue;
+    if(jentry%100==0)
+      cout<<"Event: "<<jentry<<endl;
 
-    cout<<"Event: "<<jentry<<endl;
-
+    //Get next event from input ntuple
     filein->cd();
     treein->GetEntry(jentry);
+
+    /////////////////////////////
+    //Reset branches for next event
+    /////////////////////////////
+    ResetBranches();
 
     ///////////////////////////////////////////////////
     //read in all final state particles for jet building from pythia input
@@ -238,12 +320,14 @@ int main(int argc, char* argv[]){
       input_particles_Pileup.push_back(input_particles.at(ipart));
     }
 
-    int n_pileup_vertices      = rand_pileup->Poisson(10);
+    int n_pileup_vertices      = (int)rand_pileup->Poisson(10);
     int n_particles_per_vertex = 5;
+    int n_pileup_particles = n_pileup_vertices*n_particles_per_vertex;
 
     NumberOfVertices = n_pileup_vertices;
 
-    int n_pileup_particles = n_pileup_vertices*n_particles_per_vertex;
+    if(debug) cout<<"Pileup: "<<NumberOfVertices<<"  "<<n_particles_per_vertex<<"  "<<n_pileup_particles<<endl;
+
     for(int ipart=0; ipart<n_pileup_particles; ipart++){
 
       double m  = 0.0;
@@ -273,6 +357,16 @@ int main(int argc, char* argv[]){
 
     fastjet::ClusterSequence clust_seq_TruthRaw(input_particles, jet_def);
     vector<fastjet::PseudoJet> inclusive_jets_TruthRaw = sorted_by_pt(clust_seq_TruthRaw.inclusive_jets(5.0));
+
+    fastjet::ClusterSequence clust_seq_TruthPileup(input_particles_Pileup, jet_def);
+    vector<fastjet::PseudoJet> inclusive_jets_TruthPileup = sorted_by_pt(clust_seq_TruthPileup.inclusive_jets(5.0));
+
+    fastjet::ClusterSequence clust_seq_RecoRaw(calo_cells, jet_def);
+    vector<fastjet::PseudoJet> inclusive_jets_RecoRaw = sorted_by_pt(clust_seq_RecoRaw.inclusive_jets(5.0));
+
+    fastjet::ClusterSequence clust_seq_RecoPileup(calo_cells_Pileup, jet_def);
+    vector<fastjet::PseudoJet> inclusive_jets_RecoPileup = sorted_by_pt(clust_seq_RecoPileup.inclusive_jets(5.0));
+
 
 
     if(debug){
@@ -310,23 +404,9 @@ int main(int argc, char* argv[]){
     fastjet::contrib::EnergyCorrelatorD2 ecfD2(1.);
     fastjet::contrib::EnergyCorrelatorDoubleRatio ecfC3(2, 1.);
 
-    //////////////////////////////////////////////
     // Filtering with a pt cut as for trimming (arXiv:0912.1342)
-    //////////////////////////////////////////////
-//     vector<PseudoJet> inclusive_jets_trimmed;
-//     inclusive_jets_trimmed.clear();
-//     double Rtrim = 0.2;
-//     double ptfrac = 0.05;
-//     Transformer *trimmer = new Filter(JetDefinition(kt_algorithm, Rtrim), SelectorPtFractionMin(ptfrac) );
-//     const Transformer & f = *trimmer;
-//     //groom jets
-//     printf("Trimmed");
-//     for (unsigned int i = 0; i < inclusive_jets.size(); i++) {
-//       PseudoJet groomed_jet = f(inclusive_jets[i]);
-//       inclusive_jets_trimmed.push_back(groomed_jet);
-//       cout<<i<<"  "<<inclusive_jets_trimmed[i].pt()<<"  "<<inclusive_jets_trimmed[i].eta()<<"  "<<inclusive_jets_trimmed[i].phi()<<"  "<<inclusive_jets_trimmed[i].m()<<endl;
-//     }
-
+    Transformer *trimmer = new Filter(JetDefinition(kt_algorithm, 0.2), SelectorPtFractionMin(0.05) );
+    const Transformer &f = *trimmer;
 
     /////////////////////////////////////////////
     //Get truth objects for truth matching
@@ -344,9 +424,13 @@ int main(int argc, char* argv[]){
     TLorentzVector truth_t2;
     truth_t2.SetPtEtaPhiM(truth_t2_pt,truth_t2_eta,truth_t2_phi,truth_t2_m);
 
+
+
+
     /////////////////////////////
     //TruthRaw
     /////////////////////////////
+    if(debug) cout<<"TruthRaw jet"<<endl;
     for(int ijet=0; ijet<inclusive_jets_TruthRaw.size(); ijet++){
       TLorentzVector jettemp;
       jettemp.SetPtEtaPhiM(inclusive_jets_TruthRaw.at(ijet).pt(),
@@ -373,35 +457,626 @@ int main(int argc, char* argv[]){
       else if(jettemp.DeltaR(truth_t1)<0.8 || jettemp.DeltaR(truth_t2)<0.8){ jetflavor = 3; }
       else{ jetflavor = -1; }
 
+      if(debug) cout<<"FillingJet: flav="<<jetflavor<<"  pt="<<jettemp.Pt()<<"  m="<<jettemp.M()<<endl;
+
       /////////////////////////////////
       //Fill variables that will go into ntuple
       /////////////////////////////////
-      TruthRaw_flavor         = jetflavor;
-      TruthRaw_pt             = jettemp.Pt();
-      TruthRaw_eta            = jettemp.Eta();
-      TruthRaw_phi            = jettemp.Phi();
-      TruthRaw_m              = jettemp.M();
-      TruthRaw_Tau1           = nsub1(inclusive_jets_TruthRaw[ijet]);
-      TruthRaw_Tau2           = nsub2(inclusive_jets_TruthRaw[ijet]);
-      if(TruthRaw_Tau1!=0)
-        TruthRaw_Tau21        = TruthRaw_Tau2/TruthRaw_Tau1;
-      TruthRaw_C2             = ecfC2(inclusive_jets_TruthRaw[ijet]);
-      TruthRaw_D2             = ecfD2(inclusive_jets_TruthRaw[ijet]);
-      TruthRaw_C3             = ecfC3(inclusive_jets_TruthRaw[ijet]);
-      TruthRaw_TJet_m1        = T_Mass(1,inclusive_jets_TruthRaw[ijet]);
-      TruthRaw_TJet_m2        = T_Mass(2,inclusive_jets_TruthRaw[ijet]);
-      TruthRaw_TJet_Tau1      = T_Nsubjettiness(1, inclusive_jets_TruthRaw[ijet], 1., 2.);
-      TruthRaw_TJet_Tau2      = T_Nsubjettiness(2, inclusive_jets_TruthRaw[ijet], 1., 2.);
-      TruthRaw_TJet_Tau21     = T_NsubjettinessRatio(2, 1, inclusive_jets_TruthRaw[ijet], 1., 2.);
-      TruthRaw_TJet_C2        = T_EnergyCorrelator_C2(inclusive_jets_TruthRaw[ijet], 0.1, 2.);
-      TruthRaw_TJet_D2        = T_EnergyCorrelator_D2(inclusive_jets_TruthRaw[ijet], 0.1, 2.);
-      TruthRaw_TJet_C3        = T_EnergyCorrelator_C3(inclusive_jets_TruthRaw[ijet], 0.1, 2.);
+      tempJet_flavor         = jetflavor;
+      tempJet_pt             = jettemp.Pt();
+      tempJet_eta            = jettemp.Eta();
+      tempJet_phi            = jettemp.Phi();
+      tempJet_m              = jettemp.M();
+      tempJet_Tau1           = nsub1(inclusive_jets_TruthRaw[ijet]);
+      tempJet_Tau2           = nsub2(inclusive_jets_TruthRaw[ijet]);
+      if(tempJet_Tau1!=0)
+        tempJet_Tau21        = tempJet_Tau2/tempJet_Tau1;
+      tempJet_C2             = ecfC2(inclusive_jets_TruthRaw[ijet]);
+      tempJet_D2             = ecfD2(inclusive_jets_TruthRaw[ijet]);
+      tempJet_C3             = ecfC3(inclusive_jets_TruthRaw[ijet]);
+      tempJet_TJet_m1        = T_Mass(1,inclusive_jets_TruthRaw[ijet]);
+      tempJet_TJet_m2        = T_Mass(2,inclusive_jets_TruthRaw[ijet]);
+      tempJet_TJet_Tau1      = T_Nsubjettiness(1, inclusive_jets_TruthRaw[ijet], 1., 2.);
+      tempJet_TJet_Tau2      = T_Nsubjettiness(2, inclusive_jets_TruthRaw[ijet], 1., 2.);
+      tempJet_TJet_Tau21     = T_NsubjettinessRatio(2, 1, inclusive_jets_TruthRaw[ijet], 1., 2.);
+      tempJet_TJet_C2        = T_EnergyCorrelator_C2(inclusive_jets_TruthRaw[ijet], 0.1, 2.);
+      tempJet_TJet_D2        = T_EnergyCorrelator_D2(inclusive_jets_TruthRaw[ijet], 0.1, 2.);
+      tempJet_TJet_C3        = T_EnergyCorrelator_C3(inclusive_jets_TruthRaw[ijet], 0.1, 2.);
 
-      cout<<"FillingJet: flav="<<TruthRaw_flavor<<"  pt="<<TruthRaw_pt<<"  m="<<TruthRaw_m<<endl;
-
-      treeout->Fill();
+      TruthRaw_flavor    .push_back(tempJet_flavor);
+      TruthRaw_pt        .push_back(tempJet_pt);
+      TruthRaw_eta       .push_back(tempJet_eta);
+      TruthRaw_phi       .push_back(tempJet_phi);
+      TruthRaw_m         .push_back(tempJet_m);
+      TruthRaw_Tau1      .push_back(tempJet_Tau1);
+      TruthRaw_Tau2      .push_back(tempJet_Tau2);
+      TruthRaw_Tau21     .push_back(tempJet_Tau21);
+      TruthRaw_C2        .push_back(tempJet_C2);
+      TruthRaw_D2        .push_back(tempJet_D2);
+      TruthRaw_C3        .push_back(tempJet_C3);
+      TruthRaw_TJet_m1   .push_back(tempJet_TJet_m1);
+      TruthRaw_TJet_m2   .push_back(tempJet_TJet_m2);
+      TruthRaw_TJet_Tau1 .push_back(tempJet_TJet_Tau1);
+      TruthRaw_TJet_Tau2 .push_back(tempJet_TJet_Tau2);
+      TruthRaw_TJet_Tau21.push_back(tempJet_TJet_Tau21);
+      TruthRaw_TJet_C2   .push_back(tempJet_TJet_C2);
+      TruthRaw_TJet_D2   .push_back(tempJet_TJet_D2);
+      TruthRaw_TJet_C3   .push_back(tempJet_TJet_C3);
     }
 
+
+    /////////////////////////////
+    //TruthPileup
+    /////////////////////////////
+    if(debug) cout<<"TruthPileup jet"<<endl;
+    for(int ijet=0; ijet<inclusive_jets_TruthPileup.size(); ijet++){
+      TLorentzVector jettemp;
+      jettemp.SetPtEtaPhiM(inclusive_jets_TruthPileup.at(ijet).pt(),
+                           inclusive_jets_TruthPileup.at(ijet).eta(),
+                           inclusive_jets_TruthPileup.at(ijet).phi(),
+                           inclusive_jets_TruthPileup.at(ijet).m());
+
+      /////////////////////////////////
+      //Getting truth label for filling into ntuple
+      /////////////////////////////////
+      if(debug){
+        cout<<"DeltaR: "<<endl
+            <<"q1:  "<<jettemp.DeltaR(truth_q1)<<endl
+            <<"q2:  "<<jettemp.DeltaR(truth_q2)<<endl
+            <<"W:   "<<jettemp.DeltaR(truth_W)<<endl
+            <<"Z:   "<<jettemp.DeltaR(truth_Z)<<endl
+            <<"t1:  "<<jettemp.DeltaR(truth_t1)<<endl
+            <<"t2:  "<<jettemp.DeltaR(truth_t2)<<endl;
+      }
+      int jetflavor = -1;
+      if(jettemp.DeltaR(truth_q1)<0.8 || jettemp.DeltaR(truth_q2)<0.8){ jetflavor = 0; }
+      else if(jettemp.DeltaR(truth_W)<0.8){  jetflavor = 1; }
+      else if(jettemp.DeltaR(truth_Z)<0.8){  jetflavor = 2; }
+      else if(jettemp.DeltaR(truth_t1)<0.8 || jettemp.DeltaR(truth_t2)<0.8){ jetflavor = 3; }
+      else{ jetflavor = -1; }
+
+      if(debug) cout<<"FillingJet: flav="<<jetflavor<<"  pt="<<jettemp.Pt()<<"  m="<<jettemp.M()<<endl;
+
+      /////////////////////////////////
+      //Fill variables that will go into ntuple
+      /////////////////////////////////
+      tempJet_flavor         = jetflavor;
+      tempJet_pt             = jettemp.Pt();
+      tempJet_eta            = jettemp.Eta();
+      tempJet_phi            = jettemp.Phi();
+      tempJet_m              = jettemp.M();
+      tempJet_Tau1           = nsub1(inclusive_jets_TruthPileup[ijet]);
+      tempJet_Tau2           = nsub2(inclusive_jets_TruthPileup[ijet]);
+      if(tempJet_Tau1!=0)
+        tempJet_Tau21        = tempJet_Tau2/tempJet_Tau1;
+      tempJet_C2             = ecfC2(inclusive_jets_TruthPileup[ijet]);
+      tempJet_D2             = ecfD2(inclusive_jets_TruthPileup[ijet]);
+      tempJet_C3             = ecfC3(inclusive_jets_TruthPileup[ijet]);
+      tempJet_TJet_m1        = T_Mass(1,inclusive_jets_TruthPileup[ijet]);
+      tempJet_TJet_m2        = T_Mass(2,inclusive_jets_TruthPileup[ijet]);
+      tempJet_TJet_Tau1      = T_Nsubjettiness(1, inclusive_jets_TruthPileup[ijet], 1., 2.);
+      tempJet_TJet_Tau2      = T_Nsubjettiness(2, inclusive_jets_TruthPileup[ijet], 1., 2.);
+      tempJet_TJet_Tau21     = T_NsubjettinessRatio(2, 1, inclusive_jets_TruthPileup[ijet], 1., 2.);
+      tempJet_TJet_C2        = T_EnergyCorrelator_C2(inclusive_jets_TruthPileup[ijet], 0.1, 2.);
+      tempJet_TJet_D2        = T_EnergyCorrelator_D2(inclusive_jets_TruthPileup[ijet], 0.1, 2.);
+      tempJet_TJet_C3        = T_EnergyCorrelator_C3(inclusive_jets_TruthPileup[ijet], 0.1, 2.);
+
+      TruthPileup_flavor    .push_back(tempJet_flavor);
+      TruthPileup_pt        .push_back(tempJet_pt);
+      TruthPileup_eta       .push_back(tempJet_eta);
+      TruthPileup_phi       .push_back(tempJet_phi);
+      TruthPileup_m         .push_back(tempJet_m);
+      TruthPileup_Tau1      .push_back(tempJet_Tau1);
+      TruthPileup_Tau2      .push_back(tempJet_Tau2);
+      TruthPileup_Tau21     .push_back(tempJet_Tau21);
+      TruthPileup_C2        .push_back(tempJet_C2);
+      TruthPileup_D2        .push_back(tempJet_D2);
+      TruthPileup_C3        .push_back(tempJet_C3);
+      TruthPileup_TJet_m1   .push_back(tempJet_TJet_m1);
+      TruthPileup_TJet_m2   .push_back(tempJet_TJet_m2);
+      TruthPileup_TJet_Tau1 .push_back(tempJet_TJet_Tau1);
+      TruthPileup_TJet_Tau2 .push_back(tempJet_TJet_Tau2);
+      TruthPileup_TJet_Tau21.push_back(tempJet_TJet_Tau21);
+      TruthPileup_TJet_C2   .push_back(tempJet_TJet_C2);
+      TruthPileup_TJet_D2   .push_back(tempJet_TJet_D2);
+      TruthPileup_TJet_C3   .push_back(tempJet_TJet_C3);
+
+    }
+
+
+    /////////////////////////////
+    //RecoRaw
+    /////////////////////////////
+    if(debug) cout<<"RecoRaw jet"<<endl;
+    for(int ijet=0; ijet<inclusive_jets_RecoRaw.size(); ijet++){
+      TLorentzVector jettemp;
+      jettemp.SetPtEtaPhiM(inclusive_jets_RecoRaw.at(ijet).pt(),
+                           inclusive_jets_RecoRaw.at(ijet).eta(),
+                           inclusive_jets_RecoRaw.at(ijet).phi(),
+                           inclusive_jets_RecoRaw.at(ijet).m());
+
+      /////////////////////////////////
+      //Getting Reco label for filling into ntuple
+      /////////////////////////////////
+      if(debug){
+        cout<<"DeltaR: "<<endl
+            <<"q1:  "<<jettemp.DeltaR(truth_q1)<<endl
+            <<"q2:  "<<jettemp.DeltaR(truth_q2)<<endl
+            <<"W:   "<<jettemp.DeltaR(truth_W)<<endl
+            <<"Z:   "<<jettemp.DeltaR(truth_Z)<<endl
+            <<"t1:  "<<jettemp.DeltaR(truth_t1)<<endl
+            <<"t2:  "<<jettemp.DeltaR(truth_t2)<<endl;
+      }
+      int jetflavor = -1;
+      if(jettemp.DeltaR(truth_q1)<0.8 || jettemp.DeltaR(truth_q2)<0.8){ jetflavor = 0; }
+      else if(jettemp.DeltaR(truth_W)<0.8){  jetflavor = 1; }
+      else if(jettemp.DeltaR(truth_Z)<0.8){  jetflavor = 2; }
+      else if(jettemp.DeltaR(truth_t1)<0.8 || jettemp.DeltaR(truth_t2)<0.8){ jetflavor = 3; }
+      else{ jetflavor = -1; }
+
+      if(debug) cout<<"FillingJet: flav="<<jetflavor<<"  pt="<<jettemp.Pt()<<"  m="<<jettemp.M()<<endl;
+
+      /////////////////////////////////
+      //Fill variables that will go into ntuple
+      /////////////////////////////////
+      tempJet_flavor         = jetflavor;
+      tempJet_pt             = jettemp.Pt();
+      tempJet_eta            = jettemp.Eta();
+      tempJet_phi            = jettemp.Phi();
+      tempJet_m              = jettemp.M();
+      tempJet_Tau1           = nsub1(inclusive_jets_RecoRaw[ijet]);
+      tempJet_Tau2           = nsub2(inclusive_jets_RecoRaw[ijet]);
+      if(tempJet_Tau1!=0)
+        tempJet_Tau21        = tempJet_Tau2/tempJet_Tau1;
+      tempJet_C2             = ecfC2(inclusive_jets_RecoRaw[ijet]);
+      tempJet_D2             = ecfD2(inclusive_jets_RecoRaw[ijet]);
+      tempJet_C3             = ecfC3(inclusive_jets_RecoRaw[ijet]);
+      tempJet_TJet_m1        = T_Mass(1,inclusive_jets_RecoRaw[ijet]);
+      tempJet_TJet_m2        = T_Mass(2,inclusive_jets_RecoRaw[ijet]);
+      tempJet_TJet_Tau1      = T_Nsubjettiness(1, inclusive_jets_RecoRaw[ijet], 1., 2.);
+      tempJet_TJet_Tau2      = T_Nsubjettiness(2, inclusive_jets_RecoRaw[ijet], 1., 2.);
+      tempJet_TJet_Tau21     = T_NsubjettinessRatio(2, 1, inclusive_jets_RecoRaw[ijet], 1., 2.);
+      tempJet_TJet_C2        = T_EnergyCorrelator_C2(inclusive_jets_RecoRaw[ijet], 0.1, 2.);
+      tempJet_TJet_D2        = T_EnergyCorrelator_D2(inclusive_jets_RecoRaw[ijet], 0.1, 2.);
+      tempJet_TJet_C3        = T_EnergyCorrelator_C3(inclusive_jets_RecoRaw[ijet], 0.1, 2.);
+
+      RecoRaw_flavor    .push_back(tempJet_flavor);
+      RecoRaw_pt        .push_back(tempJet_pt);
+      RecoRaw_eta       .push_back(tempJet_eta);
+      RecoRaw_phi       .push_back(tempJet_phi);
+      RecoRaw_m         .push_back(tempJet_m);
+      RecoRaw_Tau1      .push_back(tempJet_Tau1);
+      RecoRaw_Tau2      .push_back(tempJet_Tau2);
+      RecoRaw_Tau21     .push_back(tempJet_Tau21);
+      RecoRaw_C2        .push_back(tempJet_C2);
+      RecoRaw_D2        .push_back(tempJet_D2);
+      RecoRaw_C3        .push_back(tempJet_C3);
+      RecoRaw_TJet_m1   .push_back(tempJet_TJet_m1);
+      RecoRaw_TJet_m2   .push_back(tempJet_TJet_m2);
+      RecoRaw_TJet_Tau1 .push_back(tempJet_TJet_Tau1);
+      RecoRaw_TJet_Tau2 .push_back(tempJet_TJet_Tau2);
+      RecoRaw_TJet_Tau21.push_back(tempJet_TJet_Tau21);
+      RecoRaw_TJet_C2   .push_back(tempJet_TJet_C2);
+      RecoRaw_TJet_D2   .push_back(tempJet_TJet_D2);
+      RecoRaw_TJet_C3   .push_back(tempJet_TJet_C3);
+
+    }
+
+
+    /////////////////////////////
+    //RecoPileup
+    /////////////////////////////
+    if(debug) cout<<"RecoPileup jet"<<endl;
+    for(int ijet=0; ijet<inclusive_jets_RecoPileup.size(); ijet++){
+      TLorentzVector jettemp;
+      jettemp.SetPtEtaPhiM(inclusive_jets_RecoPileup.at(ijet).pt(),
+                           inclusive_jets_RecoPileup.at(ijet).eta(),
+                           inclusive_jets_RecoPileup.at(ijet).phi(),
+                           inclusive_jets_RecoPileup.at(ijet).m());
+
+      /////////////////////////////////
+      //Getting truth label for filling into ntuple
+      /////////////////////////////////
+      if(debug){
+        cout<<"DeltaR: "<<endl
+            <<"q1:  "<<jettemp.DeltaR(truth_q1)<<endl
+            <<"q2:  "<<jettemp.DeltaR(truth_q2)<<endl
+            <<"W:   "<<jettemp.DeltaR(truth_W)<<endl
+            <<"Z:   "<<jettemp.DeltaR(truth_Z)<<endl
+            <<"t1:  "<<jettemp.DeltaR(truth_t1)<<endl
+            <<"t2:  "<<jettemp.DeltaR(truth_t2)<<endl;
+      }
+      int jetflavor = -1;
+      if(jettemp.DeltaR(truth_q1)<0.8 || jettemp.DeltaR(truth_q2)<0.8){ jetflavor = 0; }
+      else if(jettemp.DeltaR(truth_W)<0.8){  jetflavor = 1; }
+      else if(jettemp.DeltaR(truth_Z)<0.8){  jetflavor = 2; }
+      else if(jettemp.DeltaR(truth_t1)<0.8 || jettemp.DeltaR(truth_t2)<0.8){ jetflavor = 3; }
+      else{ jetflavor = -1; }
+
+      if(debug) cout<<"FillingJet: flav="<<jetflavor<<"  pt="<<jettemp.Pt()<<"  m="<<jettemp.M()<<endl;
+
+      /////////////////////////////////
+      //Fill variables that will go into ntuple
+      /////////////////////////////////
+      tempJet_flavor         = jetflavor;
+      tempJet_pt             = jettemp.Pt();
+      tempJet_eta            = jettemp.Eta();
+      tempJet_phi            = jettemp.Phi();
+      tempJet_m              = jettemp.M();
+      tempJet_Tau1           = nsub1(inclusive_jets_RecoPileup[ijet]);
+      tempJet_Tau2           = nsub2(inclusive_jets_RecoPileup[ijet]);
+      if(tempJet_Tau1!=0)
+        tempJet_Tau21        = tempJet_Tau2/tempJet_Tau1;
+      tempJet_C2             = ecfC2(inclusive_jets_RecoPileup[ijet]);
+      tempJet_D2             = ecfD2(inclusive_jets_RecoPileup[ijet]);
+      tempJet_C3             = ecfC3(inclusive_jets_RecoPileup[ijet]);
+      tempJet_TJet_m1        = T_Mass(1,inclusive_jets_RecoPileup[ijet]);
+      tempJet_TJet_m2        = T_Mass(2,inclusive_jets_RecoPileup[ijet]);
+      tempJet_TJet_Tau1      = T_Nsubjettiness(1, inclusive_jets_RecoPileup[ijet], 1., 2.);
+      tempJet_TJet_Tau2      = T_Nsubjettiness(2, inclusive_jets_RecoPileup[ijet], 1., 2.);
+      tempJet_TJet_Tau21     = T_NsubjettinessRatio(2, 1, inclusive_jets_RecoPileup[ijet], 1., 2.);
+      tempJet_TJet_C2        = T_EnergyCorrelator_C2(inclusive_jets_RecoPileup[ijet], 0.1, 2.);
+      tempJet_TJet_D2        = T_EnergyCorrelator_D2(inclusive_jets_RecoPileup[ijet], 0.1, 2.);
+      tempJet_TJet_C3        = T_EnergyCorrelator_C3(inclusive_jets_RecoPileup[ijet], 0.1, 2.);
+
+      RecoPileup_flavor    .push_back(tempJet_flavor);
+      RecoPileup_pt        .push_back(tempJet_pt);
+      RecoPileup_eta       .push_back(tempJet_eta);
+      RecoPileup_phi       .push_back(tempJet_phi);
+      RecoPileup_m         .push_back(tempJet_m);
+      RecoPileup_Tau1      .push_back(tempJet_Tau1);
+      RecoPileup_Tau2      .push_back(tempJet_Tau2);
+      RecoPileup_Tau21     .push_back(tempJet_Tau21);
+      RecoPileup_C2        .push_back(tempJet_C2);
+      RecoPileup_D2        .push_back(tempJet_D2);
+      RecoPileup_C3        .push_back(tempJet_C3);
+      RecoPileup_TJet_m1   .push_back(tempJet_TJet_m1);
+      RecoPileup_TJet_m2   .push_back(tempJet_TJet_m2);
+      RecoPileup_TJet_Tau1 .push_back(tempJet_TJet_Tau1);
+      RecoPileup_TJet_Tau2 .push_back(tempJet_TJet_Tau2);
+      RecoPileup_TJet_Tau21.push_back(tempJet_TJet_Tau21);
+      RecoPileup_TJet_C2   .push_back(tempJet_TJet_C2);
+      RecoPileup_TJet_D2   .push_back(tempJet_TJet_D2);
+      RecoPileup_TJet_C3   .push_back(tempJet_TJet_C3);
+
+    }
+
+
+
+    /////////////////////////////
+    //TruthRawTrim
+    /////////////////////////////
+    for (unsigned int ijet = 0; ijet < inclusive_jets_TruthRaw.size(); ijet++) {
+      PseudoJet groomed_jet = f(inclusive_jets_TruthRaw[ijet]);
+
+      TLorentzVector jettemp;
+      jettemp.SetPtEtaPhiM(groomed_jet.pt(),
+                           groomed_jet.eta(),
+                           groomed_jet.phi(),
+                           groomed_jet.m());
+
+      /////////////////////////////////
+      //Getting truth label for filling into ntuple
+      /////////////////////////////////
+      if(debug){
+        cout<<"DeltaR: "<<endl
+            <<"q1:  "<<jettemp.DeltaR(truth_q1)<<endl
+            <<"q2:  "<<jettemp.DeltaR(truth_q2)<<endl
+            <<"W:   "<<jettemp.DeltaR(truth_W)<<endl
+            <<"Z:   "<<jettemp.DeltaR(truth_Z)<<endl
+            <<"t1:  "<<jettemp.DeltaR(truth_t1)<<endl
+            <<"t2:  "<<jettemp.DeltaR(truth_t2)<<endl;
+      }
+      int jetflavor = -1;
+      if(jettemp.DeltaR(truth_q1)<0.8 || jettemp.DeltaR(truth_q2)<0.8){ jetflavor = 0; }
+      else if(jettemp.DeltaR(truth_W)<0.8){  jetflavor = 1; }
+      else if(jettemp.DeltaR(truth_Z)<0.8){  jetflavor = 2; }
+      else if(jettemp.DeltaR(truth_t1)<0.8 || jettemp.DeltaR(truth_t2)<0.8){ jetflavor = 3; }
+      else{ jetflavor = -1; }
+
+      if(debug) cout<<"FillingJet: flav="<<jetflavor<<"  pt="<<jettemp.Pt()<<"  m="<<jettemp.M()<<endl;
+
+
+      /////////////////////////////////
+      //Fill variables that will go into ntuple
+      /////////////////////////////////
+      tempJet_flavor         = jetflavor;
+      tempJet_pt             = jettemp.Pt();
+      tempJet_eta            = jettemp.Eta();
+      tempJet_phi            = jettemp.Phi();
+      tempJet_m              = jettemp.M();
+      tempJet_Tau1           = nsub1(groomed_jet);
+      tempJet_Tau2           = nsub2(groomed_jet);
+      if(tempJet_Tau1!=0)
+        tempJet_Tau21        = tempJet_Tau2/tempJet_Tau1;
+      tempJet_C2             = ecfC2(groomed_jet);
+      tempJet_D2             = ecfD2(groomed_jet);
+      tempJet_C3             = ecfC3(groomed_jet);
+      tempJet_TJet_m1        = T_Mass(1,groomed_jet);
+      tempJet_TJet_m2        = T_Mass(2,groomed_jet);
+      tempJet_TJet_Tau1      = T_Nsubjettiness(1, groomed_jet, 1., 2.);
+      tempJet_TJet_Tau2      = T_Nsubjettiness(2, groomed_jet, 1., 2.);
+      tempJet_TJet_Tau21     = T_NsubjettinessRatio(2, 1, groomed_jet, 1., 2.);
+      tempJet_TJet_C2        = T_EnergyCorrelator_C2(groomed_jet, 0.1, 2.);
+      tempJet_TJet_D2        = T_EnergyCorrelator_D2(groomed_jet, 0.1, 2.);
+      tempJet_TJet_C3        = T_EnergyCorrelator_C3(groomed_jet, 0.1, 2.);
+
+      TruthRawTrim_flavor    .push_back(tempJet_flavor);
+      TruthRawTrim_pt        .push_back(tempJet_pt);
+      TruthRawTrim_eta       .push_back(tempJet_eta);
+      TruthRawTrim_phi       .push_back(tempJet_phi);
+      TruthRawTrim_m         .push_back(tempJet_m);
+      TruthRawTrim_Tau1      .push_back(tempJet_Tau1);
+      TruthRawTrim_Tau2      .push_back(tempJet_Tau2);
+      TruthRawTrim_Tau21     .push_back(tempJet_Tau21);
+      TruthRawTrim_C2        .push_back(tempJet_C2);
+      TruthRawTrim_D2        .push_back(tempJet_D2);
+      TruthRawTrim_C3        .push_back(tempJet_C3);
+      TruthRawTrim_TJet_m1   .push_back(tempJet_TJet_m1);
+      TruthRawTrim_TJet_m2   .push_back(tempJet_TJet_m2);
+      TruthRawTrim_TJet_Tau1 .push_back(tempJet_TJet_Tau1);
+      TruthRawTrim_TJet_Tau2 .push_back(tempJet_TJet_Tau2);
+      TruthRawTrim_TJet_Tau21.push_back(tempJet_TJet_Tau21);
+      TruthRawTrim_TJet_C2   .push_back(tempJet_TJet_C2);
+      TruthRawTrim_TJet_D2   .push_back(tempJet_TJet_D2);
+      TruthRawTrim_TJet_C3   .push_back(tempJet_TJet_C3);
+
+    }
+
+
+    /////////////////////////////
+    //TruthPileupTrim
+    /////////////////////////////
+    for (unsigned int ijet = 0; ijet < inclusive_jets_TruthPileup.size(); ijet++) {
+      PseudoJet groomed_jet = f(inclusive_jets_TruthPileup[ijet]);
+
+      TLorentzVector jettemp;
+      jettemp.SetPtEtaPhiM(groomed_jet.pt(),
+                           groomed_jet.eta(),
+                           groomed_jet.phi(),
+                           groomed_jet.m());
+
+      /////////////////////////////////
+      //Getting truth label for filling into ntuple
+      /////////////////////////////////
+      if(debug){
+        cout<<"DeltaR: "<<endl
+            <<"q1:  "<<jettemp.DeltaR(truth_q1)<<endl
+            <<"q2:  "<<jettemp.DeltaR(truth_q2)<<endl
+            <<"W:   "<<jettemp.DeltaR(truth_W)<<endl
+            <<"Z:   "<<jettemp.DeltaR(truth_Z)<<endl
+            <<"t1:  "<<jettemp.DeltaR(truth_t1)<<endl
+            <<"t2:  "<<jettemp.DeltaR(truth_t2)<<endl;
+      }
+      int jetflavor = -1;
+      if(jettemp.DeltaR(truth_q1)<0.8 || jettemp.DeltaR(truth_q2)<0.8){ jetflavor = 0; }
+      else if(jettemp.DeltaR(truth_W)<0.8){  jetflavor = 1; }
+      else if(jettemp.DeltaR(truth_Z)<0.8){  jetflavor = 2; }
+      else if(jettemp.DeltaR(truth_t1)<0.8 || jettemp.DeltaR(truth_t2)<0.8){ jetflavor = 3; }
+      else{ jetflavor = -1; }
+
+      if(debug) cout<<"FillingJet: flav="<<jetflavor<<"  pt="<<jettemp.Pt()<<"  m="<<jettemp.M()<<endl;
+
+
+      /////////////////////////////////
+      //Fill variables that will go into ntuple
+      /////////////////////////////////
+      tempJet_flavor         = jetflavor;
+      tempJet_pt             = jettemp.Pt();
+      tempJet_eta            = jettemp.Eta();
+      tempJet_phi            = jettemp.Phi();
+      tempJet_m              = jettemp.M();
+      tempJet_Tau1           = nsub1(groomed_jet);
+      tempJet_Tau2           = nsub2(groomed_jet);
+      if(tempJet_Tau1!=0)
+        tempJet_Tau21        = tempJet_Tau2/tempJet_Tau1;
+      tempJet_C2             = ecfC2(groomed_jet);
+      tempJet_D2             = ecfD2(groomed_jet);
+      tempJet_C3             = ecfC3(groomed_jet);
+      tempJet_TJet_m1        = T_Mass(1,groomed_jet);
+      tempJet_TJet_m2        = T_Mass(2,groomed_jet);
+      tempJet_TJet_Tau1      = T_Nsubjettiness(1, groomed_jet, 1., 2.);
+      tempJet_TJet_Tau2      = T_Nsubjettiness(2, groomed_jet, 1., 2.);
+      tempJet_TJet_Tau21     = T_NsubjettinessRatio(2, 1, groomed_jet, 1., 2.);
+      tempJet_TJet_C2        = T_EnergyCorrelator_C2(groomed_jet, 0.1, 2.);
+      tempJet_TJet_D2        = T_EnergyCorrelator_D2(groomed_jet, 0.1, 2.);
+      tempJet_TJet_C3        = T_EnergyCorrelator_C3(groomed_jet, 0.1, 2.);
+
+      TruthPileupTrim_flavor    .push_back(tempJet_flavor);
+      TruthPileupTrim_pt        .push_back(tempJet_pt);
+      TruthPileupTrim_eta       .push_back(tempJet_eta);
+      TruthPileupTrim_phi       .push_back(tempJet_phi);
+      TruthPileupTrim_m         .push_back(tempJet_m);
+      TruthPileupTrim_Tau1      .push_back(tempJet_Tau1);
+      TruthPileupTrim_Tau2      .push_back(tempJet_Tau2);
+      TruthPileupTrim_Tau21     .push_back(tempJet_Tau21);
+      TruthPileupTrim_C2        .push_back(tempJet_C2);
+      TruthPileupTrim_D2        .push_back(tempJet_D2);
+      TruthPileupTrim_C3        .push_back(tempJet_C3);
+      TruthPileupTrim_TJet_m1   .push_back(tempJet_TJet_m1);
+      TruthPileupTrim_TJet_m2   .push_back(tempJet_TJet_m2);
+      TruthPileupTrim_TJet_Tau1 .push_back(tempJet_TJet_Tau1);
+      TruthPileupTrim_TJet_Tau2 .push_back(tempJet_TJet_Tau2);
+      TruthPileupTrim_TJet_Tau21.push_back(tempJet_TJet_Tau21);
+      TruthPileupTrim_TJet_C2   .push_back(tempJet_TJet_C2);
+      TruthPileupTrim_TJet_D2   .push_back(tempJet_TJet_D2);
+      TruthPileupTrim_TJet_C3   .push_back(tempJet_TJet_C3);
+
+    }
+
+    /////////////////////////////
+    //RecoRawTrim
+    /////////////////////////////
+    for (unsigned int ijet = 0; ijet < inclusive_jets_RecoRaw.size(); ijet++) {
+      PseudoJet groomed_jet = f(inclusive_jets_RecoRaw[ijet]);
+
+      TLorentzVector jettemp;
+      jettemp.SetPtEtaPhiM(groomed_jet.pt(),
+                           groomed_jet.eta(),
+                           groomed_jet.phi(),
+                           groomed_jet.m());
+
+      /////////////////////////////////
+      //Getting truth label for filling into ntuple
+      /////////////////////////////////
+      if(debug){
+        cout<<"DeltaR: "<<endl
+            <<"q1:  "<<jettemp.DeltaR(truth_q1)<<endl
+            <<"q2:  "<<jettemp.DeltaR(truth_q2)<<endl
+            <<"W:   "<<jettemp.DeltaR(truth_W)<<endl
+            <<"Z:   "<<jettemp.DeltaR(truth_Z)<<endl
+            <<"t1:  "<<jettemp.DeltaR(truth_t1)<<endl
+            <<"t2:  "<<jettemp.DeltaR(truth_t2)<<endl;
+      }
+      int jetflavor = -1;
+      if(jettemp.DeltaR(truth_q1)<0.8 || jettemp.DeltaR(truth_q2)<0.8){ jetflavor = 0; }
+      else if(jettemp.DeltaR(truth_W)<0.8){  jetflavor = 1; }
+      else if(jettemp.DeltaR(truth_Z)<0.8){  jetflavor = 2; }
+      else if(jettemp.DeltaR(truth_t1)<0.8 || jettemp.DeltaR(truth_t2)<0.8){ jetflavor = 3; }
+      else{ jetflavor = -1; }
+
+      if(debug) cout<<"FillingJet: flav="<<jetflavor<<"  pt="<<jettemp.Pt()<<"  m="<<jettemp.M()<<endl;
+
+
+      /////////////////////////////////
+      //Fill variables that will go into ntuple
+      /////////////////////////////////
+      tempJet_flavor         = jetflavor;
+      tempJet_pt             = jettemp.Pt();
+      tempJet_eta            = jettemp.Eta();
+      tempJet_phi            = jettemp.Phi();
+      tempJet_m              = jettemp.M();
+      tempJet_Tau1           = nsub1(groomed_jet);
+      tempJet_Tau2           = nsub2(groomed_jet);
+      if(tempJet_Tau1!=0)
+        tempJet_Tau21        = tempJet_Tau2/tempJet_Tau1;
+      tempJet_C2             = ecfC2(groomed_jet);
+      tempJet_D2             = ecfD2(groomed_jet);
+      tempJet_C3             = ecfC3(groomed_jet);
+      tempJet_TJet_m1        = T_Mass(1,groomed_jet);
+      tempJet_TJet_m2        = T_Mass(2,groomed_jet);
+      tempJet_TJet_Tau1      = T_Nsubjettiness(1, groomed_jet, 1., 2.);
+      tempJet_TJet_Tau2      = T_Nsubjettiness(2, groomed_jet, 1., 2.);
+      tempJet_TJet_Tau21     = T_NsubjettinessRatio(2, 1, groomed_jet, 1., 2.);
+      tempJet_TJet_C2        = T_EnergyCorrelator_C2(groomed_jet, 0.1, 2.);
+      tempJet_TJet_D2        = T_EnergyCorrelator_D2(groomed_jet, 0.1, 2.);
+      tempJet_TJet_C3        = T_EnergyCorrelator_C3(groomed_jet, 0.1, 2.);
+
+      RecoRawTrim_flavor    .push_back(tempJet_flavor);
+      RecoRawTrim_pt        .push_back(tempJet_pt);
+      RecoRawTrim_eta       .push_back(tempJet_eta);
+      RecoRawTrim_phi       .push_back(tempJet_phi);
+      RecoRawTrim_m         .push_back(tempJet_m);
+      RecoRawTrim_Tau1      .push_back(tempJet_Tau1);
+      RecoRawTrim_Tau2      .push_back(tempJet_Tau2);
+      RecoRawTrim_Tau21     .push_back(tempJet_Tau21);
+      RecoRawTrim_C2        .push_back(tempJet_C2);
+      RecoRawTrim_D2        .push_back(tempJet_D2);
+      RecoRawTrim_C3        .push_back(tempJet_C3);
+      RecoRawTrim_TJet_m1   .push_back(tempJet_TJet_m1);
+      RecoRawTrim_TJet_m2   .push_back(tempJet_TJet_m2);
+      RecoRawTrim_TJet_Tau1 .push_back(tempJet_TJet_Tau1);
+      RecoRawTrim_TJet_Tau2 .push_back(tempJet_TJet_Tau2);
+      RecoRawTrim_TJet_Tau21.push_back(tempJet_TJet_Tau21);
+      RecoRawTrim_TJet_C2   .push_back(tempJet_TJet_C2);
+      RecoRawTrim_TJet_D2   .push_back(tempJet_TJet_D2);
+      RecoRawTrim_TJet_C3   .push_back(tempJet_TJet_C3);
+
+    }
+
+    /////////////////////////////
+    //RecoPileupTrim
+    /////////////////////////////
+    for (unsigned int ijet = 0; ijet < inclusive_jets_RecoPileup.size(); ijet++) {
+      PseudoJet groomed_jet = f(inclusive_jets_RecoPileup[ijet]);
+
+      TLorentzVector jettemp;
+      jettemp.SetPtEtaPhiM(groomed_jet.pt(),
+                           groomed_jet.eta(),
+                           groomed_jet.phi(),
+                           groomed_jet.m());
+
+      /////////////////////////////////
+      //Getting truth label for filling into ntuple
+      /////////////////////////////////
+      if(debug){
+        cout<<"DeltaR: "<<endl
+            <<"q1:  "<<jettemp.DeltaR(truth_q1)<<endl
+            <<"q2:  "<<jettemp.DeltaR(truth_q2)<<endl
+            <<"W:   "<<jettemp.DeltaR(truth_W)<<endl
+            <<"Z:   "<<jettemp.DeltaR(truth_Z)<<endl
+            <<"t1:  "<<jettemp.DeltaR(truth_t1)<<endl
+            <<"t2:  "<<jettemp.DeltaR(truth_t2)<<endl;
+      }
+      int jetflavor = -1;
+      if(jettemp.DeltaR(truth_q1)<0.8 || jettemp.DeltaR(truth_q2)<0.8){ jetflavor = 0; }
+      else if(jettemp.DeltaR(truth_W)<0.8){  jetflavor = 1; }
+      else if(jettemp.DeltaR(truth_Z)<0.8){  jetflavor = 2; }
+      else if(jettemp.DeltaR(truth_t1)<0.8 || jettemp.DeltaR(truth_t2)<0.8){ jetflavor = 3; }
+      else{ jetflavor = -1; }
+
+      if(debug) cout<<"FillingJet: flav="<<jetflavor<<"  pt="<<jettemp.Pt()<<"  m="<<jettemp.M()<<endl;
+
+
+      /////////////////////////////////
+      //Fill variables that will go into ntuple
+      /////////////////////////////////
+      tempJet_flavor         = jetflavor;
+      tempJet_pt             = jettemp.Pt();
+      tempJet_eta            = jettemp.Eta();
+      tempJet_phi            = jettemp.Phi();
+      tempJet_m              = jettemp.M();
+      tempJet_Tau1           = nsub1(groomed_jet);
+      tempJet_Tau2           = nsub2(groomed_jet);
+      if(tempJet_Tau1!=0)
+        tempJet_Tau21        = tempJet_Tau2/tempJet_Tau1;
+      tempJet_C2             = ecfC2(groomed_jet);
+      tempJet_D2             = ecfD2(groomed_jet);
+      tempJet_C3             = ecfC3(groomed_jet);
+      tempJet_TJet_m1        = T_Mass(1,groomed_jet);
+      tempJet_TJet_m2        = T_Mass(2,groomed_jet);
+      tempJet_TJet_Tau1      = T_Nsubjettiness(1, groomed_jet, 1., 2.);
+      tempJet_TJet_Tau2      = T_Nsubjettiness(2, groomed_jet, 1., 2.);
+      tempJet_TJet_Tau21     = T_NsubjettinessRatio(2, 1, groomed_jet, 1., 2.);
+      tempJet_TJet_C2        = T_EnergyCorrelator_C2(groomed_jet, 0.1, 2.);
+      tempJet_TJet_D2        = T_EnergyCorrelator_D2(groomed_jet, 0.1, 2.);
+      tempJet_TJet_C3        = T_EnergyCorrelator_C3(groomed_jet, 0.1, 2.);
+
+      RecoPileupTrim_flavor    .push_back(tempJet_flavor);
+      RecoPileupTrim_pt        .push_back(tempJet_pt);
+      RecoPileupTrim_eta       .push_back(tempJet_eta);
+      RecoPileupTrim_phi       .push_back(tempJet_phi);
+      RecoPileupTrim_m         .push_back(tempJet_m);
+      RecoPileupTrim_Tau1      .push_back(tempJet_Tau1);
+      RecoPileupTrim_Tau2      .push_back(tempJet_Tau2);
+      RecoPileupTrim_Tau21     .push_back(tempJet_Tau21);
+      RecoPileupTrim_C2        .push_back(tempJet_C2);
+      RecoPileupTrim_D2        .push_back(tempJet_D2);
+      RecoPileupTrim_C3        .push_back(tempJet_C3);
+      RecoPileupTrim_TJet_m1   .push_back(tempJet_TJet_m1);
+      RecoPileupTrim_TJet_m2   .push_back(tempJet_TJet_m2);
+      RecoPileupTrim_TJet_Tau1 .push_back(tempJet_TJet_Tau1);
+      RecoPileupTrim_TJet_Tau2 .push_back(tempJet_TJet_Tau2);
+      RecoPileupTrim_TJet_Tau21.push_back(tempJet_TJet_Tau21);
+      RecoPileupTrim_TJet_C2   .push_back(tempJet_TJet_C2);
+      RecoPileupTrim_TJet_D2   .push_back(tempJet_TJet_D2);
+      RecoPileupTrim_TJet_C3   .push_back(tempJet_TJet_C3);
+
+    }
+
+
+
+
+
+
+
+
+
+    //////////////////////////////////////
+    //Fill event into tree
+    //////////////////////////////////////
+    if(debug) cout<<"Filling Tree"<<endl;
+    treeout->Fill();
   }
 
 
@@ -415,6 +1090,180 @@ int main(int argc, char* argv[]){
   return 0;
 
 }
+
+
+
+///=========================================
+/// Reset Branches
+///=========================================
+void ResetBranches(){
+
+  NumberOfVertices = 0;
+
+  TruthRaw_flavor.clear();
+  TruthRaw_pt.clear();
+  TruthRaw_eta.clear();
+  TruthRaw_phi.clear();
+  TruthRaw_m.clear();
+  TruthRaw_Tau1.clear();
+  TruthRaw_Tau2.clear();
+  TruthRaw_Tau21.clear();
+  TruthRaw_C2.clear();
+  TruthRaw_D2.clear();
+  TruthRaw_C3.clear();
+  TruthRaw_TJet_m1.clear();
+  TruthRaw_TJet_m2.clear();
+  TruthRaw_TJet_Tau1.clear();
+  TruthRaw_TJet_Tau2.clear();
+  TruthRaw_TJet_Tau21.clear();
+  TruthRaw_TJet_C2.clear();
+  TruthRaw_TJet_D2.clear();
+  TruthRaw_TJet_C3.clear();
+
+  TruthPileup_flavor.clear();
+  TruthPileup_pt.clear();
+  TruthPileup_eta.clear();
+  TruthPileup_phi.clear();
+  TruthPileup_m.clear();
+  TruthPileup_Tau1.clear();
+  TruthPileup_Tau2.clear();
+  TruthPileup_Tau21.clear();
+  TruthPileup_C2.clear();
+  TruthPileup_D2.clear();
+  TruthPileup_C3.clear();
+  TruthPileup_TJet_m1.clear();
+  TruthPileup_TJet_m2.clear();
+  TruthPileup_TJet_Tau1.clear();
+  TruthPileup_TJet_Tau2.clear();
+  TruthPileup_TJet_Tau21.clear();
+  TruthPileup_TJet_C2.clear();
+  TruthPileup_TJet_D2.clear();
+  TruthPileup_TJet_C3.clear();
+
+  RecoRaw_flavor.clear();
+  RecoRaw_pt.clear();
+  RecoRaw_eta.clear();
+  RecoRaw_phi.clear();
+  RecoRaw_m.clear();
+  RecoRaw_Tau1.clear();
+  RecoRaw_Tau2.clear();
+  RecoRaw_Tau21.clear();
+  RecoRaw_C2.clear();
+  RecoRaw_D2.clear();
+  RecoRaw_C3.clear();
+  RecoRaw_TJet_m1.clear();
+  RecoRaw_TJet_m2.clear();
+  RecoRaw_TJet_Tau1.clear();
+  RecoRaw_TJet_Tau2.clear();
+  RecoRaw_TJet_Tau21.clear();
+  RecoRaw_TJet_C2.clear();
+  RecoRaw_TJet_D2.clear();
+  RecoRaw_TJet_C3.clear();
+
+  RecoPileup_flavor.clear();
+  RecoPileup_pt.clear();
+  RecoPileup_eta.clear();
+  RecoPileup_phi.clear();
+  RecoPileup_m.clear();
+  RecoPileup_Tau1.clear();
+  RecoPileup_Tau2.clear();
+  RecoPileup_Tau21.clear();
+  RecoPileup_C2.clear();
+  RecoPileup_D2.clear();
+  RecoPileup_C3.clear();
+  RecoPileup_TJet_m1.clear();
+  RecoPileup_TJet_m2.clear();
+  RecoPileup_TJet_Tau1.clear();
+  RecoPileup_TJet_Tau2.clear();
+  RecoPileup_TJet_Tau21.clear();
+  RecoPileup_TJet_C2.clear();
+  RecoPileup_TJet_D2.clear();
+  RecoPileup_TJet_C3.clear();
+
+
+
+  TruthRawTrim_flavor.clear();
+  TruthRawTrim_pt.clear();
+  TruthRawTrim_eta.clear();
+  TruthRawTrim_phi.clear();
+  TruthRawTrim_m.clear();
+  TruthRawTrim_Tau1.clear();
+  TruthRawTrim_Tau2.clear();
+  TruthRawTrim_Tau21.clear();
+  TruthRawTrim_C2.clear();
+  TruthRawTrim_D2.clear();
+  TruthRawTrim_C3.clear();
+  TruthRawTrim_TJet_m1.clear();
+  TruthRawTrim_TJet_m2.clear();
+  TruthRawTrim_TJet_Tau1.clear();
+  TruthRawTrim_TJet_Tau2.clear();
+  TruthRawTrim_TJet_Tau21.clear();
+  TruthRawTrim_TJet_C2.clear();
+  TruthRawTrim_TJet_D2.clear();
+  TruthRawTrim_TJet_C3.clear();
+
+  TruthPileupTrim_flavor.clear();
+  TruthPileupTrim_pt.clear();
+  TruthPileupTrim_eta.clear();
+  TruthPileupTrim_phi.clear();
+  TruthPileupTrim_m.clear();
+  TruthPileupTrim_Tau1.clear();
+  TruthPileupTrim_Tau2.clear();
+  TruthPileupTrim_Tau21.clear();
+  TruthPileupTrim_C2.clear();
+  TruthPileupTrim_D2.clear();
+  TruthPileupTrim_C3.clear();
+  TruthPileupTrim_TJet_m1.clear();
+  TruthPileupTrim_TJet_m2.clear();
+  TruthPileupTrim_TJet_Tau1.clear();
+  TruthPileupTrim_TJet_Tau2.clear();
+  TruthPileupTrim_TJet_Tau21.clear();
+  TruthPileupTrim_TJet_C2.clear();
+  TruthPileupTrim_TJet_D2.clear();
+  TruthPileupTrim_TJet_C3.clear();
+
+  RecoRawTrim_flavor.clear();
+  RecoRawTrim_pt.clear();
+  RecoRawTrim_eta.clear();
+  RecoRawTrim_phi.clear();
+  RecoRawTrim_m.clear();
+  RecoRawTrim_Tau1.clear();
+  RecoRawTrim_Tau2.clear();
+  RecoRawTrim_Tau21.clear();
+  RecoRawTrim_C2.clear();
+  RecoRawTrim_D2.clear();
+  RecoRawTrim_C3.clear();
+  RecoRawTrim_TJet_m1.clear();
+  RecoRawTrim_TJet_m2.clear();
+  RecoRawTrim_TJet_Tau1.clear();
+  RecoRawTrim_TJet_Tau2.clear();
+  RecoRawTrim_TJet_Tau21.clear();
+  RecoRawTrim_TJet_C2.clear();
+  RecoRawTrim_TJet_D2.clear();
+  RecoRawTrim_TJet_C3.clear();
+
+  RecoPileupTrim_flavor.clear();
+  RecoPileupTrim_pt.clear();
+  RecoPileupTrim_eta.clear();
+  RecoPileupTrim_phi.clear();
+  RecoPileupTrim_m.clear();
+  RecoPileupTrim_Tau1.clear();
+  RecoPileupTrim_Tau2.clear();
+  RecoPileupTrim_Tau21.clear();
+  RecoPileupTrim_C2.clear();
+  RecoPileupTrim_D2.clear();
+  RecoPileupTrim_C3.clear();
+  RecoPileupTrim_TJet_m1.clear();
+  RecoPileupTrim_TJet_m2.clear();
+  RecoPileupTrim_TJet_Tau1.clear();
+  RecoPileupTrim_TJet_Tau2.clear();
+  RecoPileupTrim_TJet_Tau21.clear();
+  RecoPileupTrim_TJet_C2.clear();
+  RecoPileupTrim_TJet_D2.clear();
+  RecoPileupTrim_TJet_C3.clear();
+
+}
+
 
 ///=========================================
 /// Calorimeter Simulation

@@ -66,25 +66,25 @@ int main(int argc, char* argv[]){
   ///////////////////////////////////
   //initialize the output ttree and branches
   ///////////////////////////////////
-  double truth_quark1_pt;
-  double truth_quark1_eta;
-  double truth_quark1_phi;
-  double truth_quark1_m;
+  double truth_q1_pt;
+  double truth_q1_eta;
+  double truth_q1_phi;
+  double truth_q1_m;
 
-  double truth_quark2_pt;
-  double truth_quark2_eta;
-  double truth_quark2_phi;
-  double truth_quark2_m;
+  double truth_q2_pt;
+  double truth_q2_eta;
+  double truth_q2_phi;
+  double truth_q2_m;
 
-  double truth_top1_pt;
-  double truth_top1_eta;
-  double truth_top1_phi;
-  double truth_top1_m;
+  double truth_t1_pt;
+  double truth_t1_eta;
+  double truth_t1_phi;
+  double truth_t1_m;
 
-  double truth_top2_pt;
-  double truth_top2_eta;
-  double truth_top2_phi;
-  double truth_top2_m;
+  double truth_t2_pt;
+  double truth_t2_eta;
+  double truth_t2_phi;
+  double truth_t2_m;
 
   double truth_W_pt;
   double truth_W_eta;
@@ -109,25 +109,25 @@ int main(int argc, char* argv[]){
   tree->Branch("fspart_phi",&fspart_phi);
   tree->Branch("fspart_m",  &fspart_m);
 
-  tree->Branch("truth_quark1_pt",  &truth_quark1_pt);
-  tree->Branch("truth_quark1_eta", &truth_quark1_eta);
-  tree->Branch("truth_quark1_phi", &truth_quark1_phi);
-  tree->Branch("truth_quark1_m",   &truth_quark1_m);
+  tree->Branch("truth_q1_pt",  &truth_q1_pt);
+  tree->Branch("truth_q1_eta", &truth_q1_eta);
+  tree->Branch("truth_q1_phi", &truth_q1_phi);
+  tree->Branch("truth_q1_m",   &truth_q1_m);
 
-  tree->Branch("truth_quark2_pt",  &truth_quark2_pt);
-  tree->Branch("truth_quark2_eta", &truth_quark2_eta);
-  tree->Branch("truth_quark2_phi", &truth_quark2_phi);
-  tree->Branch("truth_quark2_m",   &truth_quark2_m);
+  tree->Branch("truth_q2_pt",  &truth_q2_pt);
+  tree->Branch("truth_q2_eta", &truth_q2_eta);
+  tree->Branch("truth_q2_phi", &truth_q2_phi);
+  tree->Branch("truth_q2_m",   &truth_q2_m);
 
-  tree->Branch("truth_top1_pt",  &truth_top1_pt);
-  tree->Branch("truth_top1_eta", &truth_top1_eta);
-  tree->Branch("truth_top1_phi", &truth_top1_phi);
-  tree->Branch("truth_top1_m",   &truth_top1_m);
+  tree->Branch("truth_t1_pt",  &truth_t1_pt);
+  tree->Branch("truth_t1_eta", &truth_t1_eta);
+  tree->Branch("truth_t1_phi", &truth_t1_phi);
+  tree->Branch("truth_t1_m",   &truth_t1_m);
 
-  tree->Branch("truth_top2_pt",  &truth_top2_pt);
-  tree->Branch("truth_top2_eta", &truth_top2_eta);
-  tree->Branch("truth_top2_phi", &truth_top2_phi);
-  tree->Branch("truth_top2_m",   &truth_top2_m);
+  tree->Branch("truth_t2_pt",  &truth_t2_pt);
+  tree->Branch("truth_t2_eta", &truth_t2_eta);
+  tree->Branch("truth_t2_phi", &truth_t2_phi);
+  tree->Branch("truth_t2_m",   &truth_t2_m);
 
   tree->Branch("truth_W_pt",  &truth_W_pt);
   tree->Branch("truth_W_eta", &truth_W_eta);
@@ -175,15 +175,15 @@ int main(int argc, char* argv[]){
     fspart_phi.clear();
     fspart_m.clear();
 
-    truth_quark1_pt  = 100.0;
-    truth_quark1_eta = 10.0;
-    truth_quark1_phi = 0.0;
-    truth_quark1_m   = 1.0;
+    truth_q1_pt  = 100.0;
+    truth_q1_eta = 10.0;
+    truth_q1_phi = 0.0;
+    truth_q1_m   = 1.0;
 
-    truth_quark2_pt  = 100.0;
-    truth_quark2_eta = 10.0;
-    truth_quark2_phi = 0.0;
-    truth_quark2_m   = 1.0;
+    truth_q2_pt  = 100.0;
+    truth_q2_eta = 10.0;
+    truth_q2_phi = 0.0;
+    truth_q2_m   = 1.0;
 
     truth_W_pt  = 100.0;
     truth_W_eta = 10.0;
@@ -195,15 +195,15 @@ int main(int argc, char* argv[]){
     truth_Z_phi = 0.0;
     truth_Z_m   = 1.0;
 
-    truth_top1_pt  = 100.0;
-    truth_top1_eta = 10.0;
-    truth_top1_phi = 0.0;
-    truth_top1_m   = 1.0;
+    truth_t1_pt  = 100.0;
+    truth_t1_eta = 10.0;
+    truth_t1_phi = 0.0;
+    truth_t1_m   = 1.0;
 
-    truth_top2_pt  = 100.0;
-    truth_top2_eta = 10.0;
-    truth_top2_phi = 0.0;
-    truth_top2_m   = 1.0;
+    truth_t2_pt  = 100.0;
+    truth_t2_eta = 10.0;
+    truth_t2_phi = 0.0;
+    truth_t2_m   = 1.0;
 
     //loops through the particles in the event just generated
     for (int iPart = 0; iPart < pythia.event.size(); ++iPart) {
@@ -214,16 +214,16 @@ int main(int argc, char* argv[]){
         acceptevent=true;
         //fill truth quark branches
         if(pythia.event[iPart].id()<0 && pythia.event[iPart].status()==23){
-          truth_quark1_pt=pythia.event[iPart].pT();
-          truth_quark1_eta=pythia.event[iPart].eta();
-          truth_quark1_phi=pythia.event[iPart].phi();
-          truth_quark1_m=pythia.event[iPart].m();
+          truth_q1_pt=pythia.event[iPart].pT();
+          truth_q1_eta=pythia.event[iPart].eta();
+          truth_q1_phi=pythia.event[iPart].phi();
+          truth_q1_m=pythia.event[iPart].m();
         }
         if(pythia.event[iPart].id()>0 && pythia.event[iPart].status()==23){
-          truth_quark2_pt=pythia.event[iPart].pT();
-          truth_quark2_eta=pythia.event[iPart].eta();
-          truth_quark2_phi=pythia.event[iPart].phi();
-          truth_quark2_m=pythia.event[iPart].m();
+          truth_q2_pt=pythia.event[iPart].pT();
+          truth_q2_eta=pythia.event[iPart].eta();
+          truth_q2_phi=pythia.event[iPart].phi();
+          truth_q2_m=pythia.event[iPart].m();
         }
       }
       else if(ProcessType==1){
@@ -251,16 +251,16 @@ int main(int argc, char* argv[]){
         acceptevent=true;
         //fill truth topquark branches
         if(pythia.event[iPart].id()==-6 && pythia.event[iPart].status()==-62){
-          truth_top1_pt=pythia.event[iPart].pT();
-          truth_top1_eta=pythia.event[iPart].eta();
-          truth_top1_phi=pythia.event[iPart].phi();
-          truth_top1_m=pythia.event[iPart].m();
+          truth_t1_pt=pythia.event[iPart].pT();
+          truth_t1_eta=pythia.event[iPart].eta();
+          truth_t1_phi=pythia.event[iPart].phi();
+          truth_t1_m=pythia.event[iPart].m();
         }
         if(pythia.event[iPart].id()==6 && pythia.event[iPart].status()==-62){
-          truth_top2_pt=pythia.event[iPart].pT();
-          truth_top2_eta=pythia.event[iPart].eta();
-          truth_top2_phi=pythia.event[iPart].phi();
-          truth_top2_m=pythia.event[iPart].m();
+          truth_t2_pt=pythia.event[iPart].pT();
+          truth_t2_eta=pythia.event[iPart].eta();
+          truth_t2_phi=pythia.event[iPart].phi();
+          truth_t2_m=pythia.event[iPart].m();
         }
       }
       else{

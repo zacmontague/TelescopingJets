@@ -3,10 +3,18 @@
 //  Alexander Emerman, Yang-Ting Chien, Shih-Chieh Hsu
 //
 
-#include "TelescopingJets.hh" 
+#include "TelescopingJets.hh"
 
   // Returns the mass volatility for N axes
 double TelescopingJets::result(int N, const fastjet::PseudoJet& jet) const {
+
+  int nconst = jet.constituents().size();
+  //std::cout<<"Number of constits: "<<nconst<<std::endl;
+  if(nconst==1){
+    //std::cout<<"Only one constituent, can't calculate TJets("<<N<<")"<<std::endl;
+    return -1;
+  }
+
   std::vector<double> tjet_masses = getTjetMasses(N,jet);
   return getVolatility(tjet_masses);
 }
@@ -14,7 +22,7 @@ double TelescopingJets::result(int N, const fastjet::PseudoJet& jet) const {
 std::vector<std::vector<fastjet::PseudoJet> > TelescopingJets::getSubjets(int N, const fastjet::PseudoJet& jet) const {
   _setSubjets(N, jet);
   return _current_subjets;
-} 
+}
   // Returns the sum of the subjets at each R value
 std::vector<fastjet::PseudoJet> TelescopingJets::getTjets(int N, const fastjet::PseudoJet& jet) const {
   _setTjets(N, jet);
@@ -70,7 +78,7 @@ void TelescopingJets::_setSubjets(int N, const fastjet::PseudoJet& jet) const {
 }
 void TelescopingJets::_setSubjets(const fastjet::PseudoJet& jet) const {
   if (!_axes_are_set) throw std::runtime_error("axes not set");
-  // reset objects so that they can never hold information on a set of particles other than the current one 
+  // reset objects so that they can never hold information on a set of particles other than the current one
   _current_tjet_masses.clear();
   _current_tjets.clear();
   _current_subjets.clear();
@@ -102,7 +110,7 @@ void TelescopingJets::_setTjets(int N, const fastjet::PseudoJet&  jet) const {
 void TelescopingJets::_setTjets(const fastjet::PseudoJet&  jet) const {
   if (!_axes_are_set) throw std::runtime_error("axes not set");
   _setSubjets(jet);
-  // reset objects so that they can never hold information on a set of particles other than the current one 
+  // reset objects so that they can never hold information on a set of particles other than the current one
   _current_tjet_masses.clear();
   _current_tjets.clear();
 
@@ -125,7 +133,7 @@ void TelescopingJets::_setTjetMasses(int N, const fastjet::PseudoJet& jet) const
 void TelescopingJets::_setTjetMasses(const fastjet::PseudoJet& jet) const {
   if (!_axes_are_set) throw std::runtime_error("axes not set");
   _setTjets(jet);
-  // reset objects so that they can never hold information on a set of particles other than the current one 
+  // reset objects so that they can never hold information on a set of particles other than the current one
   _current_tjet_masses.clear();
   for (unsigned int i=0; i < _r_values.size(); i++) {
     _current_tjet_masses.push_back( (_current_tjets.at(i)).m() );
@@ -140,7 +148,7 @@ void TelescopingJets::_setAxes(int N, const std::vector<fastjet::PseudoJet>& par
   _current_axes = _axes_finder->getAxes(_N, particles, seed_axes);
   _axes_are_set = true;
   return;
-} 
+}
 
 void TelescopingJets::_partitionJet(const std::vector<fastjet::PseudoJet>& particles, double R, std::vector<std::vector<fastjet::PseudoJet> >& jet_partition) const {
   if (_current_axes.size() != _N) throw std::logic_error("Subjet axes uninitialized.\n");
