@@ -17,22 +17,19 @@ def SignalBGCompare1D(InputDir, alg, variable, range, logy, pt1, pt2, m1, m2, ou
     dry=0.045
 
     weight=""
-    weight+="pass_selection*EventWeight*CrossSection*("
-    weight+="akt10"+alg+"_trim_pt>"+pt1+" && "
-    weight+="akt10"+alg+"_trim_pt<"+pt2
+    weight+="("
+    weight+=alg+"_pt>"+pt1+" && "
+    weight+=alg+"_pt<"+pt2
     if m1!="0":
-        weight+=" && akt10"+alg+"_trim_mass>"+m1+" && "
-        weight+="akt10"+alg+"_trim_mass<"+m2
+        weight+=" && "+alg+"_m>"+m1+" && "
+        weight+=alg+"_m<"+m2
     weight+=")"
     
     #Get signal and background histograms
-    if variable=="mass":
-        histname = "akt10"+alg+"_trim_"+variable
-    else:
-        histname = alg+"_"+variable
+    histname = alg+"_"+variable
     print histname
-    hsig = GetHist1D(InputDir+"wprime1000_wprime2000.root", "varTree", histname, range, weight)
-    hbkg = GetHist1D(InputDir+"dijet.root",                 "varTree", histname, range, weight)
+    hsig = GetHist1D(InputDir+"ntuple_wz.root",    "JetTree", histname, range, weight+"*("+alg+"_flavor==1)")
+    hbkg = GetHist1D(InputDir+"ntuple_dijet.root", "JetTree", histname, range, weight+"*("+alg+"_flavor==-1)")
 
     #Normalize them to unity
     hsig = NormalizeHist(hsig)
@@ -121,17 +118,17 @@ def SignalBGCompare1D(InputDir, alg, variable, range, logy, pt1, pt2, m1, m2, ou
 def GetMassEffs(InputDir, alg, m1, m2, outputdir):
 
     weight=""
-    weight+="pass_selection*EventWeight*CrossSection*("
-    weight+="akt10"+alg+"_trim_pt>"+pt1+" && "
-    weight+="akt10"+alg+"_trim_pt<"+pt2+")"
+    weight+="("
+    weight+=alg+"_pt>"+pt1+" && "
+    weight+=alg+"_pt<"+pt2+")"
     
     range="100,0,200"
     
     #Get signal and background histograms
-    histname="akt10"+alg+"_trim_mass"
+    histname=alg+"_m"
     print histname
-    hsig = GetHist1D(InputDir+"wprime1000_wprime2000.root", "varTree", histname, range, weight)
-    hbkg = GetHist1D(InputDir+"dijet.root",                 "varTree", histname, range, weight)
+    hsig = GetHist1D(InputDir+"ntuple_wz.root",    "JetTree", histname, range, weight+"*("+alg+"_flavor==1)")
+    hbkg = GetHist1D(InputDir+"ntuple_dijet.root", "JetTree", histname, range, weight+"*("+alg+"_flavor==-1)")
 
     #Normalize them to unity
     hsig = NormalizeHist(hsig)
@@ -853,17 +850,17 @@ def SignalBGCompare2D(InputDir, alg, var1, var1cutdir, var2, var2cutdir, range1,
     dry=0.045
 
     weight=""
-    weight+="pass_selection*EventWeight*CrossSection*("
-    weight+="akt10"+alg+"_trim_pt>"+pt1+" && "
-    weight+="akt10"+alg+"_trim_pt<"+pt2
+    weight+="("
+    weight+=alg+"__pt>"+pt1+" && "
+    weight+=alg+"_pt<"+pt2
     if m1!="0":
-        weight+=" && akt10"+alg+"_trim_mass>"+m1+" && "
-        weight+="akt10"+alg+"_trim_mass<"+m2
+        weight+=" && "+alg+"_m>"+m1+" && "
+        weight+=alg+"_m<"+m2
     weight+=")"
     
     #Get signal and background histograms
-    hsig = GetHist2D(InputDir+"wprime1000_wprime2000.root", "varTree", alg+"_"+var1, alg+"_"+var2, range1, range2, weight)
-    hbkg = GetHist2D(InputDir+"dijet.root",                 "varTree", alg+"_"+var1, alg+"_"+var2, range1, range2, weight)
+    hsig = GetHist2D(InputDir+"ntuple_wz.root",    "JetTree", alg+"_"+var1, alg+"_"+var2, range1, range2, weight+"*("+alg+"_flavor==1)")
+    hbkg = GetHist2D(InputDir+"ntuple_dijet.root", "JetTree", alg+"_"+var1, alg+"_"+var2, range1, range2, weight+"*("+alg+"_flavor==1)")
 
     # rebin and normalize
     rebinX=2
@@ -993,13 +990,13 @@ def GetCorrelationAndSeparationSigBG(InputDir, alg, var1, var2, range1, range2, 
     dry=0.045
 
     weight=""
-    weight+="pass_selection*EventWeight*CrossSection*("
-    weight+="akt10"+alg+"_trim_pt>"+pt1+" && "
-    weight+="akt10"+alg+"_trim_pt<"+pt2+")"
+    weight+="("
+    weight+=alg+"_pt>"+pt1+" && "
+    weight+=alg+"_pt<"+pt2+")"
     
     #Get signal and background histograms
-    hsig = GetHist2D(InputDir+"wprime1000_wprime2000.root", "varTree", alg+"_"+var1, alg+"_"+var2, range1, range2, weight)
-    hbkg = GetHist2D(InputDir+"dijet.root",                 "varTree", alg+"_"+var1, alg+"_"+var2, range1, range2, weight)
+    hsig = GetHist2D(InputDir+"ntuple_wz.root",    "JetTree", alg+"_"+var1, alg+"_"+var2, range1, range2, weight+"*("+alg+"_flavor==1)")
+    hbkg = GetHist2D(InputDir+"ntuple_dijet.root", "JetTree", alg+"_"+var1, alg+"_"+var2, range1, range2, weight+"*("+alg+"_flavor==1)")
 
     
     # NORMALIZE
@@ -1262,7 +1259,7 @@ flag_rocoverlay      = False
 #==========================
 #Set output directory name
 #==========================
-InputDir="../Data/20150709/"
+InputDir="../Data/"
 
 outputdir1 = "OutputSingleVariable/"
 outputdir2 = "OutputTwoVariableByHand/"
@@ -1276,16 +1273,18 @@ outputdir4 = MakeNewDir(outputdir4)
 
 #ALGORITHMS
 algs=[]
-algs.append("truth")
-algs.append("reco")
-algs.append("fullsim")
+algs.append("TruthRaw")
+algs.append("RecoRaw")
 
 # VARIABLES AND RANGES
 VarsAndRanges={}
-VarsAndRanges["tau21_WTA"]=                        [0, "100,0,1", "100,0,1" ,"L"]
-VarsAndRanges["tnsub_beta10to20_tau21_vol"]=       [0, "100,0,1", "100,0,1" ,"R"]
-VarsAndRanges["D2"]=                               [0, "100,0,5", "100,0,5" ,"L"]
-VarsAndRanges["C2"]=                               [0, "100,0,1", "100,0,1" ,"L"]
+VarsAndRanges["Tau21"]      = [0, "100,0,1", "100,0,1" ,"L"]
+# VarsAndRanges["D2"]         = [0, "100,0,5", "100,0,5" ,"L"]
+# VarsAndRanges["C2"]         = [0, "100,0,1", "100,0,1" ,"L"]
+# VarsAndRanges["TJet_Tau21"]      = [0, "100,0,1", "100,0,1" ,"L"]
+# VarsAndRanges["TJet_D2"]         = [0, "100,0,5", "100,0,5" ,"L"]
+# VarsAndRanges["TJet_C2"]         = [0, "100,0,1", "100,0,1" ,"L"]
+
 
 
 #################################
@@ -1307,7 +1306,7 @@ for alg in algs:
         ##################################################################
         # Get mass window efficiency
         ##################################################################
-        SignalBGCompare1D(      InputDir, alg, "mass", "100,0,200", 0, pt1, pt2, "0", "200", outputdir1)        
+        SignalBGCompare1D(      InputDir, alg, "m", "100,0,200", 0, pt1, pt2, "0", "200", outputdir1)        
         effsig,effsig_err,effbkg,effbkg_err = GetMassEffs(InputDir, alg, m1, m2, outputdir1)
         print "Optimal Mass Cuts Sam:   ",m1,m2,effsig,effsig_err,effbkg,effbkg_err
     
@@ -1323,7 +1322,7 @@ for alg in algs:
         # ROC curves for two variable combinations defined below
         ##################################################################
         TwoVarCombos = []
-        TwoVarCombos.append(["tnsub_beta10to20_tau21_vol","tau21_WTA"])
+        TwoVarCombos.append(["TJet_Tau21","Tau21"])
 
         for combo in TwoVarCombos:
         
@@ -1348,8 +1347,8 @@ for alg in algs:
             
                 tmvacommand =  " python MyTMVAClassification.py  "
                 tmvacommand += " "+alg+" "
-                tmvacommand += " akt10"+alg+"_trim_pt,akt10"+alg+"_trim_mass"
-                tmvacommand += " \"pt>"+str(pt1)+",pt<"+str(pt2)+",mass>"+str(m1)+",mass<"+str(m2)+",pass_selection==1\" "
+                tmvacommand += " akt10"+alg+"_pt,"+alg+"_m"
+                tmvacommand += " \"pt>"+str(pt1)+",pt<"+str(pt2)+",m>"+str(m1)+",m<"+str(m2)+"\" "
                 tmvacommand += " \""+alg+"_"+var0+","+alg+"_"+var1+"\" " 
                 tmvacommand += " "+mvatypes+" "
 

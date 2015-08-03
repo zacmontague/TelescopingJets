@@ -1,6 +1,6 @@
 ! dijet production card
 
-Main:numberOfEvents = 10000
+Main:numberOfEvents = 1000
 
 Beams:idA = 2212 ! first incoming beam is a 2212, i.e. a proton.
 Beams:idB = 2212 ! second beam is also a proton.
@@ -14,3 +14,6 @@ HardQCD:qg2qg = on
 HardQCD:qq2qq = on 
 HardQCD:qqbar2gg = on 
 HardQCD:qqbar2qqbarNew = on 
+
+! make the min
+PhaseSpace:pTHatMin = 100

@@ -73,9 +73,8 @@ def TranslateRegion(pt1,pt2,m1,m2):
     
 def TranslateAlg(alg):
     print "Translating alg: ",alg
-    if   alg=="truth":    output = "Truth   anti-k_{t}^{R=1.2} _{Trimmed(f_{cut}=5%,R_{sub}=0.2)}"    
-    elif alg=="reco":     output = "ToyCalo anti-k_{t}^{R=1.2} _{Trimmed(f_{cut}=5%,R_{sub}=0.2)}"   
-    elif alg=="fullsim":  output = "FullSim anti-k_{t}^{R=1.2} _{Trimmed(f_{cut}=5%,R_{sub}=0.2)}"   
+    if   alg=="TruthRaw":    output = "Truth anti-k_{t}^{R=1.0}"    
+    elif alg=="RecoRaw":     output = "Reco anti-k_{t}^{R=1.0}"   
     return output
 
 def TranslateVar(var):

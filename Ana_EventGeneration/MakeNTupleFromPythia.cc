@@ -159,7 +159,7 @@ int main(int argc, char* argv[]){
   for (int iEvent = 0; iEvent < nEvents; ++iEvent) {
 
     //print out to show progress
-    if(iEvent%100==0)
+    if(iEvent%500==0)
       cout<<"Event: "<<iEvent<<endl;
 
     //generates a new event
@@ -211,19 +211,28 @@ int main(int argc, char* argv[]){
       if(debug) cout<<"Process specific filters: "<<ProcessType<<endl;
       if(ProcessType==0){
         if(debug) cout<<"Dijet Filter"<<endl;
-        acceptevent=true;
         //fill truth quark branches
-        if(pythia.event[iPart].id()<0 && pythia.event[iPart].status()==23){
+        if(pythia.event[iPart].status()==-23){
+          if(debug) cout<<"GotTruth - q1"<<endl;
           truth_q1_pt=pythia.event[iPart].pT();
           truth_q1_eta=pythia.event[iPart].eta();
           truth_q1_phi=pythia.event[iPart].phi();
           truth_q1_m=pythia.event[iPart].m();
+          if(debug) cout<<"q1  "<<truth_q1_pt<<endl;
+          if(truth_q1_pt>100){
+            acceptevent=true;
+          }
         }
-        if(pythia.event[iPart].id()>0 && pythia.event[iPart].status()==23){
+        if(pythia.event[iPart].status()==-23){
+          if(debug) cout<<"GotTruth - q2"<<endl;
           truth_q2_pt=pythia.event[iPart].pT();
           truth_q2_eta=pythia.event[iPart].eta();
           truth_q2_phi=pythia.event[iPart].phi();
           truth_q2_m=pythia.event[iPart].m();
+          if(debug) cout<<"q2  "<<truth_q2_pt<<endl;
+          if(truth_q2_pt>100){
+            acceptevent=true;
+          }
         }
       }
       else if(ProcessType==1){
@@ -234,12 +243,14 @@ int main(int argc, char* argv[]){
         }
         //fill truth boson branches
         if(pythia.event[iPart].id()==23 && pythia.event[iPart].status()==-22){
+          if(debug) cout<<"GotTruth - Z"<<endl;
           truth_Z_pt  = pythia.event[iPart].pT();
           truth_Z_eta = pythia.event[iPart].eta();
           truth_Z_phi = pythia.event[iPart].phi();
           truth_Z_m   = pythia.event[iPart].m();
         }
         if( (pythia.event[iPart].id()==24 || pythia.event[iPart].id()==-24) && pythia.event[iPart].status()==-22){
+          if(debug) cout<<"GotTruth - W"<<endl;
           truth_W_pt  = pythia.event[iPart].pT();
           truth_W_eta = pythia.event[iPart].eta();
           truth_W_phi = pythia.event[iPart].phi();
@@ -248,25 +259,34 @@ int main(int argc, char* argv[]){
       }
       else if(ProcessType=2){
         if(debug) cout<<"Top quark Filter"<<endl;
-        acceptevent=true;
         //fill truth topquark branches
         if(pythia.event[iPart].id()==-6 && pythia.event[iPart].status()==-62){
+          if(debug) cout<<"GotTruth - t1"<<endl;
           truth_t1_pt=pythia.event[iPart].pT();
           truth_t1_eta=pythia.event[iPart].eta();
           truth_t1_phi=pythia.event[iPart].phi();
           truth_t1_m=pythia.event[iPart].m();
+          if(truth_t1_pt>150){
+            acceptevent=true;
+          }
+
         }
         if(pythia.event[iPart].id()==6 && pythia.event[iPart].status()==-62){
+          if(debug) cout<<"GotTruth - t2"<<endl;
           truth_t2_pt=pythia.event[iPart].pT();
           truth_t2_eta=pythia.event[iPart].eta();
           truth_t2_phi=pythia.event[iPart].phi();
           truth_t2_m=pythia.event[iPart].m();
+          if(truth_t2_pt>150){
+            acceptevent=true;
+          }
         }
       }
       else{
         acceptevent=true;
       }
       if(debug) cout<<acceptevent<<endl;
+
 
       //only save particles to output ttree if they are final state particles
       //this is the method recommended by Yang-Ting

@@ -43,6 +43,9 @@ int main(int argc, char* argv[]){
   //debug flag
   bool debug=false;
 
+  //dR truth matching
+  double dR_match = 1.0;
+
   //////////////////////////////////////////////
   //INPUT
   //////////////////////////////////////////////
@@ -272,7 +275,7 @@ int main(int argc, char* argv[]){
 
   for (Long64_t jentry=0; jentry<nEvents; jentry++) {
 
-    if(jentry%100==0)
+    if(jentry%500==0)
       cout<<"Event: "<<jentry<<endl;
 
     //Get next event from input ntuple
@@ -451,10 +454,10 @@ int main(int argc, char* argv[]){
             <<"t2:  "<<jettemp.DeltaR(truth_t2)<<endl;
       }
       int jetflavor = -1;
-      if(jettemp.DeltaR(truth_q1)<0.8 || jettemp.DeltaR(truth_q2)<0.8){ jetflavor = 0; }
-      else if(jettemp.DeltaR(truth_W)<0.8){  jetflavor = 1; }
-      else if(jettemp.DeltaR(truth_Z)<0.8){  jetflavor = 2; }
-      else if(jettemp.DeltaR(truth_t1)<0.8 || jettemp.DeltaR(truth_t2)<0.8){ jetflavor = 3; }
+      if(jettemp.DeltaR(truth_q1)<dR_match || jettemp.DeltaR(truth_q2)<dR_match){ jetflavor = 0; }
+      else if(jettemp.DeltaR(truth_W)<dR_match){  jetflavor = 1; }
+      else if(jettemp.DeltaR(truth_Z)<dR_match){  jetflavor = 2; }
+      else if(jettemp.DeltaR(truth_t1)<dR_match || jettemp.DeltaR(truth_t2)<dR_match){ jetflavor = 3; }
       else{ jetflavor = -1; }
 
       if(debug) cout<<"FillingJet: flav="<<jetflavor<<"  pt="<<jettemp.Pt()<<"  m="<<jettemp.M()<<endl;
@@ -529,10 +532,10 @@ int main(int argc, char* argv[]){
             <<"t2:  "<<jettemp.DeltaR(truth_t2)<<endl;
       }
       int jetflavor = -1;
-      if(jettemp.DeltaR(truth_q1)<0.8 || jettemp.DeltaR(truth_q2)<0.8){ jetflavor = 0; }
-      else if(jettemp.DeltaR(truth_W)<0.8){  jetflavor = 1; }
-      else if(jettemp.DeltaR(truth_Z)<0.8){  jetflavor = 2; }
-      else if(jettemp.DeltaR(truth_t1)<0.8 || jettemp.DeltaR(truth_t2)<0.8){ jetflavor = 3; }
+      if(jettemp.DeltaR(truth_q1)<dR_match || jettemp.DeltaR(truth_q2)<dR_match){ jetflavor = 0; }
+      else if(jettemp.DeltaR(truth_W)<dR_match){  jetflavor = 1; }
+      else if(jettemp.DeltaR(truth_Z)<dR_match){  jetflavor = 2; }
+      else if(jettemp.DeltaR(truth_t1)<dR_match || jettemp.DeltaR(truth_t2)<dR_match){ jetflavor = 3; }
       else{ jetflavor = -1; }
 
       if(debug) cout<<"FillingJet: flav="<<jetflavor<<"  pt="<<jettemp.Pt()<<"  m="<<jettemp.M()<<endl;
@@ -608,10 +611,10 @@ int main(int argc, char* argv[]){
             <<"t2:  "<<jettemp.DeltaR(truth_t2)<<endl;
       }
       int jetflavor = -1;
-      if(jettemp.DeltaR(truth_q1)<0.8 || jettemp.DeltaR(truth_q2)<0.8){ jetflavor = 0; }
-      else if(jettemp.DeltaR(truth_W)<0.8){  jetflavor = 1; }
-      else if(jettemp.DeltaR(truth_Z)<0.8){  jetflavor = 2; }
-      else if(jettemp.DeltaR(truth_t1)<0.8 || jettemp.DeltaR(truth_t2)<0.8){ jetflavor = 3; }
+      if(jettemp.DeltaR(truth_q1)<dR_match || jettemp.DeltaR(truth_q2)<dR_match){ jetflavor = 0; }
+      else if(jettemp.DeltaR(truth_W)<dR_match){  jetflavor = 1; }
+      else if(jettemp.DeltaR(truth_Z)<dR_match){  jetflavor = 2; }
+      else if(jettemp.DeltaR(truth_t1)<dR_match || jettemp.DeltaR(truth_t2)<dR_match){ jetflavor = 3; }
       else{ jetflavor = -1; }
 
       if(debug) cout<<"FillingJet: flav="<<jetflavor<<"  pt="<<jettemp.Pt()<<"  m="<<jettemp.M()<<endl;
@@ -687,10 +690,10 @@ int main(int argc, char* argv[]){
             <<"t2:  "<<jettemp.DeltaR(truth_t2)<<endl;
       }
       int jetflavor = -1;
-      if(jettemp.DeltaR(truth_q1)<0.8 || jettemp.DeltaR(truth_q2)<0.8){ jetflavor = 0; }
-      else if(jettemp.DeltaR(truth_W)<0.8){  jetflavor = 1; }
-      else if(jettemp.DeltaR(truth_Z)<0.8){  jetflavor = 2; }
-      else if(jettemp.DeltaR(truth_t1)<0.8 || jettemp.DeltaR(truth_t2)<0.8){ jetflavor = 3; }
+      if(jettemp.DeltaR(truth_q1)<dR_match || jettemp.DeltaR(truth_q2)<dR_match){ jetflavor = 0; }
+      else if(jettemp.DeltaR(truth_W)<dR_match){  jetflavor = 1; }
+      else if(jettemp.DeltaR(truth_Z)<dR_match){  jetflavor = 2; }
+      else if(jettemp.DeltaR(truth_t1)<dR_match || jettemp.DeltaR(truth_t2)<dR_match){ jetflavor = 3; }
       else{ jetflavor = -1; }
 
       if(debug) cout<<"FillingJet: flav="<<jetflavor<<"  pt="<<jettemp.Pt()<<"  m="<<jettemp.M()<<endl;
@@ -768,10 +771,10 @@ int main(int argc, char* argv[]){
             <<"t2:  "<<jettemp.DeltaR(truth_t2)<<endl;
       }
       int jetflavor = -1;
-      if(jettemp.DeltaR(truth_q1)<0.8 || jettemp.DeltaR(truth_q2)<0.8){ jetflavor = 0; }
-      else if(jettemp.DeltaR(truth_W)<0.8){  jetflavor = 1; }
-      else if(jettemp.DeltaR(truth_Z)<0.8){  jetflavor = 2; }
-      else if(jettemp.DeltaR(truth_t1)<0.8 || jettemp.DeltaR(truth_t2)<0.8){ jetflavor = 3; }
+      if(jettemp.DeltaR(truth_q1)<dR_match || jettemp.DeltaR(truth_q2)<dR_match){ jetflavor = 0; }
+      else if(jettemp.DeltaR(truth_W)<dR_match){  jetflavor = 1; }
+      else if(jettemp.DeltaR(truth_Z)<dR_match){  jetflavor = 2; }
+      else if(jettemp.DeltaR(truth_t1)<dR_match || jettemp.DeltaR(truth_t2)<dR_match){ jetflavor = 3; }
       else{ jetflavor = -1; }
 
       if(debug) cout<<"FillingJet: flav="<<jetflavor<<"  pt="<<jettemp.Pt()<<"  m="<<jettemp.M()<<endl;
@@ -849,10 +852,10 @@ int main(int argc, char* argv[]){
             <<"t2:  "<<jettemp.DeltaR(truth_t2)<<endl;
       }
       int jetflavor = -1;
-      if(jettemp.DeltaR(truth_q1)<0.8 || jettemp.DeltaR(truth_q2)<0.8){ jetflavor = 0; }
-      else if(jettemp.DeltaR(truth_W)<0.8){  jetflavor = 1; }
-      else if(jettemp.DeltaR(truth_Z)<0.8){  jetflavor = 2; }
-      else if(jettemp.DeltaR(truth_t1)<0.8 || jettemp.DeltaR(truth_t2)<0.8){ jetflavor = 3; }
+      if(jettemp.DeltaR(truth_q1)<dR_match || jettemp.DeltaR(truth_q2)<dR_match){ jetflavor = 0; }
+      else if(jettemp.DeltaR(truth_W)<dR_match){  jetflavor = 1; }
+      else if(jettemp.DeltaR(truth_Z)<dR_match){  jetflavor = 2; }
+      else if(jettemp.DeltaR(truth_t1)<dR_match || jettemp.DeltaR(truth_t2)<dR_match){ jetflavor = 3; }
       else{ jetflavor = -1; }
 
       if(debug) cout<<"FillingJet: flav="<<jetflavor<<"  pt="<<jettemp.Pt()<<"  m="<<jettemp.M()<<endl;
@@ -929,10 +932,10 @@ int main(int argc, char* argv[]){
             <<"t2:  "<<jettemp.DeltaR(truth_t2)<<endl;
       }
       int jetflavor = -1;
-      if(jettemp.DeltaR(truth_q1)<0.8 || jettemp.DeltaR(truth_q2)<0.8){ jetflavor = 0; }
-      else if(jettemp.DeltaR(truth_W)<0.8){  jetflavor = 1; }
-      else if(jettemp.DeltaR(truth_Z)<0.8){  jetflavor = 2; }
-      else if(jettemp.DeltaR(truth_t1)<0.8 || jettemp.DeltaR(truth_t2)<0.8){ jetflavor = 3; }
+      if(jettemp.DeltaR(truth_q1)<dR_match || jettemp.DeltaR(truth_q2)<dR_match){ jetflavor = 0; }
+      else if(jettemp.DeltaR(truth_W)<dR_match){  jetflavor = 1; }
+      else if(jettemp.DeltaR(truth_Z)<dR_match){  jetflavor = 2; }
+      else if(jettemp.DeltaR(truth_t1)<dR_match || jettemp.DeltaR(truth_t2)<dR_match){ jetflavor = 3; }
       else{ jetflavor = -1; }
 
       if(debug) cout<<"FillingJet: flav="<<jetflavor<<"  pt="<<jettemp.Pt()<<"  m="<<jettemp.M()<<endl;
@@ -1009,10 +1012,10 @@ int main(int argc, char* argv[]){
             <<"t2:  "<<jettemp.DeltaR(truth_t2)<<endl;
       }
       int jetflavor = -1;
-      if(jettemp.DeltaR(truth_q1)<0.8 || jettemp.DeltaR(truth_q2)<0.8){ jetflavor = 0; }
-      else if(jettemp.DeltaR(truth_W)<0.8){  jetflavor = 1; }
-      else if(jettemp.DeltaR(truth_Z)<0.8){  jetflavor = 2; }
-      else if(jettemp.DeltaR(truth_t1)<0.8 || jettemp.DeltaR(truth_t2)<0.8){ jetflavor = 3; }
+      if(jettemp.DeltaR(truth_q1)<dR_match || jettemp.DeltaR(truth_q2)<dR_match){ jetflavor = 0; }
+      else if(jettemp.DeltaR(truth_W)<dR_match){  jetflavor = 1; }
+      else if(jettemp.DeltaR(truth_Z)<dR_match){  jetflavor = 2; }
+      else if(jettemp.DeltaR(truth_t1)<dR_match || jettemp.DeltaR(truth_t2)<dR_match){ jetflavor = 3; }
       else{ jetflavor = -1; }
 
       if(debug) cout<<"FillingJet: flav="<<jetflavor<<"  pt="<<jettemp.Pt()<<"  m="<<jettemp.M()<<endl;
