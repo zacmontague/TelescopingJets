@@ -31,6 +31,9 @@ $ ./MakeNTupleFromPythia 1 pythia_wz.root
 This will generate 500 events and save to the pythia_wz.root output file a flat ntuple that contains truth vectors of the relevant particles (W,Z) for truth tagging later along with vector<double> branches for all of the truth particles with final state particles.
 
 #### TODO :
+1) Batch system on TeVCluster.
+
+2) Modify truth 4vector storing to store W 4-vectors for both W' and ttbar events so that you can use them for truth matching in the next stage.
 
 ################################
 # Running NTupling
@@ -52,11 +55,11 @@ This will process the 500 events generated with the MakeNTupleFromPythia code an
 The output will be saved in the file NTuple_wz.root
 
 #### TODO :
-1) Implement some scheme to model pileup contributions to the input\_particles list by creating a new input\_particles\_with\_pileup list or something like this.
+1) Batch system on TeVCluster.
 
-2) Implement scheme to create new container of input particles that mimicks a toy calorimeter.
+2) Put in CMS jet configuration (antikt R=0.8 pruned).
 
-3) Implement analysis tools/code previously developed by Alex to calculate further telescoped quantities.
+3) Build in more sophisticated truth matching for ttbar events so that you can ensure that you are really looking at a top jet when we call it signal, not just a jet from a ttbar event that is really a W jet or a frankenstein q+b jet.
 
 ################################
 # Running MiniNTupleAnalysis
