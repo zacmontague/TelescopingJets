@@ -281,6 +281,14 @@ vector<double> RecoPileupTrim_TJet_C3;
 ///////////////////////////
 void ResetBranches();
 
+int GetJetTruthFlavor(TLorentzVector jettemp,
+                      TLorentzVector truth_t1,
+                      TLorentzVector truth_t2,
+                      TLorentzVector truth_W,
+                      TLorentzVector truth_Z,
+                      TLorentzVector truth_H,
+                      int debug);
+
 vector<PseudoJet> ToyCalorimeter(vector<PseudoJet> truth_particles);
 double T_Nsubjettiness(int N, PseudoJet& input, double beta_min, double beta_max);
 double T_NsubjettinessRatio(int N_num, int N_den, PseudoJet& input, double beta_min, double beta_max);

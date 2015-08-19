@@ -36,7 +36,7 @@ int main(int argc, char* argv[]){
   bool debug=false;
 
   //exit if you dont pass a run card
-  if(argc<3){
+  if(argc<4){
     cout<<"You need to specify more arguments"<<endl;
     return 1;
   }
@@ -49,9 +49,11 @@ int main(int argc, char* argv[]){
   if(ProcessType==0)
     ConfigFile="config_dijet.cmnd";
   else if(ProcessType==1)
-    ConfigFile="config_WprimeWZ.cmnd";
+    ConfigFile="config_wz.cmnd";
   else if(ProcessType==2)
     ConfigFile="config_ttbar.cmnd";
+  else if(ProcessType==3)
+    ConfigFile="config_higgs.cmnd";
   else{
     cout<<"Bad process type!"<<endl;
     return 0;
@@ -59,6 +61,10 @@ int main(int argc, char* argv[]){
 
   //get output file name
   string OutfileName = argv[2];
+
+  //number of events
+  int nEvents = atoi(argv[3]);
+
 
   cout<<"InputArguments:  ProcessType="<<ProcessType<<"   ConfigFile="<<ConfigFile<<"  OutfileName="<<OutfileName<<endl;
 
@@ -95,6 +101,11 @@ int main(int argc, char* argv[]){
   double truth_Z_eta;
   double truth_Z_phi;
   double truth_Z_m;
+
+  double truth_H_pt;
+  double truth_H_eta;
+  double truth_H_phi;
+  double truth_H_m;
 
   vector<int>    fspart_id;
   vector<double> fspart_pt;
@@ -139,6 +150,11 @@ int main(int argc, char* argv[]){
   tree->Branch("truth_Z_phi", &truth_Z_phi);
   tree->Branch("truth_Z_m",   &truth_Z_m);
 
+  tree->Branch("truth_H_pt",  &truth_H_pt);
+  tree->Branch("truth_H_eta", &truth_H_eta);
+  tree->Branch("truth_H_phi", &truth_H_phi);
+  tree->Branch("truth_H_m",   &truth_H_m);
+
   //initialize pythia
   Pythia pythia;
 
@@ -146,7 +162,7 @@ int main(int argc, char* argv[]){
   pythia.readFile(ConfigFile);
 
   //get the number of events from the config file
-  int nEvents = pythia.mode("Main:numberOfEvents");
+  //int nEvents = pythia.mode("Main:numberOfEvents");
 
   //collide protons with setup defined above
   pythia.init();
@@ -159,8 +175,8 @@ int main(int argc, char* argv[]){
   for (int iEvent = 0; iEvent < nEvents; ++iEvent) {
 
     //print out to show progress
-    if(iEvent%500==0)
-      cout<<"Event: "<<iEvent<<endl;
+    if(iEvent%100==0)
+      cout<<"Pythia: ProcessType="<<ProcessType<<"  entry="<<iEvent<<endl;
 
     //generates a new event
     pythia.next();
@@ -185,16 +201,6 @@ int main(int argc, char* argv[]){
     truth_q2_phi = 0.0;
     truth_q2_m   = 1.0;
 
-    truth_W_pt  = 100.0;
-    truth_W_eta = 10.0;
-    truth_W_phi = 0.0;
-    truth_W_m   = 1.0;
-
-    truth_Z_pt  = 100.0;
-    truth_Z_eta = 10.0;
-    truth_Z_phi = 0.0;
-    truth_Z_m   = 1.0;
-
     truth_t1_pt  = 100.0;
     truth_t1_eta = 10.0;
     truth_t1_phi = 0.0;
@@ -205,6 +211,21 @@ int main(int argc, char* argv[]){
     truth_t2_phi = 0.0;
     truth_t2_m   = 1.0;
 
+    truth_W_pt  = 100.0;
+    truth_W_eta = 10.0;
+    truth_W_phi = 0.0;
+    truth_W_m   = 1.0;
+
+    truth_Z_pt  = 100.0;
+    truth_Z_eta = 10.0;
+    truth_Z_phi = 0.0;
+    truth_Z_m   = 1.0;
+
+    truth_H_pt  = 100.0;
+    truth_H_eta = 10.0;
+    truth_H_phi = 0.0;
+    truth_H_m   = 1.0;
+
     //loops through the particles in the event just generated
     for (int iPart = 0; iPart < pythia.event.size(); ++iPart) {
       //event filter for
@@ -212,25 +233,25 @@ int main(int argc, char* argv[]){
       if(ProcessType==0){
         if(debug) cout<<"Dijet Filter"<<endl;
         //fill truth quark branches
-        if(pythia.event[iPart].status()==-23){
+        if(pythia.event[iPart].status()==-23 && truth_q1_m==1.0){
           if(debug) cout<<"GotTruth - q1"<<endl;
           truth_q1_pt=pythia.event[iPart].pT();
           truth_q1_eta=pythia.event[iPart].eta();
           truth_q1_phi=pythia.event[iPart].phi();
           truth_q1_m=pythia.event[iPart].m();
           if(debug) cout<<"q1  "<<truth_q1_pt<<endl;
-          if(truth_q1_pt>100){
+          if(truth_q1_pt>190){
             acceptevent=true;
           }
         }
-        if(pythia.event[iPart].status()==-23){
+        else if(pythia.event[iPart].status()==-23 && truth_q1_m!=1.0){
           if(debug) cout<<"GotTruth - q2"<<endl;
           truth_q2_pt=pythia.event[iPart].pT();
           truth_q2_eta=pythia.event[iPart].eta();
           truth_q2_phi=pythia.event[iPart].phi();
           truth_q2_m=pythia.event[iPart].m();
           if(debug) cout<<"q2  "<<truth_q2_pt<<endl;
-          if(truth_q2_pt>100){
+          if(truth_q2_pt>190){
             acceptevent=true;
           }
         }
@@ -249,7 +270,7 @@ int main(int argc, char* argv[]){
           truth_Z_phi = pythia.event[iPart].phi();
           truth_Z_m   = pythia.event[iPart].m();
         }
-        if( (pythia.event[iPart].id()==24 || pythia.event[iPart].id()==-24) && pythia.event[iPart].status()==-22){
+        else if( (pythia.event[iPart].id()==24 || pythia.event[iPart].id()==-24) && pythia.event[iPart].status()==-22){
           if(debug) cout<<"GotTruth - W"<<endl;
           truth_W_pt  = pythia.event[iPart].pT();
           truth_W_eta = pythia.event[iPart].eta();
@@ -257,7 +278,7 @@ int main(int argc, char* argv[]){
           truth_W_m   = pythia.event[iPart].m();
         }
       }
-      else if(ProcessType=2){
+      else if(ProcessType==2){
         if(debug) cout<<"Top quark Filter"<<endl;
         //fill truth topquark branches
         if(pythia.event[iPart].id()==-6 && pythia.event[iPart].status()==-62){
@@ -266,23 +287,38 @@ int main(int argc, char* argv[]){
           truth_t1_eta=pythia.event[iPart].eta();
           truth_t1_phi=pythia.event[iPart].phi();
           truth_t1_m=pythia.event[iPart].m();
-          if(truth_t1_pt>150){
+          if(truth_t1_pt>180){
             acceptevent=true;
           }
 
         }
-        if(pythia.event[iPart].id()==6 && pythia.event[iPart].status()==-62){
+        else if(pythia.event[iPart].id()==6 && pythia.event[iPart].status()==-62){
           if(debug) cout<<"GotTruth - t2"<<endl;
           truth_t2_pt=pythia.event[iPart].pT();
           truth_t2_eta=pythia.event[iPart].eta();
           truth_t2_phi=pythia.event[iPart].phi();
           truth_t2_m=pythia.event[iPart].m();
-          if(truth_t2_pt>150){
+          if(truth_t2_pt>180){
+            acceptevent=true;
+          }
+        }
+      }
+      else if(ProcessType==3){
+        if(debug) cout<<"Higgs Filter"<<endl;
+        //fill truth higgs branches
+        if(pythia.event[iPart].id()==25 && pythia.event[iPart].status()==-62){
+          if(debug) cout<<"GotTruth - H"<<endl;
+          truth_H_pt=pythia.event[iPart].pT();
+          truth_H_eta=pythia.event[iPart].eta();
+          truth_H_phi=pythia.event[iPart].phi();
+          truth_H_m=pythia.event[iPart].m();
+          if(truth_H_pt>180){
             acceptevent=true;
           }
         }
       }
       else{
+        if(debug) cout<<"Filling event"<<endl;
         acceptevent=true;
       }
       if(debug) cout<<acceptevent<<endl;

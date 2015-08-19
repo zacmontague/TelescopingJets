@@ -52,7 +52,7 @@ int main(int argc, char* argv[]){
   //get input file and tree
   filein = new TFile( InputFile.c_str() );
   treein = (TTree*)filein->Get( "tree" );
-  treein->Print();
+  if(debug) treein->Print();
 
   //set up branch linking to addresses
   treein->SetBranchAddress("fspart_id", &fspart_id);
@@ -91,6 +91,10 @@ int main(int argc, char* argv[]){
   treein->SetBranchAddress("truth_Z_phi", &truth_Z_phi);
   treein->SetBranchAddress("truth_Z_m",   &truth_Z_m);
 
+  treein->SetBranchAddress("truth_H_pt",  &truth_H_pt);
+  treein->SetBranchAddress("truth_H_eta", &truth_H_eta);
+  treein->SetBranchAddress("truth_H_phi", &truth_H_phi);
+  treein->SetBranchAddress("truth_H_m",   &truth_H_m);
 
   //////////////////////////////////////////////
   //OUTPUT
@@ -275,8 +279,8 @@ int main(int argc, char* argv[]){
 
   for (Long64_t jentry=0; jentry<nEvents; jentry++) {
 
-    if(jentry%500==0)
-      cout<<"Event: "<<jentry<<endl;
+    if(jentry%100==0)
+      cout<<"NTupler: ProcessType="<<ProcessType<<"  entry="<<jentry<<endl;
 
     //Get next event from input ntuple
     filein->cd();
@@ -418,14 +422,16 @@ int main(int argc, char* argv[]){
     truth_q1.SetPtEtaPhiM(truth_q1_pt,truth_q1_eta,truth_q1_phi,truth_q1_m);
     TLorentzVector truth_q2;
     truth_q2.SetPtEtaPhiM(truth_q2_pt,truth_q2_eta,truth_q2_phi,truth_q2_m);
-    TLorentzVector truth_W;
-    truth_W.SetPtEtaPhiM(truth_W_pt,truth_W_eta,truth_W_phi,truth_W_m);
-    TLorentzVector truth_Z;
-    truth_Z.SetPtEtaPhiM(truth_Z_pt,truth_Z_eta,truth_Z_phi,truth_Z_m);
     TLorentzVector truth_t1;
     truth_t1.SetPtEtaPhiM(truth_t1_pt,truth_t1_eta,truth_t1_phi,truth_t1_m);
     TLorentzVector truth_t2;
     truth_t2.SetPtEtaPhiM(truth_t2_pt,truth_t2_eta,truth_t2_phi,truth_t2_m);
+    TLorentzVector truth_W;
+    truth_W.SetPtEtaPhiM(truth_W_pt,truth_W_eta,truth_W_phi,truth_W_m);
+    TLorentzVector truth_Z;
+    truth_Z.SetPtEtaPhiM(truth_Z_pt,truth_Z_eta,truth_Z_phi,truth_Z_m);
+    TLorentzVector truth_H;
+    truth_H.SetPtEtaPhiM(truth_H_pt,truth_H_eta,truth_H_phi,truth_H_m);
 
 
 
@@ -444,22 +450,7 @@ int main(int argc, char* argv[]){
       /////////////////////////////////
       //Getting truth label for filling into ntuple
       /////////////////////////////////
-      if(debug){
-        cout<<"DeltaR: "<<endl
-            <<"q1:  "<<jettemp.DeltaR(truth_q1)<<endl
-            <<"q2:  "<<jettemp.DeltaR(truth_q2)<<endl
-            <<"W:   "<<jettemp.DeltaR(truth_W)<<endl
-            <<"Z:   "<<jettemp.DeltaR(truth_Z)<<endl
-            <<"t1:  "<<jettemp.DeltaR(truth_t1)<<endl
-            <<"t2:  "<<jettemp.DeltaR(truth_t2)<<endl;
-      }
-      int jetflavor = -1;
-      if(jettemp.DeltaR(truth_q1)<dR_match || jettemp.DeltaR(truth_q2)<dR_match){ jetflavor = 0; }
-      else if(jettemp.DeltaR(truth_W)<dR_match){  jetflavor = 1; }
-      else if(jettemp.DeltaR(truth_Z)<dR_match){  jetflavor = 2; }
-      else if(jettemp.DeltaR(truth_t1)<dR_match || jettemp.DeltaR(truth_t2)<dR_match){ jetflavor = 3; }
-      else{ jetflavor = -1; }
-
+      jetflavor = GetJetTruthFlavor(jettemp, truth_t1, truth_t2, truth_W, truth_Z, truth_H, debug);
       if(debug) cout<<"FillingJet: flav="<<jetflavor<<"  pt="<<jettemp.Pt()<<"  m="<<jettemp.M()<<endl;
 
       /////////////////////////////////
@@ -485,6 +476,9 @@ int main(int argc, char* argv[]){
       tempJet_TJet_C2        = T_EnergyCorrelator_C2(inclusive_jets_TruthRaw[ijet], 0.1, 2.);
       tempJet_TJet_D2        = T_EnergyCorrelator_D2(inclusive_jets_TruthRaw[ijet], 0.1, 2.);
       tempJet_TJet_C3        = T_EnergyCorrelator_C3(inclusive_jets_TruthRaw[ijet], 0.1, 2.);
+
+      if(tempJet_flavor==-1)
+        continue;
 
       TruthRaw_flavor    .push_back(tempJet_flavor);
       TruthRaw_pt        .push_back(tempJet_pt);
@@ -522,22 +516,7 @@ int main(int argc, char* argv[]){
       /////////////////////////////////
       //Getting truth label for filling into ntuple
       /////////////////////////////////
-      if(debug){
-        cout<<"DeltaR: "<<endl
-            <<"q1:  "<<jettemp.DeltaR(truth_q1)<<endl
-            <<"q2:  "<<jettemp.DeltaR(truth_q2)<<endl
-            <<"W:   "<<jettemp.DeltaR(truth_W)<<endl
-            <<"Z:   "<<jettemp.DeltaR(truth_Z)<<endl
-            <<"t1:  "<<jettemp.DeltaR(truth_t1)<<endl
-            <<"t2:  "<<jettemp.DeltaR(truth_t2)<<endl;
-      }
-      int jetflavor = -1;
-      if(jettemp.DeltaR(truth_q1)<dR_match || jettemp.DeltaR(truth_q2)<dR_match){ jetflavor = 0; }
-      else if(jettemp.DeltaR(truth_W)<dR_match){  jetflavor = 1; }
-      else if(jettemp.DeltaR(truth_Z)<dR_match){  jetflavor = 2; }
-      else if(jettemp.DeltaR(truth_t1)<dR_match || jettemp.DeltaR(truth_t2)<dR_match){ jetflavor = 3; }
-      else{ jetflavor = -1; }
-
+      jetflavor = GetJetTruthFlavor(jettemp, truth_t1, truth_t2, truth_W, truth_Z, truth_H, debug);
       if(debug) cout<<"FillingJet: flav="<<jetflavor<<"  pt="<<jettemp.Pt()<<"  m="<<jettemp.M()<<endl;
 
       /////////////////////////////////
@@ -563,6 +542,9 @@ int main(int argc, char* argv[]){
       tempJet_TJet_C2        = T_EnergyCorrelator_C2(inclusive_jets_TruthPileup[ijet], 0.1, 2.);
       tempJet_TJet_D2        = T_EnergyCorrelator_D2(inclusive_jets_TruthPileup[ijet], 0.1, 2.);
       tempJet_TJet_C3        = T_EnergyCorrelator_C3(inclusive_jets_TruthPileup[ijet], 0.1, 2.);
+
+      if(tempJet_flavor==-1)
+        continue;
 
       TruthPileup_flavor    .push_back(tempJet_flavor);
       TruthPileup_pt        .push_back(tempJet_pt);
@@ -601,22 +583,7 @@ int main(int argc, char* argv[]){
       /////////////////////////////////
       //Getting Reco label for filling into ntuple
       /////////////////////////////////
-      if(debug){
-        cout<<"DeltaR: "<<endl
-            <<"q1:  "<<jettemp.DeltaR(truth_q1)<<endl
-            <<"q2:  "<<jettemp.DeltaR(truth_q2)<<endl
-            <<"W:   "<<jettemp.DeltaR(truth_W)<<endl
-            <<"Z:   "<<jettemp.DeltaR(truth_Z)<<endl
-            <<"t1:  "<<jettemp.DeltaR(truth_t1)<<endl
-            <<"t2:  "<<jettemp.DeltaR(truth_t2)<<endl;
-      }
-      int jetflavor = -1;
-      if(jettemp.DeltaR(truth_q1)<dR_match || jettemp.DeltaR(truth_q2)<dR_match){ jetflavor = 0; }
-      else if(jettemp.DeltaR(truth_W)<dR_match){  jetflavor = 1; }
-      else if(jettemp.DeltaR(truth_Z)<dR_match){  jetflavor = 2; }
-      else if(jettemp.DeltaR(truth_t1)<dR_match || jettemp.DeltaR(truth_t2)<dR_match){ jetflavor = 3; }
-      else{ jetflavor = -1; }
-
+      jetflavor = GetJetTruthFlavor(jettemp, truth_t1, truth_t2, truth_W, truth_Z, truth_H, debug);
       if(debug) cout<<"FillingJet: flav="<<jetflavor<<"  pt="<<jettemp.Pt()<<"  m="<<jettemp.M()<<endl;
 
       /////////////////////////////////
@@ -642,6 +609,9 @@ int main(int argc, char* argv[]){
       tempJet_TJet_C2        = T_EnergyCorrelator_C2(inclusive_jets_RecoRaw[ijet], 0.1, 2.);
       tempJet_TJet_D2        = T_EnergyCorrelator_D2(inclusive_jets_RecoRaw[ijet], 0.1, 2.);
       tempJet_TJet_C3        = T_EnergyCorrelator_C3(inclusive_jets_RecoRaw[ijet], 0.1, 2.);
+
+      if(tempJet_flavor==-1)
+        continue;
 
       RecoRaw_flavor    .push_back(tempJet_flavor);
       RecoRaw_pt        .push_back(tempJet_pt);
@@ -680,22 +650,7 @@ int main(int argc, char* argv[]){
       /////////////////////////////////
       //Getting truth label for filling into ntuple
       /////////////////////////////////
-      if(debug){
-        cout<<"DeltaR: "<<endl
-            <<"q1:  "<<jettemp.DeltaR(truth_q1)<<endl
-            <<"q2:  "<<jettemp.DeltaR(truth_q2)<<endl
-            <<"W:   "<<jettemp.DeltaR(truth_W)<<endl
-            <<"Z:   "<<jettemp.DeltaR(truth_Z)<<endl
-            <<"t1:  "<<jettemp.DeltaR(truth_t1)<<endl
-            <<"t2:  "<<jettemp.DeltaR(truth_t2)<<endl;
-      }
-      int jetflavor = -1;
-      if(jettemp.DeltaR(truth_q1)<dR_match || jettemp.DeltaR(truth_q2)<dR_match){ jetflavor = 0; }
-      else if(jettemp.DeltaR(truth_W)<dR_match){  jetflavor = 1; }
-      else if(jettemp.DeltaR(truth_Z)<dR_match){  jetflavor = 2; }
-      else if(jettemp.DeltaR(truth_t1)<dR_match || jettemp.DeltaR(truth_t2)<dR_match){ jetflavor = 3; }
-      else{ jetflavor = -1; }
-
+      jetflavor = GetJetTruthFlavor(jettemp, truth_t1, truth_t2, truth_W, truth_Z, truth_H, debug);
       if(debug) cout<<"FillingJet: flav="<<jetflavor<<"  pt="<<jettemp.Pt()<<"  m="<<jettemp.M()<<endl;
 
       /////////////////////////////////
@@ -721,6 +676,9 @@ int main(int argc, char* argv[]){
       tempJet_TJet_C2        = T_EnergyCorrelator_C2(inclusive_jets_RecoPileup[ijet], 0.1, 2.);
       tempJet_TJet_D2        = T_EnergyCorrelator_D2(inclusive_jets_RecoPileup[ijet], 0.1, 2.);
       tempJet_TJet_C3        = T_EnergyCorrelator_C3(inclusive_jets_RecoPileup[ijet], 0.1, 2.);
+
+      if(tempJet_flavor==-1)
+        continue;
 
       RecoPileup_flavor    .push_back(tempJet_flavor);
       RecoPileup_pt        .push_back(tempJet_pt);
@@ -761,22 +719,7 @@ int main(int argc, char* argv[]){
       /////////////////////////////////
       //Getting truth label for filling into ntuple
       /////////////////////////////////
-      if(debug){
-        cout<<"DeltaR: "<<endl
-            <<"q1:  "<<jettemp.DeltaR(truth_q1)<<endl
-            <<"q2:  "<<jettemp.DeltaR(truth_q2)<<endl
-            <<"W:   "<<jettemp.DeltaR(truth_W)<<endl
-            <<"Z:   "<<jettemp.DeltaR(truth_Z)<<endl
-            <<"t1:  "<<jettemp.DeltaR(truth_t1)<<endl
-            <<"t2:  "<<jettemp.DeltaR(truth_t2)<<endl;
-      }
-      int jetflavor = -1;
-      if(jettemp.DeltaR(truth_q1)<dR_match || jettemp.DeltaR(truth_q2)<dR_match){ jetflavor = 0; }
-      else if(jettemp.DeltaR(truth_W)<dR_match){  jetflavor = 1; }
-      else if(jettemp.DeltaR(truth_Z)<dR_match){  jetflavor = 2; }
-      else if(jettemp.DeltaR(truth_t1)<dR_match || jettemp.DeltaR(truth_t2)<dR_match){ jetflavor = 3; }
-      else{ jetflavor = -1; }
-
+      jetflavor = GetJetTruthFlavor(jettemp, truth_t1, truth_t2, truth_W, truth_Z, truth_H, debug);
       if(debug) cout<<"FillingJet: flav="<<jetflavor<<"  pt="<<jettemp.Pt()<<"  m="<<jettemp.M()<<endl;
 
 
@@ -803,6 +746,9 @@ int main(int argc, char* argv[]){
       tempJet_TJet_C2        = T_EnergyCorrelator_C2(groomed_jet, 0.1, 2.);
       tempJet_TJet_D2        = T_EnergyCorrelator_D2(groomed_jet, 0.1, 2.);
       tempJet_TJet_C3        = T_EnergyCorrelator_C3(groomed_jet, 0.1, 2.);
+
+      if(tempJet_flavor==-1)
+        continue;
 
       TruthRawTrim_flavor    .push_back(tempJet_flavor);
       TruthRawTrim_pt        .push_back(tempJet_pt);
@@ -842,22 +788,7 @@ int main(int argc, char* argv[]){
       /////////////////////////////////
       //Getting truth label for filling into ntuple
       /////////////////////////////////
-      if(debug){
-        cout<<"DeltaR: "<<endl
-            <<"q1:  "<<jettemp.DeltaR(truth_q1)<<endl
-            <<"q2:  "<<jettemp.DeltaR(truth_q2)<<endl
-            <<"W:   "<<jettemp.DeltaR(truth_W)<<endl
-            <<"Z:   "<<jettemp.DeltaR(truth_Z)<<endl
-            <<"t1:  "<<jettemp.DeltaR(truth_t1)<<endl
-            <<"t2:  "<<jettemp.DeltaR(truth_t2)<<endl;
-      }
-      int jetflavor = -1;
-      if(jettemp.DeltaR(truth_q1)<dR_match || jettemp.DeltaR(truth_q2)<dR_match){ jetflavor = 0; }
-      else if(jettemp.DeltaR(truth_W)<dR_match){  jetflavor = 1; }
-      else if(jettemp.DeltaR(truth_Z)<dR_match){  jetflavor = 2; }
-      else if(jettemp.DeltaR(truth_t1)<dR_match || jettemp.DeltaR(truth_t2)<dR_match){ jetflavor = 3; }
-      else{ jetflavor = -1; }
-
+      jetflavor = GetJetTruthFlavor(jettemp, truth_t1, truth_t2, truth_W, truth_Z, truth_H, debug);
       if(debug) cout<<"FillingJet: flav="<<jetflavor<<"  pt="<<jettemp.Pt()<<"  m="<<jettemp.M()<<endl;
 
 
@@ -884,6 +815,9 @@ int main(int argc, char* argv[]){
       tempJet_TJet_C2        = T_EnergyCorrelator_C2(groomed_jet, 0.1, 2.);
       tempJet_TJet_D2        = T_EnergyCorrelator_D2(groomed_jet, 0.1, 2.);
       tempJet_TJet_C3        = T_EnergyCorrelator_C3(groomed_jet, 0.1, 2.);
+
+      if(tempJet_flavor==-1)
+        continue;
 
       TruthPileupTrim_flavor    .push_back(tempJet_flavor);
       TruthPileupTrim_pt        .push_back(tempJet_pt);
@@ -922,22 +856,7 @@ int main(int argc, char* argv[]){
       /////////////////////////////////
       //Getting truth label for filling into ntuple
       /////////////////////////////////
-      if(debug){
-        cout<<"DeltaR: "<<endl
-            <<"q1:  "<<jettemp.DeltaR(truth_q1)<<endl
-            <<"q2:  "<<jettemp.DeltaR(truth_q2)<<endl
-            <<"W:   "<<jettemp.DeltaR(truth_W)<<endl
-            <<"Z:   "<<jettemp.DeltaR(truth_Z)<<endl
-            <<"t1:  "<<jettemp.DeltaR(truth_t1)<<endl
-            <<"t2:  "<<jettemp.DeltaR(truth_t2)<<endl;
-      }
-      int jetflavor = -1;
-      if(jettemp.DeltaR(truth_q1)<dR_match || jettemp.DeltaR(truth_q2)<dR_match){ jetflavor = 0; }
-      else if(jettemp.DeltaR(truth_W)<dR_match){  jetflavor = 1; }
-      else if(jettemp.DeltaR(truth_Z)<dR_match){  jetflavor = 2; }
-      else if(jettemp.DeltaR(truth_t1)<dR_match || jettemp.DeltaR(truth_t2)<dR_match){ jetflavor = 3; }
-      else{ jetflavor = -1; }
-
+      jetflavor = GetJetTruthFlavor(jettemp, truth_t1, truth_t2, truth_W, truth_Z, truth_H, debug);
       if(debug) cout<<"FillingJet: flav="<<jetflavor<<"  pt="<<jettemp.Pt()<<"  m="<<jettemp.M()<<endl;
 
 
@@ -964,6 +883,9 @@ int main(int argc, char* argv[]){
       tempJet_TJet_C2        = T_EnergyCorrelator_C2(groomed_jet, 0.1, 2.);
       tempJet_TJet_D2        = T_EnergyCorrelator_D2(groomed_jet, 0.1, 2.);
       tempJet_TJet_C3        = T_EnergyCorrelator_C3(groomed_jet, 0.1, 2.);
+
+      if(tempJet_flavor==-1)
+        continue;
 
       RecoRawTrim_flavor    .push_back(tempJet_flavor);
       RecoRawTrim_pt        .push_back(tempJet_pt);
@@ -1045,6 +967,9 @@ int main(int argc, char* argv[]){
       tempJet_TJet_D2        = T_EnergyCorrelator_D2(groomed_jet, 0.1, 2.);
       tempJet_TJet_C3        = T_EnergyCorrelator_C3(groomed_jet, 0.1, 2.);
 
+      if(tempJet_flavor==-1)
+        continue;
+
       RecoPileupTrim_flavor    .push_back(tempJet_flavor);
       RecoPileupTrim_pt        .push_back(tempJet_pt);
       RecoPileupTrim_eta       .push_back(tempJet_eta);
@@ -1066,13 +991,6 @@ int main(int argc, char* argv[]){
       RecoPileupTrim_TJet_C3   .push_back(tempJet_TJet_C3);
 
     }
-
-
-
-
-
-
-
 
 
     //////////////////////////////////////
@@ -1379,4 +1297,29 @@ double T_EnergyCorrelator_C3(PseudoJet& input, double beta_min, double beta_max)
   }
   // getVolatility function provided by TelescopingJets
   return getVolatility(ecfs);
+}
+
+///========================================
+int GetJetTruthFlavor(jettemp, truth_t1, truth_t2, truth_W, truth_Z, truth_H, debug){
+  if(debug){
+    cout<<"DeltaR: "<<endl
+        <<"q1:  "<<jettemp.DeltaR(truth_q1)<<endl
+        <<"q2:  "<<jettemp.DeltaR(truth_q2)<<endl
+        <<"W:   "<<jettemp.DeltaR(truth_W)<<endl
+        <<"Z:   "<<jettemp.DeltaR(truth_Z)<<endl
+        <<"H:   "<<jettemp.DeltaR(truth_H)<<endl
+        <<"t1:  "<<jettemp.DeltaR(truth_t1)<<endl
+        <<"t2:  "<<jettemp.DeltaR(truth_t2)<<endl;
+  }
+  int jetflavor = -1;
+  if(jettemp.DeltaR(truth_q1)<dR_match || jettemp.DeltaR(truth_q2)<dR_match){ jetflavor = 0; }
+  else if(jettemp.DeltaR(truth_t1)<dR_match || jettemp.DeltaR(truth_t2)<dR_match){ jetflavor = 3; }
+  else if(jettemp.DeltaR(truth_W)<dR_match){  jetflavor = 1; }
+  else if(jettemp.DeltaR(truth_Z)<dR_match){  jetflavor = 2; }
+  else if(jettemp.DeltaR(truth_H)<dR_match){  jetflavor = 3; }
+  else{ jetflavor = -1; }
+
+  if(debug) cout<<"Found jet truth flavor: "<<jetflavor<<endl;
+
+  return jetflavor;
 }
