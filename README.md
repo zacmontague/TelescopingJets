@@ -86,4 +86,14 @@ meehan:Ana_EventGeneration >
 
 This is the final stage of analysis where the analyzer uses any method they wish to analyze the flat ntuple of jets from the previous stage and produce final results.  The preferred method is to use the (TTree::Draw())[https://root.cern.ch/root/html/TTree.html#TTree:Draw@2] method to quickly make histograms that can be used for further calculation.  This means that in principle there should be *no event loop* in this part of the code.  This is made more amenable by implementing all analysis tools with PyROOT.
 
-All of the existing scripts are stored in the `Ana_MiniNTupleAnalysis` with the main script being the `MakeROCS.py`
+All of the existing scripts are stored in the `Ana_MiniNTupleAnalysis`.  You should explore them on your own to understand what they do.
+
+If all you want to do is create a comparison of signal and background, you can execute
+```
+python SimplePlot.py
+```
+noting that you will need to point to the proper output file directory after having executed, in the `Ana_EventGeneration` stage, the following two commands
+```
+python GenerateFull.py --type dijet --nevents 5000 --pythia --ntuple --recompile
+python GenerateFull.py --type ww --nevents 5000 --pythia --ntuple --recompile
+```
