@@ -134,15 +134,15 @@ vector<double> TruthRaw_D2;
 vector<double> TruthRaw_TJet_m1;
 vector<double> TruthRaw_TJet_m2;
 
-vector<int>    TruthPileup_flavor;
-vector<double> TruthPileup_pt;
-vector<double> TruthPileup_eta;
-vector<double> TruthPileup_phi;
-vector<double> TruthPileup_m;
-vector<double> TruthPileup_Tau21;
-vector<double> TruthPileup_D2;
-vector<double> TruthPileup_TJet_m1;
-vector<double> TruthPileup_TJet_m2;
+vector<int>    TruthRawTrim_flavor;
+vector<double> TruthRawTrim_pt;
+vector<double> TruthRawTrim_eta;
+vector<double> TruthRawTrim_phi;
+vector<double> TruthRawTrim_m;
+vector<double> TruthRawTrim_Tau21;
+vector<double> TruthRawTrim_D2;
+vector<double> TruthRawTrim_TJet_m1;
+vector<double> TruthRawTrim_TJet_m2;
 
 
 ///////////////////////////
@@ -159,10 +159,16 @@ int GetJetTruthFlavor(TLorentzVector jettemp,
                       int debug);
 
 vector<PseudoJet> ToyCalorimeter(vector<PseudoJet> truth_particles);
+
+double GetTau21(PseudoJet& input);
+
 double T_Nsubjettiness(int N, PseudoJet& input, double beta_min, double beta_max);
 double T_NsubjettinessRatio(int N_num, int N_den, PseudoJet& input, double beta_min, double beta_max);
+
 double T_EnergyCorrelator_C2(PseudoJet& input, double beta_min, double beta_max);
 double T_EnergyCorrelator_D2(PseudoJet& input, double beta_min, double beta_max);
 double T_EnergyCorrelator_C3(PseudoJet& input, double beta_min, double beta_max);
+
+
 
 #endif

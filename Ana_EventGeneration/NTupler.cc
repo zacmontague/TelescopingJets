@@ -32,7 +32,7 @@ int main(int argc, char* argv[]){
   }
 
   //process
-  int ProcessType = atoi(argv[1]);
+  string ProcessType = argv[1];
 
   //inputfile
   string InputFile = argv[2];
@@ -42,6 +42,12 @@ int main(int argc, char* argv[]){
 
   //debug flag
   bool debug=false;
+  string argdebug = argv[4];
+  if(argdebug=="debug")
+    debug=true;
+
+  //print out the input arguments
+  cout<<"InputArguments:  ProcessType="<<ProcessType<<"   InputFile="<<InputFile<<"  OutputFile="<<OutputFile<<"  Debug="<<debug<<endl;
 
   //dR truth matching
   dR_match = 1.0;
@@ -262,11 +268,6 @@ int main(int argc, char* argv[]){
     }
     TelescopingJets T_Mass(axes_def,r_values);
 
-    //N-subjettiness
-    fastjet::contrib::UnnormalizedMeasure nsubMeasure(1.);
-    fastjet::contrib::Nsubjettiness nsub1(1, fastjet::contrib::WTA_KT_Axes(), nsubMeasure);
-    fastjet::contrib::Nsubjettiness nsub2(2, fastjet::contrib::WTA_KT_Axes(), nsubMeasure);
-
     //Energy correlation functions
     fastjet::contrib::EnergyCorrelatorC2 ecfC2(1.);
     fastjet::contrib::EnergyCorrelatorD2 ecfD2(1.);
@@ -312,21 +313,10 @@ int main(int argc, char* argv[]){
       tempJet_eta            = jettemp.Eta();
       tempJet_phi            = jettemp.Phi();
       tempJet_m              = jettemp.M();
-      tempJet_Tau1           = nsub1(inclusive_jets_TruthRaw[ijet]);
-      tempJet_Tau2           = nsub2(inclusive_jets_TruthRaw[ijet]);
-      if(tempJet_Tau1!=0)
-        tempJet_Tau21        = tempJet_Tau2/tempJet_Tau1;
-      tempJet_C2             = ecfC2(inclusive_jets_TruthRaw[ijet]);
+      tempJet_Tau21          = GetTau21(inclusive_jets_TruthRaw[ijet]);
       tempJet_D2             = ecfD2(inclusive_jets_TruthRaw[ijet]);
-      tempJet_C3             = ecfC3(inclusive_jets_TruthRaw[ijet]);
       tempJet_TJet_m1        = T_Mass(1,inclusive_jets_TruthRaw[ijet]);
       tempJet_TJet_m2        = T_Mass(2,inclusive_jets_TruthRaw[ijet]);
-      tempJet_TJet_Tau1      = T_Nsubjettiness(1, inclusive_jets_TruthRaw[ijet], 1., 2.);
-      tempJet_TJet_Tau2      = T_Nsubjettiness(2, inclusive_jets_TruthRaw[ijet], 1., 2.);
-      tempJet_TJet_Tau21     = T_NsubjettinessRatio(2, 1, inclusive_jets_TruthRaw[ijet], 1., 2.);
-      tempJet_TJet_C2        = T_EnergyCorrelator_C2(inclusive_jets_TruthRaw[ijet], 0.1, 2.);
-      tempJet_TJet_D2        = T_EnergyCorrelator_D2(inclusive_jets_TruthRaw[ijet], 0.1, 2.);
-      tempJet_TJet_C3        = T_EnergyCorrelator_C3(inclusive_jets_TruthRaw[ijet], 0.1, 2.);
 
       if(tempJet_flavor==-1)
         continue;
@@ -336,20 +326,11 @@ int main(int argc, char* argv[]){
       TruthRaw_eta       .push_back(tempJet_eta);
       TruthRaw_phi       .push_back(tempJet_phi);
       TruthRaw_m         .push_back(tempJet_m);
-      TruthRaw_Tau1      .push_back(tempJet_Tau1);
-      TruthRaw_Tau2      .push_back(tempJet_Tau2);
       TruthRaw_Tau21     .push_back(tempJet_Tau21);
-      TruthRaw_C2        .push_back(tempJet_C2);
       TruthRaw_D2        .push_back(tempJet_D2);
-      TruthRaw_C3        .push_back(tempJet_C3);
       TruthRaw_TJet_m1   .push_back(tempJet_TJet_m1);
       TruthRaw_TJet_m2   .push_back(tempJet_TJet_m2);
-      TruthRaw_TJet_Tau1 .push_back(tempJet_TJet_Tau1);
-      TruthRaw_TJet_Tau2 .push_back(tempJet_TJet_Tau2);
-      TruthRaw_TJet_Tau21.push_back(tempJet_TJet_Tau21);
-      TruthRaw_TJet_C2   .push_back(tempJet_TJet_C2);
-      TruthRaw_TJet_D2   .push_back(tempJet_TJet_D2);
-      TruthRaw_TJet_C3   .push_back(tempJet_TJet_C3);
+
     }
 
 
@@ -380,21 +361,10 @@ int main(int argc, char* argv[]){
       tempJet_eta            = jettemp.Eta();
       tempJet_phi            = jettemp.Phi();
       tempJet_m              = jettemp.M();
-      tempJet_Tau1           = nsub1(groomed_jet);
-      tempJet_Tau2           = nsub2(groomed_jet);
-      if(tempJet_Tau1!=0)
-        tempJet_Tau21        = tempJet_Tau2/tempJet_Tau1;
-      tempJet_C2             = ecfC2(groomed_jet);
+      tempJet_Tau21          = GetTau21(groomed_jet);
       tempJet_D2             = ecfD2(groomed_jet);
-      tempJet_C3             = ecfC3(groomed_jet);
       tempJet_TJet_m1        = T_Mass(1,groomed_jet);
       tempJet_TJet_m2        = T_Mass(2,groomed_jet);
-      tempJet_TJet_Tau1      = T_Nsubjettiness(1, groomed_jet, 1., 2.);
-      tempJet_TJet_Tau2      = T_Nsubjettiness(2, groomed_jet, 1., 2.);
-      tempJet_TJet_Tau21     = T_NsubjettinessRatio(2, 1, groomed_jet, 1., 2.);
-      tempJet_TJet_C2        = T_EnergyCorrelator_C2(groomed_jet, 0.1, 2.);
-      tempJet_TJet_D2        = T_EnergyCorrelator_D2(groomed_jet, 0.1, 2.);
-      tempJet_TJet_C3        = T_EnergyCorrelator_C3(groomed_jet, 0.1, 2.);
 
       if(tempJet_flavor==-1)
         continue;
@@ -404,20 +374,10 @@ int main(int argc, char* argv[]){
       TruthRawTrim_eta       .push_back(tempJet_eta);
       TruthRawTrim_phi       .push_back(tempJet_phi);
       TruthRawTrim_m         .push_back(tempJet_m);
-      TruthRawTrim_Tau1      .push_back(tempJet_Tau1);
-      TruthRawTrim_Tau2      .push_back(tempJet_Tau2);
       TruthRawTrim_Tau21     .push_back(tempJet_Tau21);
-      TruthRawTrim_C2        .push_back(tempJet_C2);
       TruthRawTrim_D2        .push_back(tempJet_D2);
-      TruthRawTrim_C3        .push_back(tempJet_C3);
       TruthRawTrim_TJet_m1   .push_back(tempJet_TJet_m1);
       TruthRawTrim_TJet_m2   .push_back(tempJet_TJet_m2);
-      TruthRawTrim_TJet_Tau1 .push_back(tempJet_TJet_Tau1);
-      TruthRawTrim_TJet_Tau2 .push_back(tempJet_TJet_Tau2);
-      TruthRawTrim_TJet_Tau21.push_back(tempJet_TJet_Tau21);
-      TruthRawTrim_TJet_C2   .push_back(tempJet_TJet_C2);
-      TruthRawTrim_TJet_D2   .push_back(tempJet_TJet_D2);
-      TruthRawTrim_TJet_C3   .push_back(tempJet_TJet_C3);
 
     }
 
@@ -460,15 +420,15 @@ void ResetBranches(){
   TruthRaw_TJet_m1.clear();
   TruthRaw_TJet_m2.clear();
 
-  TruthPileup_flavor.clear();
-  TruthPileup_pt.clear();
-  TruthPileup_eta.clear();
-  TruthPileup_phi.clear();
-  TruthPileup_m.clear();
-  TruthPileup_Tau21.clear();
-  TruthPileup_D2.clear();
-  TruthPileup_TJet_m1.clear();
-  TruthPileup_TJet_m2.clear();
+  TruthRawTrim_flavor.clear();
+  TruthRawTrim_pt.clear();
+  TruthRawTrim_eta.clear();
+  TruthRawTrim_phi.clear();
+  TruthRawTrim_m.clear();
+  TruthRawTrim_Tau21.clear();
+  TruthRawTrim_D2.clear();
+  TruthRawTrim_TJet_m1.clear();
+  TruthRawTrim_TJet_m2.clear();
 
 }
 
@@ -625,4 +585,24 @@ int GetJetTruthFlavor(TLorentzVector jettemp,
   if(debug) cout<<"Found jet truth flavor: "<<jetflavor<<endl;
 
   return jetflavor;
+}
+
+
+double GetTau21(PseudoJet& input){
+
+  float tau21=-1;
+
+  //N-subjettiness
+  fastjet::contrib::UnnormalizedMeasure nsubMeasure(1.);
+  fastjet::contrib::Nsubjettiness nsub1(1, fastjet::contrib::WTA_KT_Axes(), nsubMeasure);
+  fastjet::contrib::Nsubjettiness nsub2(2, fastjet::contrib::WTA_KT_Axes(), nsubMeasure);
+
+  float tau1 = nsub1(input);
+  float tau2 = nsub2(input);
+
+  if(tau1>0)
+    tau21 = tau2/tau1;
+
+  return tau21;
+
 }

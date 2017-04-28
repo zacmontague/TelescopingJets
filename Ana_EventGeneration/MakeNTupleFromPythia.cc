@@ -19,21 +19,12 @@ output : Anything you want - but being logical.  This will be the input for the 
 
 //----------------------------------------------------------------------*/
 
-#include <TROOT.h>
-#include "TFile.h"
-#include "TTree.h"
-#include "TH1D.h"
-
-#include <vector>
-#include <string>
-
-#include "Pythia8/Pythia.h"
+#include "MakeNTupleFromPythia.h"
 using namespace Pythia8;
 
 int main(int argc, char* argv[]){
 
-  //debug flag
-  bool debug=false;
+
 
   //exit if you dont pass a run card
   if(argc<4){
@@ -61,58 +52,25 @@ int main(int argc, char* argv[]){
   }
 
   //get output file name
-  string OutfileName = argv[2];
+  string OutputFile = argv[2];
 
   //number of events
   int nEvents = atoi(argv[3]);
 
+  //debug flag
+  bool debug=false;
+  string argdebug = argv[4];
+  if(argdebug=="debug")
+    debug=true;
 
-  cout<<"InputArguments:  ProcessType="<<ProcessType<<"   ConfigFile="<<ConfigFile<<"  OutfileName="<<OutfileName<<endl;
+  //print out the input arguments
+  cout<<"InputArguments:  ProcessType="<<ProcessType<<"   ConfigFile="<<ConfigFile<<"  OutputFile="<<OutputFile<<"  Debug="<<debug<<endl;
 
 
   ///////////////////////////////////
   //initialize the output ttree and branches
   ///////////////////////////////////
-  double truth_q1_pt;
-  double truth_q1_eta;
-  double truth_q1_phi;
-  double truth_q1_m;
 
-  double truth_q2_pt;
-  double truth_q2_eta;
-  double truth_q2_phi;
-  double truth_q2_m;
-
-  double truth_t1_pt;
-  double truth_t1_eta;
-  double truth_t1_phi;
-  double truth_t1_m;
-
-  double truth_t2_pt;
-  double truth_t2_eta;
-  double truth_t2_phi;
-  double truth_t2_m;
-
-  double truth_W1_pt;
-  double truth_W1_eta;
-  double truth_W1_phi;
-  double truth_W1_m;
-
-  double truth_W2_pt;
-  double truth_W2_eta;
-  double truth_W2_phi;
-  double truth_W2_m;
-
-  double truth_H_pt;
-  double truth_H_eta;
-  double truth_H_phi;
-  double truth_H_m;
-
-  vector<int>    fspart_id;
-  vector<double> fspart_pt;
-  vector<double> fspart_eta;
-  vector<double> fspart_phi;
-  vector<double> fspart_m;
 
   TTree *tree = new TTree("tree","tree");
   tree->Branch("fspart_id", &fspart_id);
@@ -195,12 +153,12 @@ int main(int argc, char* argv[]){
     truth_q1_pt  = 100.0;
     truth_q1_eta = 10.0;
     truth_q1_phi = 0.0;
-    truth_q1_m   = 1.0;
+    truth_q1_m   = -10.0;
 
     truth_q2_pt  = 100.0;
     truth_q2_eta = 10.0;
     truth_q2_phi = 0.0;
-    truth_q2_m   = 1.0;
+    truth_q2_m   = -10.0;
 
     truth_t1_pt  = 100.0;
     truth_t1_eta = 10.0;
@@ -227,37 +185,44 @@ int main(int argc, char* argv[]){
     truth_H_phi = 0.0;
     truth_H_m   = 1.0;
 
+    bool flag_q1_set=false;
+
     //loops through the particles in the event just generated
     for (int iPart = 0; iPart < pythia.event.size(); ++iPart) {
+
       //event filter for
       if(debug) cout<<"Process specific filters: "<<ProcessType<<endl;
-      if(ProcessType==0){
+      if(ProcessType=="dijet"){
         if(debug) cout<<"Dijet Filter"<<endl;
         //fill truth quark branches
-        if(pythia.event[iPart].status()==-23 && truth_q1_m==1.0){
+        if(debug) cout<<"FilterStatus : "<<pythia.event[iPart].status()<<"  "<<flag_q1_set<<endl;
+        if(pythia.event[iPart].status()==-23 && !flag_q1_set){
           if(debug) cout<<"GotTruth - q1"<<endl;
           truth_q1_pt=pythia.event[iPart].pT();
           truth_q1_eta=pythia.event[iPart].eta();
           truth_q1_phi=pythia.event[iPart].phi();
           truth_q1_m=pythia.event[iPart].m();
-          if(debug) cout<<"q1  "<<truth_q1_pt<<endl;
+          if(debug) cout<<"q1  "<<truth_q1_pt<<"  "<<truth_q1_eta<<"  "<<truth_q1_phi<<"  "<<truth_q1_m<<endl;
           if(truth_q1_pt>190){
             acceptevent=true;
           }
+
+          flag_q1_set=true;
+
         }
-        else if(pythia.event[iPart].status()==-23 && truth_q1_m!=1.0){
+        else if(pythia.event[iPart].status()==-23){
           if(debug) cout<<"GotTruth - q2"<<endl;
           truth_q2_pt=pythia.event[iPart].pT();
           truth_q2_eta=pythia.event[iPart].eta();
           truth_q2_phi=pythia.event[iPart].phi();
           truth_q2_m=pythia.event[iPart].m();
-          if(debug) cout<<"q2  "<<truth_q2_pt<<endl;
+          if(debug) cout<<"q2  "<<truth_q2_pt<<"  "<<truth_q2_eta<<"  "<<truth_q2_phi<<"  "<<truth_q2_m<<endl;
           if(truth_q2_pt>190){
             acceptevent=true;
           }
         }
       }
-      else if(ProcessType==1){
+      else if(ProcessType=="ww"){
         if(debug) cout<<"WW Filter"<<endl;
         //only accept if Wprime decay is via G*->WW - identify by asking for Z0 in the intermediate state
         if(pythia.event[iPart].id()==24 && pythia.event[iPart].status()==-22){
@@ -279,7 +244,7 @@ int main(int argc, char* argv[]){
           truth_W2_m   = pythia.event[iPart].m();
         }
       }
-      else if(ProcessType==2){
+      else if(ProcessType=="tt"){
         if(debug) cout<<"Top quark Filter"<<endl;
         //fill truth topquark branches
         if(pythia.event[iPart].id()==6 && pythia.event[iPart].status()==-62){
@@ -303,7 +268,7 @@ int main(int argc, char* argv[]){
           }
         }
       }
-      else if(ProcessType==3){
+      else if(ProcessType=="hh"){
         if(debug) cout<<"Higgs Filter"<<endl;
         //fill truth higgs branches
         if(pythia.event[iPart].id()==25 && pythia.event[iPart].status()==-62){
@@ -363,7 +328,7 @@ int main(int argc, char* argv[]){
       <<"accepted   = "<<nAcceptedEvents<<endl
       <<"efficiency = "<<float(nAcceptedEvents)/float(nEvents)<<endl;
 
-  TFile *fout = new TFile(OutfileName.c_str(),"RECREATE");
+  TFile *fout = new TFile(OutputFile.c_str(),"RECREATE");
   tree->Write("tree");
   fout->Close();
 
