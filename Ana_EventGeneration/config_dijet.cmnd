@@ -9,6 +9,11 @@ HardQCD:qg2qg = on
 HardQCD:qq2qq = on 
 HardQCD:qqbar2gg = on 
 
+! Modify the region of phase space in which events are generated
+PhaseSpace:pTHatMin = 200.0 
+PhaseSpace:pTHatMax = 800.0
 
-! make the min
-PhaseSpace:pTHatMin = 100 
+! Bias the sampling of events to oversample at higher pT to make statistics the same across the spectrum
+PhaseSpace:bias2Selection = on
+PhaseSpace:bias2SelectionPow = 6.
+PhaseSpace:bias2SelectionRef = 100.

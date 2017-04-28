@@ -42,17 +42,18 @@ int main(int argc, char* argv[]){
   }
 
   //get processtype
-  int ProcessType = atoi(argv[1]);
+  std::string ProcessType = argv[1];
 
   //get config file
   string ConfigFile   = "config_DEFAULT.cmnd";
-  if(ProcessType==0)
+
+  if(ProcessType=="dijet")
     ConfigFile="config_dijet.cmnd";
-  else if(ProcessType==1)
-    ConfigFile="config_wz.cmnd";
-  else if(ProcessType==2)
+  else if(ProcessType=="ww")
+    ConfigFile="config_ww.cmnd";
+  else if(ProcessType=="tt")
     ConfigFile="config_ttbar.cmnd";
-  else if(ProcessType==3)
+  else if(ProcessType=="hh")
     ConfigFile="config_higgs.cmnd";
   else{
     cout<<"Bad process type!"<<endl;
@@ -92,15 +93,15 @@ int main(int argc, char* argv[]){
   double truth_t2_phi;
   double truth_t2_m;
 
-  double truth_W_pt;
-  double truth_W_eta;
-  double truth_W_phi;
-  double truth_W_m;
+  double truth_W1_pt;
+  double truth_W1_eta;
+  double truth_W1_phi;
+  double truth_W1_m;
 
-  double truth_Z_pt;
-  double truth_Z_eta;
-  double truth_Z_phi;
-  double truth_Z_m;
+  double truth_W2_pt;
+  double truth_W2_eta;
+  double truth_W2_phi;
+  double truth_W2_m;
 
   double truth_H_pt;
   double truth_H_eta;
@@ -140,15 +141,15 @@ int main(int argc, char* argv[]){
   tree->Branch("truth_t2_phi", &truth_t2_phi);
   tree->Branch("truth_t2_m",   &truth_t2_m);
 
-  tree->Branch("truth_W_pt",  &truth_W_pt);
-  tree->Branch("truth_W_eta", &truth_W_eta);
-  tree->Branch("truth_W_phi", &truth_W_phi);
-  tree->Branch("truth_W_m",   &truth_W_m);
+  tree->Branch("truth_W1_pt",  &truth_W1_pt);
+  tree->Branch("truth_W1_eta", &truth_W1_eta);
+  tree->Branch("truth_W1_phi", &truth_W1_phi);
+  tree->Branch("truth_W1_m",   &truth_W1_m);
 
-  tree->Branch("truth_Z_pt",  &truth_Z_pt);
-  tree->Branch("truth_Z_eta", &truth_Z_eta);
-  tree->Branch("truth_Z_phi", &truth_Z_phi);
-  tree->Branch("truth_Z_m",   &truth_Z_m);
+  tree->Branch("truth_W2_pt",  &truth_W2_pt);
+  tree->Branch("truth_W2_eta", &truth_W2_eta);
+  tree->Branch("truth_W2_phi", &truth_W2_phi);
+  tree->Branch("truth_W2_m",   &truth_W2_m);
 
   tree->Branch("truth_H_pt",  &truth_H_pt);
   tree->Branch("truth_H_eta", &truth_H_eta);
@@ -211,15 +212,15 @@ int main(int argc, char* argv[]){
     truth_t2_phi = 0.0;
     truth_t2_m   = 1.0;
 
-    truth_W_pt  = 100.0;
-    truth_W_eta = 10.0;
-    truth_W_phi = 0.0;
-    truth_W_m   = 1.0;
+    truth_W1_pt  = 100.0;
+    truth_W1_eta = 10.0;
+    truth_W1_phi = 0.0;
+    truth_W1_m   = 1.0;
 
-    truth_Z_pt  = 100.0;
-    truth_Z_eta = 10.0;
-    truth_Z_phi = 0.0;
-    truth_Z_m   = 1.0;
+    truth_W2_pt  = 100.0;
+    truth_W2_eta = 10.0;
+    truth_W2_phi = 0.0;
+    truth_W2_m   = 1.0;
 
     truth_H_pt  = 100.0;
     truth_H_eta = 10.0;
@@ -257,31 +258,31 @@ int main(int argc, char* argv[]){
         }
       }
       else if(ProcessType==1){
-        if(debug) cout<<"WZ Filter"<<endl;
-        //only accept if Wprime decay is via W'->WZ - identify by asking for Z0 in the intermediate state
-        if(pythia.event[iPart].id()==23 && pythia.event[iPart].status()==-22){
+        if(debug) cout<<"WW Filter"<<endl;
+        //only accept if Wprime decay is via G*->WW - identify by asking for Z0 in the intermediate state
+        if(pythia.event[iPart].id()==24 && pythia.event[iPart].status()==-22){
           acceptevent=true;
         }
         //fill truth boson branches
-        if(pythia.event[iPart].id()==23 && pythia.event[iPart].status()==-22){
-          if(debug) cout<<"GotTruth - Z"<<endl;
-          truth_Z_pt  = pythia.event[iPart].pT();
-          truth_Z_eta = pythia.event[iPart].eta();
-          truth_Z_phi = pythia.event[iPart].phi();
-          truth_Z_m   = pythia.event[iPart].m();
+        if(pythia.event[iPart].id()==24 && pythia.event[iPart].status()==-22){
+          if(debug) cout<<"GotTruth - W1"<<endl;
+          truth_W1_pt  = pythia.event[iPart].pT();
+          truth_W1_eta = pythia.event[iPart].eta();
+          truth_W1_phi = pythia.event[iPart].phi();
+          truth_W1_m   = pythia.event[iPart].m();
         }
-        else if( (pythia.event[iPart].id()==24 || pythia.event[iPart].id()==-24) && pythia.event[iPart].status()==-22){
-          if(debug) cout<<"GotTruth - W"<<endl;
-          truth_W_pt  = pythia.event[iPart].pT();
-          truth_W_eta = pythia.event[iPart].eta();
-          truth_W_phi = pythia.event[iPart].phi();
-          truth_W_m   = pythia.event[iPart].m();
+        else if( pythia.event[iPart].id()==-24 && pythia.event[iPart].status()==-22){
+          if(debug) cout<<"GotTruth - W2"<<endl;
+          truth_W2_pt  = pythia.event[iPart].pT();
+          truth_W2_eta = pythia.event[iPart].eta();
+          truth_W2_phi = pythia.event[iPart].phi();
+          truth_W2_m   = pythia.event[iPart].m();
         }
       }
       else if(ProcessType==2){
         if(debug) cout<<"Top quark Filter"<<endl;
         //fill truth topquark branches
-        if(pythia.event[iPart].id()==-6 && pythia.event[iPart].status()==-62){
+        if(pythia.event[iPart].id()==6 && pythia.event[iPart].status()==-62){
           if(debug) cout<<"GotTruth - t1"<<endl;
           truth_t1_pt=pythia.event[iPart].pT();
           truth_t1_eta=pythia.event[iPart].eta();
@@ -290,9 +291,8 @@ int main(int argc, char* argv[]){
           if(truth_t1_pt>180){
             acceptevent=true;
           }
-
         }
-        else if(pythia.event[iPart].id()==6 && pythia.event[iPart].status()==-62){
+        else if(pythia.event[iPart].id()==-6 && pythia.event[iPart].status()==-62){
           if(debug) cout<<"GotTruth - t2"<<endl;
           truth_t2_pt=pythia.event[iPart].pT();
           truth_t2_eta=pythia.event[iPart].eta();
