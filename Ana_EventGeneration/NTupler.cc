@@ -28,6 +28,10 @@ int main(int argc, char* argv[]){
   //exit if you dont pass a run card
   if(argc<4){
     cout<<"You need to specify more arguments"<<endl;
+    cout<<"Arg1 = process type"<<endl;
+    cout<<"Arg2 = input file path and name"<<endl;
+    cout<<"Arg3 = output file path and name"<<endl;
+    cout<<"Arg4 = debug flag (optional)"<<endl;
     return 1;
   }
 
@@ -42,9 +46,11 @@ int main(int argc, char* argv[]){
 
   //debug flag
   bool debug=false;
-  string argdebug = argv[4];
-  if(argdebug=="debug")
-    debug=true;
+  if(argc>=5){
+    string argdebug = argv[4];
+    if(argdebug=="debug")
+      debug=true;
+  }
 
   //print out the input arguments
   cout<<"InputArguments:  ProcessType="<<ProcessType<<"   InputFile="<<InputFile<<"  OutputFile="<<OutputFile<<"  Debug="<<debug<<endl;

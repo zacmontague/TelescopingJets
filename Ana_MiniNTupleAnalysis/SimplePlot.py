@@ -17,8 +17,11 @@ outputdir = MakeNewDir(outputdir)
 
 c = TCanvas("c","c",200,200)
 
-h1 = GetHist1D(InputDir+"ntuple_ww_0.root",    "JetTree", "TruthRawTrim_m", "200,0,200", "")
-h2 = GetHist1D(InputDir+"ntuple_dijet_0.root",    "JetTree", "TruthRawTrim_m", "200,0,200", "")
+variable = "TruthRaw_TJet_m1"
+range    = "100,0,4"
+
+h1 = GetHist1D(InputDir+"ntuple_ww_0.root",    "JetTree", variable, range, "TruthRawTrim_m>60")
+h2 = GetHist1D(InputDir+"ntuple_dijet_0.root", "JetTree", variable, range, "TruthRawTrim_m>60")
 
 #Normalize them to unity
 h1 = NormalizeHist(h1)
