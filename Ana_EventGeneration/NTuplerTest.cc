@@ -125,14 +125,16 @@ int main(int argc, char* argv[]){
   treeout->Branch("TruthRaw_Tau21",         &TruthRaw_Tau21);
   treeout->Branch("TruthRaw_Tau32",         &TruthRaw_Tau32);
   treeout->Branch("TruthRaw_D2",            &TruthRaw_D2);
-  treeout->Branch("TruthRaw_TJet_m1",       &TruthRaw_TJet_m1);
-  treeout->Branch("TruthRaw_TJet_m2",       &TruthRaw_TJet_m2);
   treeout->Branch("TruthRaw_T2jet_angle",   &TruthRaw_T2jet_angle);
   treeout->Branch("TruthRaw_T2jet",         &TruthRaw_T2jet);
   treeout->Branch("TruthRaw_T3jet_angle",   &TruthRaw_T3jet_angle);
   treeout->Branch("TruthRaw_T3jet",         &TruthRaw_T3jet);
   treeout->Branch("TruthRaw_Tpruning",      &TruthRaw_Tpruning);
-  treeout->Branch("TruthRaw_Ttrimming",     &TruthRaw_Ttrimming); 
+  treeout->Branch("TruthRaw_Ttrimming",     &TruthRaw_Ttrimming);
+  treeout->Branch("TruthRaw_Taktreclustering",	&TruthRaw_Taktreclustering);
+  treeout->Branch("TruthRaw_Tktreclustering",	&TruthRaw_Tktreclustering);
+  treeout->Branch("TruthRaw_TJet_m1",       &TruthRaw_TJet_m1);
+  treeout->Branch("TruthRaw_TJet_m2",       &TruthRaw_TJet_m2);
 
   treeout->Branch("TruthRawTrim_flavor",        &TruthRawTrim_flavor);
   treeout->Branch("TruthRawTrim_pt",            &TruthRawTrim_pt);
@@ -142,14 +144,16 @@ int main(int argc, char* argv[]){
   treeout->Branch("TruthRawTrim_Tau21",         &TruthRawTrim_Tau21);
   treeout->Branch("TruthRawTrim_Tau32",         &TruthRawTrim_Tau32);
   treeout->Branch("TruthRawTrim_D2",            &TruthRawTrim_D2);
-  treeout->Branch("TruthRawTrim_TJet_m1",       &TruthRawTrim_TJet_m1);
-  treeout->Branch("TruthRawTrim_TJet_m2",       &TruthRawTrim_TJet_m2);
   treeout->Branch("TruthRawTrim_T2jet_angle",   &TruthRawTrim_T2jet_angle);
   treeout->Branch("TruthRawTrim_T2jet",         &TruthRawTrim_T2jet);
   treeout->Branch("TruthRawTrim_T3jet_angle",   &TruthRawTrim_T3jet_angle);
   treeout->Branch("TruthRawTrim_T3jet",         &TruthRawTrim_T3jet);
   treeout->Branch("TruthRawTrim_Tpruning",      &TruthRawTrim_Tpruning);
-  treeout->Branch("TruthRawTrim_Ttrimming",     &TruthRawTrim_Ttrimming); 
+  treeout->Branch("TruthRawTrim_Ttrimming",     &TruthRawTrim_Ttrimming);
+  treeout->Branch("TruthRawTrim_Taktreclustering",	&TruthRawTrim_Taktreclustering);
+  treeout->Branch("TruthRawTrim_Tktreclustering",	&TruthRawTrim_Tktreclustering);
+  treeout->Branch("TruthRawTrim_TJet_m1",       &TruthRawTrim_TJet_m1);
+  treeout->Branch("TruthRawTrim_TJet_m2",       &TruthRawTrim_TJet_m2);
 
 
 
@@ -157,7 +161,7 @@ int main(int argc, char* argv[]){
   //////////////////////////////////////////////
   //test NTupler.cc using Alex’s samples
   //////////////////////////////////////////////
-  //read Ntuple from root files
+  //read N tuple from root files
   //////////////////////////////////////////////
 
   TChain *sig_t1 = new TChain("Tree");
@@ -165,7 +169,7 @@ int main(int argc, char* argv[]){
   TChain *bkg_t = new TChain("Tree");
 
 //  sig_t1->Add("AlexSample/mc12_8TeV.110903.Pythia8_AU2MSTW2008LO_zprime1000_tt.leading_jets.root");
-//  sig_t2->Add("AlexSample/mc12_8TeV.110907.Pythia8_AU2MSTW2008LO_zprime2000_tt.leading_jets.root");
+//  sig_t1->Add("AlexSample/mc12_8TeV.110907.Pythia8_AU2MSTW2008LO_zprime2000_tt.leading_jets.root");
 
 //  sig_t1->Add("AlexSample/mc12_8TeV.158864.Pythia8_AU2MSTW2008LO_Wprime_WZ_llqq_m1000.leading_jets.root");
   sig_t1->Add("AlexSample/mc12_8TeV.158874.Pythia8_AU2MSTW2008LO_Wprime_WZ_llqq_m2000.leading_jets.root");
@@ -359,59 +363,6 @@ int main(int argc, char* argv[]){
   sig_t1->SetBranchAddress("Truth_Tdaughter_m",		 &Truth_Tdaughter_m1);
   sig_t1->SetBranchAddress("Truth_Tdaughter_status",     &Truth_Tdaughter_status1);
   sig_t1->SetBranchAddress("Truth_Tdaughter_pdgId",      &Truth_Tdaughter_pdgId1);*/
-
-  sig_t2->SetBranchAddress("EventNumber",	  	 &sigEventNumber2);
-  sig_t2->SetBranchAddress("EventWeight",	  	 &sigEventWeight2);
-  sig_t2->SetBranchAddress("CrossSection",	  	 &sigCrossSection2);
-//  sig_t2->SetBranchAddress("PileupWeight",	  	 &sigPileupWeight2);
-  sig_t2->SetBranchAddress("ChannelNumber",	  	 &ChannelNumber2);
-  sig_t2->SetBranchAddress("PassEventSelection",	 &PassEventSelection2);
-
-  sig_t2->SetBranchAddress("AntiKt10Truth_pt",		 &sig_pt2);
-  sig_t2->SetBranchAddress("AntiKt10Truth_eta",		 &sig_eta2);
-  sig_t2->SetBranchAddress("AntiKt10Truth_phi",		 &sig_phi2);
-  sig_t2->SetBranchAddress("AntiKt10Truth_m",		 &sig_m2);
-  sig_t2->SetBranchAddress("AntiKt10Truth_constit_n",	 &sigTruth_n2);
-  sig_t2->SetBranchAddress("AntiKt10Truth_constit_pt",	 &sigTruth_pt2);
-  sig_t2->SetBranchAddress("AntiKt10Truth_constit_eta",	 &sigTruth_eta2);
-  sig_t2->SetBranchAddress("AntiKt10Truth_constit_phi",	 &sigTruth_phi2);
-  sig_t2->SetBranchAddress("AntiKt10Truth_constit_m",	 &sigTruth_m2);
-
-  sig_t2->SetBranchAddress("AntiKt10Reco_pt",		 &sigR_pt2);
-  sig_t2->SetBranchAddress("AntiKt10Reco_eta",		 &sigR_eta2);
-  sig_t2->SetBranchAddress("AntiKt10Reco_phi",		 &sigR_phi2);
-  sig_t2->SetBranchAddress("AntiKt10Reco_m",		 &sigR_m2);
-  sig_t2->SetBranchAddress("AntiKt10Reco_constit_n",	 &sigReco_n2);
-  sig_t2->SetBranchAddress("AntiKt10Reco_constit_pt",	 &sigReco_pt2);
-  sig_t2->SetBranchAddress("AntiKt10Reco_constit_eta",	 &sigReco_eta2);
-  sig_t2->SetBranchAddress("AntiKt10Reco_constit_phi",	 &sigReco_phi2);
-  sig_t2->SetBranchAddress("AntiKt10Reco_constit_m",	 &sigReco_m2);
-
-  sig_t2->SetBranchAddress("Truth_W_pt",	  	 &Truth_W_pt2);
-  sig_t2->SetBranchAddress("Truth_W_eta",	  	 &Truth_W_eta2);
-  sig_t2->SetBranchAddress("Truth_W_phi",	  	 &Truth_W_phi2);
-  sig_t2->SetBranchAddress("Truth_W_m",		 	 &Truth_W_m2);
-  sig_t2->SetBranchAddress("Truth_W_status",		 &Truth_W_status2);
-  sig_t2->SetBranchAddress("Truth_W_pdgId",		 &Truth_W_pdgId2);
-  sig_t2->SetBranchAddress("Truth_Wdaughter_pt",	 &Truth_Wdaughter_pt2);
-  sig_t2->SetBranchAddress("Truth_Wdaughter_eta",	 &Truth_Wdaughter_eta2);
-  sig_t2->SetBranchAddress("Truth_Wdaughter_phi",	 &Truth_Wdaughter_phi2);
-  sig_t2->SetBranchAddress("Truth_Wdaughter_m",		 &Truth_Wdaughter_m2);
-  sig_t2->SetBranchAddress("Truth_Wdaughter_status",    &Truth_Wdaughter_status2);
-  sig_t2->SetBranchAddress("Truth_Wdaughter_pdgId",     &Truth_Wdaughter_pdgId2);
-
-/*  sig_t2->SetBranchAddress("Truth_T_pt",	 	 &Truth_T_pt2);
-  sig_t2->SetBranchAddress("Truth_T_eta",	  	 &Truth_T_eta2);
-  sig_t2->SetBranchAddress("Truth_T_phi",	  	 &Truth_T_phi2);
-  sig_t2->SetBranchAddress("Truth_T_m",	 		 &Truth_T_m2);
-  sig_t2->SetBranchAddress("Truth_T_status",	 	 &Truth_T_status2);
-  sig_t2->SetBranchAddress("Truth_T_pdgId",	 	 &Truth_T_pdgId2);
-  sig_t2->SetBranchAddress("Truth_Tdaughter_pt",	 &Truth_Tdaughter_pt2);
-  sig_t2->SetBranchAddress("Truth_Tdaughter_eta",	 &Truth_Tdaughter_eta2);
-  sig_t2->SetBranchAddress("Truth_Tdaughter_phi",	 &Truth_Tdaughter_phi2);
-  sig_t2->SetBranchAddress("Truth_Tdaughter_m",		 &Truth_Tdaughter_m2);
-  sig_t2->SetBranchAddress("Truth_Tdaughter_status",    &Truth_Tdaughter_status2);
-  sig_t2->SetBranchAddress("Truth_Tdaughter_pdgId",     &Truth_Tdaughter_pdgId2);*/
 
   bkg_t->SetBranchAddress("EventNumber",	  	 &bkgEventNumber);
   bkg_t->SetBranchAddress("EventWeight",	  	 &bkgEventWeight);
@@ -1100,8 +1051,6 @@ for (int event = 0; event < bkg_t->GetEntries(); event++) {
       tempJet_Tau21          = GetTau21(inclusive_jets_TruthRaw[ijet]);
       tempJet_Tau32          = GetTau32(inclusive_jets_TruthRaw[ijet]);
       tempJet_D2             = ecfD2(inclusive_jets_TruthRaw[ijet]);
-//      tempJet_TJet_m1        = T_Mass(1,inclusive_jets_TruthRaw[ijet]);
-//      tempJet_TJet_m2        = T_Mass(2,inclusive_jets_TruthRaw[ijet]);
 
       TSub  T2SubOutput     = T_2Subjet(inclusive_jets_TruthRaw[ijet], 0.05, 0.6, 20);
       tempJet_T2jet_angle    = T2SubOutput.min_angle;
@@ -1114,6 +1063,10 @@ for (int event = 0; event < bkg_t->GetEntries(); event++) {
       tempJet_Tpruning       = T_Pruning (inclusive_jets_TruthRaw[ijet], 0.1, 2.0, 20);
       tempJet_Ttrimming      = T_Trimming(inclusive_jets_TruthRaw[ijet], 0.0, 0.1, 20);
       tempJet_Taktreclustering = T_AkTreclustering(inclusive_jets_TruthRaw[ijet], 0.05, 0.6, 20);
+      tempJet_Tktreclustering = T_kTreclustering(inclusive_jets_TruthRaw[ijet], 0.05, 0.6, 20);
+      tempJet_TJet_m1        = T_Mass(1,inclusive_jets_TruthRaw[ijet]);
+      tempJet_TJet_m2        = T_Mass(2,inclusive_jets_TruthRaw[ijet]);
+
 
       if(tempJet_flavor==-1)
         continue;
@@ -1126,8 +1079,6 @@ for (int event = 0; event < bkg_t->GetEntries(); event++) {
       TruthRaw_Tau21      .push_back(tempJet_Tau21);
       TruthRaw_Tau32      .push_back(tempJet_Tau32);
       TruthRaw_D2         .push_back(tempJet_D2);
-//      TruthRaw_TJet_m1    .push_back(tempJet_TJet_m1);
-//      TruthRaw_TJet_m2    .push_back(tempJet_TJet_m2);
       TruthRaw_T2jet_angle.push_back(tempJet_T2jet_angle);
       TruthRaw_T2jet      .push_back(tempJet_T2jet);
       TruthRaw_T3jet_angle.push_back(tempJet_T3jet_angle);
@@ -1135,7 +1086,9 @@ for (int event = 0; event < bkg_t->GetEntries(); event++) {
       TruthRaw_Tpruning   .push_back(tempJet_Tpruning);
       TruthRaw_Ttrimming  .push_back(tempJet_Ttrimming);
       TruthRaw_Taktreclustering.push_back(tempJet_Taktreclustering);
-
+      TruthRaw_Tktreclustering.push_back(tempJet_Tktreclustering);
+      TruthRaw_TJet_m1    .push_back(tempJet_TJet_m1);
+      TruthRaw_TJet_m2    .push_back(tempJet_TJet_m2);
     }
 
 
@@ -1171,8 +1124,6 @@ for (int event = 0; event < bkg_t->GetEntries(); event++) {
       tempJet_Tau21          = GetTau21(groomed_jet);
       tempJet_Tau32          = GetTau32(groomed_jet);
       tempJet_D2             = ecfD2(groomed_jet);
-//      tempJet_TJet_m1        = T_Mass(1,groomed_jet);
-//      tempJet_TJet_m2        = T_Mass(2,groomed_jet);
 
       TSub  T2SubOutputTrim = T_2Subjet(groomed_jet, 0.05, 0.6, 20);
       tempJet_T2jet_angle    = T2SubOutputTrim.min_angle;
@@ -1185,7 +1136,9 @@ for (int event = 0; event < bkg_t->GetEntries(); event++) {
       tempJet_Tpruning       = T_Pruning (groomed_jet, 0.1, 2.0, 20);
       tempJet_Ttrimming      = T_Trimming(groomed_jet, 0.0, 0.1, 20);
       tempJet_Taktreclustering = T_AkTreclustering(groomed_jet, 0.05, 0.6, 20);
-
+      tempJet_Tktreclustering = T_kTreclustering(groomed_jet, 0.05, 0.6, 20);
+      tempJet_TJet_m1        = T_Mass(1,groomed_jet);
+      tempJet_TJet_m2        = T_Mass(2,groomed_jet);
 
       TruthRawTrim_flavor     .push_back(tempJet_flavor);
       TruthRawTrim_pt         .push_back(tempJet_pt);
@@ -1195,8 +1148,6 @@ for (int event = 0; event < bkg_t->GetEntries(); event++) {
       TruthRawTrim_Tau21      .push_back(tempJet_Tau21);
       TruthRawTrim_Tau32      .push_back(tempJet_Tau32);
       TruthRawTrim_D2         .push_back(tempJet_D2);
-//      TruthRawTrim_TJet_m1    .push_back(tempJet_TJet_m1);
-//      TruthRawTrim_TJet_m2    .push_back(tempJet_TJet_m2);
       TruthRawTrim_T2jet_angle.push_back(tempJet_T2jet_angle);
       TruthRawTrim_T2jet      .push_back(tempJet_T2jet);
       TruthRawTrim_T3jet_angle.push_back(tempJet_T3jet_angle);
@@ -1204,6 +1155,9 @@ for (int event = 0; event < bkg_t->GetEntries(); event++) {
       TruthRawTrim_Tpruning   .push_back(tempJet_Tpruning);
       TruthRawTrim_Ttrimming  .push_back(tempJet_Ttrimming);
       TruthRawTrim_Taktreclustering .push_back(tempJet_Taktreclustering);
+      TruthRawTrim_Tktreclustering .push_back(tempJet_Tktreclustering);
+      TruthRawTrim_TJet_m1    .push_back(tempJet_TJet_m1);
+      TruthRawTrim_TJet_m2    .push_back(tempJet_TJet_m2);
     }
 
 
@@ -1242,8 +1196,6 @@ void ResetBranches(){
   TruthRaw_Tau21.clear();
   TruthRaw_Tau32.clear();
   TruthRaw_D2.clear();
-  TruthRaw_TJet_m1.clear();
-  TruthRaw_TJet_m2.clear();
   TruthRaw_T2jet_angle.clear();
   TruthRaw_T2jet.clear();
   TruthRaw_T3jet_angle.clear();
@@ -1251,6 +1203,9 @@ void ResetBranches(){
   TruthRaw_Tpruning.clear();
   TruthRaw_Ttrimming.clear();
   TruthRaw_Taktreclustering.clear();
+  TruthRaw_Tktreclustering.clear();
+  TruthRaw_TJet_m1.clear();
+  TruthRaw_TJet_m2.clear();
 
   TruthRawTrim_flavor.clear();
   TruthRawTrim_pt.clear();
@@ -1260,8 +1215,6 @@ void ResetBranches(){
   TruthRawTrim_Tau21.clear();
   TruthRawTrim_Tau32.clear();
   TruthRawTrim_D2.clear();
-  TruthRawTrim_TJet_m1.clear();
-  TruthRawTrim_TJet_m2.clear();
   TruthRawTrim_T2jet_angle.clear();
   TruthRawTrim_T2jet.clear();
   TruthRawTrim_T3jet_angle.clear();
@@ -1269,6 +1222,9 @@ void ResetBranches(){
   TruthRawTrim_Tpruning.clear();
   TruthRawTrim_Ttrimming.clear();
   TruthRawTrim_Taktreclustering.clear();
+  TruthRawTrim_Tktreclustering.clear();
+  TruthRawTrim_TJet_m1.clear();
+  TruthRawTrim_TJet_m2.clear();
 
 }
 
@@ -1677,8 +1633,10 @@ double GetTau32(PseudoJet& input){
 
   //N-subjettiness
   fastjet::contrib::UnnormalizedMeasure nsubMeasure(1.);
-  fastjet::contrib::Nsubjettiness nsub2(2, fastjet::contrib::WTA_KT_Axes(), nsubMeasure);
-  fastjet::contrib::Nsubjettiness nsub3(3, fastjet::contrib::WTA_KT_Axes(), nsubMeasure);
+  fastjet::contrib::Nsubjettiness nsub2(2, fastjet::contrib::OnePass_KT_Axes(), nsubMeasure);
+  fastjet::contrib::Nsubjettiness nsub3(3, fastjet::contrib::OnePass_KT_Axes(), nsubMeasure);
+//  fastjet::contrib::Nsubjettiness nsub2(2, fastjet::contrib::WTA_KT_Axes(), nsubMeasure);
+//  fastjet::contrib::Nsubjettiness nsub3(3, fastjet::contrib::WTA_KT_Axes(), nsubMeasure);
 
   float tau2 = nsub2(input);
   float tau3 = nsub3(input);

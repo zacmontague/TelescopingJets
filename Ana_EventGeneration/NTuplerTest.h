@@ -168,6 +168,7 @@ double tempJet_T3jet;
 double tempJet_Tpruning;
 double tempJet_Ttrimming;
 double tempJet_Taktreclustering;
+double tempJet_Tktreclustering;
 
 ///////////////////////////
 //output tree branches
@@ -191,6 +192,7 @@ vector<double> TruthRaw_T3jet;
 vector<double> TruthRaw_Tpruning;
 vector<double> TruthRaw_Ttrimming;
 vector<double> TruthRaw_Taktreclustering;
+vector<double> TruthRaw_Tktreclustering;
 
 vector<int>    TruthRawTrim_flavor;
 vector<double> TruthRawTrim_pt;
@@ -209,6 +211,7 @@ vector<double> TruthRawTrim_T3jet;
 vector<double> TruthRawTrim_Tpruning;
 vector<double> TruthRawTrim_Ttrimming;
 vector<double> TruthRawTrim_Taktreclustering;
+vector<double> TruthRawTrim_Tktreclustering;
 
 ///////////////////////////
 //extra functions
