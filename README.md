@@ -50,6 +50,8 @@ after which you will run the executable as
 
 which will run jet clustering and labelling (the matching of W particles to the constructed jets) on the `pythia_ww.root` file and save the output in the `ntuple_ww.root` file.
 
+As an aside, to compile 
+
 All of this can be done in one command using the `GenerateFull.py` script which itself takes arguments about the process to generate, along with those described by looking at the help menu :
 ```
 meehan:Ana_EventGeneration > python GenerateFull.py --help
