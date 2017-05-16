@@ -50,8 +50,6 @@ after which you will run the executable as
 
 which will run jet clustering and labelling (the matching of W particles to the constructed jets) on the `pythia_ww.root` file and save the output in the `ntuple_ww.root` file.
 
-As an aside, to compile 
-
 All of this can be done in one command using the `GenerateFull.py` script which itself takes arguments about the process to generate, along with those described by looking at the help menu :
 ```
 meehan:Ana_EventGeneration > python GenerateFull.py --help
@@ -82,7 +80,25 @@ optional arguments:
                        False)
 meehan:Ana_EventGeneration >
 ```
+To compile the _NTuplerTest_, 
+```
+source compile_ntupler_test.sh
+```
+after which run the executable as
+```
+./NTuplerTest.exe ww pythia_ww.root ntuple_ww.root
+```
+Part of _NTuplerTest_ reads in Alex's samples and calculates various Telescoping jet volatilities and other jet observables. It also outputs histograms as .root files. We don't need this part because the MiniNTupleAnalysis will do. That's only how Yang-Ting cross-checked plots in his BOOST 2015 talk.
 
+Alex's samples are available at the UW TeV cluster (tev01.phys.washington.edu) in the folder /ytchien/AlexSample. There are five of them:
+
+mc12_8TeV.14791X.Pythia8_AU2CT10_jetjet_JZXW.leading_jets.root
+mc12_8TeV.158864.Pythia8_AU2MSTW2008LO_Wprime_WZ_llqq_m1000.leading_jets.root
+mc12_8TeV.158874.Pythia8_AU2MSTW2008LO_Wprime_WZ_llqq_m2000.leading_jets.root
+mc12_8TeV.110903.Pythia8_AU2MSTW2008LO_zprime1000_tt.leading_jets.root
+mc12_8TeV.110907.Pythia8_AU2MSTW2008LO_zprime2000_tt.leading_jets.root
+
+for QCD (1st), W (2nd and 3rd), top (4th and 5th) samples. Yang-Ting used the first three to reproduce the BOOST 2015 results.
 
 # Running MiniNTupleAnalysis
 
