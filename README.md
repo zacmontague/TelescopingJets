@@ -98,10 +98,16 @@ mc12_8TeV.158874.Pythia8_AU2MSTW2008LO_Wprime_WZ_llqq_m2000.leading_jets.root
 mc12_8TeV.110903.Pythia8_AU2MSTW2008LO_zprime1000_tt.leading_jets.root
 mc12_8TeV.110907.Pythia8_AU2MSTW2008LO_zprime2000_tt.leading_jets.root
 ```
-for QCD (1st), W (2nd and 3rd), top (4th and 5th) samples. Yang-Ting used the first three to reproduce the BOOST 2015 results. Two pT bins are considered: 1) 300 GeV to 500 Gev, and 2) 800 Gev to 1000 GeV. For the (300, 500) bin, the sample
+for QCD (1st), W (2nd and 3rd), top (4th and 5th) samples. Yang-Ting used the first three to reproduce the BOOST 2015 results. Two pT bins are considered: 1) 300 GeV to 500 Gev, and 2) 800 Gev to 1000 GeV.
+
+For the (300, 500) bin, the sample
+```
 mc12_8TeV.158864.Pythia8_AU2MSTW2008LO_Wprime_WZ_llqq_m1000.leading_jets.root
+```
 is used. For the (800, 1000) bin, the following one
+```
 mc12_8TeV.158874.Pythia8_AU2MSTW2008LO_Wprime_WZ_llqq_m2000.leading_jets.root
+```
 is used.
 
 # Running MiniNTupleAnalysis
