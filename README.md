@@ -104,11 +104,11 @@ For the (300, 500) bin, the sample
 ```
 mc12_8TeV.158864.Pythia8_AU2MSTW2008LO_Wprime_WZ_llqq_m1000.leading_jets.root
 ```
-is used. For the (800, 1000) bin, the following one
+is used. Also, `Rfilt = 0.2` in T-trimming and `R_min = 0.1` in T-reclustering and T-subjet. For the (800, 1000) bin, the following one
 ```
 mc12_8TeV.158874.Pythia8_AU2MSTW2008LO_Wprime_WZ_llqq_m2000.leading_jets.root
 ```
-is used.
+is used, and `Rfilt = 0.1` in T-trimming and `R_min = 0.05` in T-reclustering and T-subjet.
 
 # Running MiniNTupleAnalysis
 
