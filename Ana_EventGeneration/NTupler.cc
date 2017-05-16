@@ -131,8 +131,8 @@ int main(int argc, char* argv[]){
   treeout->Branch("TruthRaw_T3jet",         &TruthRaw_T3jet);
   treeout->Branch("TruthRaw_Tpruning",      &TruthRaw_Tpruning);
   treeout->Branch("TruthRaw_Ttrimming",     &TruthRaw_Ttrimming);
-  treeout->Branch("TruthRaw_Taktreclustering”,	&TruthRaw_Taktreclustering);
-  treeout->Branch("TruthRaw_Tktreclustering”,	&TruthRaw_Tktreclustering);
+  treeout->Branch("TruthRaw_Taktreclustering",	&TruthRaw_Taktreclustering);
+  treeout->Branch("TruthRaw_Tktreclustering",	&TruthRaw_Tktreclustering);
   treeout->Branch("TruthRaw_TJet_m1",       &TruthRaw_TJet_m1);
   treeout->Branch("TruthRaw_TJet_m2",       &TruthRaw_TJet_m2);
 
@@ -150,8 +150,8 @@ int main(int argc, char* argv[]){
   treeout->Branch("TruthRawTrim_T3jet",         &TruthRawTrim_T3jet);
   treeout->Branch("TruthRawTrim_Tpruning",      &TruthRawTrim_Tpruning);
   treeout->Branch("TruthRawTrim_Ttrimming",     &TruthRawTrim_Ttrimming);
-  treeout->Branch("TruthRawTrim_Taktreclustering”,	&TruthRawTrim_Taktreclustering);
-  treeout->Branch("TruthRawTrim_Tktreclustering”,	&TruthRawTrim_Tktreclustering);
+  treeout->Branch("TruthRawTrim_Taktreclustering",	&TruthRawTrim_Taktreclustering);
+  treeout->Branch("TruthRawTrim_Tktreclustering",	&TruthRawTrim_Tktreclustering);
   treeout->Branch("TruthRawTrim_TJet_m1",       &TruthRawTrim_TJet_m1);
   treeout->Branch("TruthRawTrim_TJet_m2",       &TruthRawTrim_TJet_m2);
 
