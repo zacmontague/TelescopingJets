@@ -88,7 +88,7 @@ after which run the executable as
 ```
 ./NTuplerTest.exe ww pythia_ww.root ntuple_ww.root
 ```
-Part of _NTuplerTest_ reads in Alex's samples and calculates various Telescoping jet volatilities and other jet observables. It also outputs histograms as .root files. We don't need this part because the MiniNTupleAnalysis will do. That's only how Yang-Ting cross-checked plots in his BOOST 2015 talk.
+_NTuplerTest_ does exactly the same thing as _NTupler_, with the addition of the part from line to line. It reads in Alex's samples and calculates various Telescoping jet volatilities and other jet observables. It also outputs histograms as .root files. We don't need this part because the MiniNTupleAnalysis will do. That's only how Yang-Ting cross-checked plots in his BOOST 2015 talk.
 
 Alex's samples are available at the UW TeV cluster (tev01.phys.washington.edu) in the folder /ytchien/AlexSample. There are five of them:
 
