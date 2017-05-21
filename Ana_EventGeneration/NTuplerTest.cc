@@ -20,7 +20,7 @@ output : Anything you want - but being logical
 //----------------------------------------------------------------------*/
 
 
-#include "NTupler.h"
+#include "NTuplerTest.h"
 
 int main(int argc, char* argv[]){
 
@@ -154,6 +154,709 @@ int main(int argc, char* argv[]){
   treeout->Branch("TruthRawTrim_Tktreclustering",	&TruthRawTrim_Tktreclustering);
   treeout->Branch("TruthRawTrim_TJet_m1",       &TruthRawTrim_TJet_m1);
   treeout->Branch("TruthRawTrim_TJet_m2",       &TruthRawTrim_TJet_m2);
+
+
+
+
+  //////////////////////////////////////////////
+  //test NTupler.cc using Alex’s samples
+  //////////////////////////////////////////////
+  //read N tuple from root files
+  //////////////////////////////////////////////
+
+  TChain *sig_t1 = new TChain("Tree");
+  TChain *sig_t2 = new TChain("Tree");
+  TChain *bkg_t = new TChain("Tree");
+
+//  sig_t1->Add("AlexSample/mc12_8TeV.110903.Pythia8_AU2MSTW2008LO_zprime1000_tt.leading_jets.root");
+//  sig_t1->Add("AlexSample/mc12_8TeV.110907.Pythia8_AU2MSTW2008LO_zprime2000_tt.leading_jets.root");
+
+//  sig_t1->Add("AlexSample/mc12_8TeV.158864.Pythia8_AU2MSTW2008LO_Wprime_WZ_llqq_m1000.leading_jets.root");
+  sig_t1->Add("AlexSample/mc12_8TeV.158874.Pythia8_AU2MSTW2008LO_Wprime_WZ_llqq_m2000.leading_jets.root");
+  bkg_t->Add("AlexSample/mc12_8TeV.14791X.Pythia8_AU2CT10_jetjet_JZXW.leading_jets.root");
+
+  //////////////////////////////////////////////
+  //define variables to read the tree information
+  //////////////////////////////////////////////
+
+  Int_t sigEventNumber1;
+  Int_t ChannelNumber1;
+  Double_t sigEventWeight1, sigCrossSection1;//, sigPileupWeight1;
+  Bool_t PassEventSelection1;
+
+  int sigTruth_n1;//, sig_dRmatch1;
+  float sig_pt1, sig_eta1, sig_phi1, sig_m1;
+  vector<float> *sigTruth_pt1 = 0;
+  vector<float> *sigTruth_eta1 = 0;
+  vector<float> *sigTruth_phi1 = 0;
+  vector<float> *sigTruth_m1 = 0;
+//  vector<int> *sigTruth_status1 = 0;
+//  vector<int> *sigTruth_pdgId1 = 0;
+  int sigReco_n1;//, sig_dRmatch1;
+  float sigR_pt1, sigR_eta1, sigR_phi1, sigR_m1;
+  vector<float> *sigReco_pt1 = 0;
+  vector<float> *sigReco_eta1 = 0;
+  vector<float> *sigReco_phi1 = 0;
+  vector<float> *sigReco_m1 = 0;
+//  vector<int> *sigReco_status1 = 0;
+//  vector<int> *sigReco_pdgId1 = 0;
+
+  Float_t	Truth_W_pt1;
+  Float_t	Truth_W_eta1;
+  Float_t	Truth_W_phi1;
+  Float_t	Truth_W_m1;
+  Int_t 	Truth_W_status1;
+  Int_t		Truth_W_pdgId1;	
+  Float_t	Truth_T_pt1;
+  Float_t	Truth_T_eta1;
+  Float_t	Truth_T_phi1;
+  Float_t	Truth_T_m1;
+  Int_t 	Truth_T_status1;
+  Int_t		Truth_T_pdgId1;	
+
+  vector<float>	*Truth_Wdaughter_pt1 = 0;
+  vector<float>	*Truth_Wdaughter_eta1 = 0;
+  vector<float>	*Truth_Wdaughter_phi1 = 0;
+  vector<float>	*Truth_Wdaughter_m1 = 0;
+  vector<int>	*Truth_Wdaughter_status1 = 0;
+  vector<int>	*Truth_Wdaughter_pdgId1 = 0;
+
+  vector<float>	*Truth_Tdaughter_pt1 = 0;
+  vector<float>	*Truth_Tdaughter_eta1 = 0;
+  vector<float>	*Truth_Tdaughter_phi1 = 0;
+  vector<float>	*Truth_Tdaughter_m1 = 0;
+  vector<int>	*Truth_Tdaughter_status1 = 0;
+  vector<int>	*Truth_Tdaughter_pdgId1 = 0;
+
+  Int_t sigEventNumber2;
+  Int_t ChannelNumber2;
+  Double_t sigEventWeight2, sigCrossSection2;//, sigPileupWeight2;
+  Bool_t PassEventSelection2;
+
+  int sigTruth_n2;//, sig_dRmatch2;
+  float sig_pt2, sig_eta2, sig_phi2, sig_m2;
+  vector<float> *sigTruth_pt2 = 0;
+  vector<float> *sigTruth_eta2 = 0;
+  vector<float> *sigTruth_phi2 = 0;
+  vector<float> *sigTruth_m2 = 0;
+//  vector<int> *sigTruth_status2 = 0;
+//  vector<int> *sigTruth_pdgId2 = 0;
+  int sigReco_n2;//, sig_dRmatch2;
+  float sigR_pt2, sigR_eta2, sigR_phi2, sigR_m2;
+  vector<float> *sigReco_pt2 = 0;
+  vector<float> *sigReco_eta2 = 0;
+  vector<float> *sigReco_phi2 = 0;
+  vector<float> *sigReco_m2 = 0;
+//  vector<int> *sigReco_status2 = 0;
+//  vector<int> *sigReco_pdgId2 = 0;
+
+  Float_t	Truth_W_pt2;
+  Float_t	Truth_W_eta2;
+  Float_t	Truth_W_phi2;
+  Float_t	Truth_W_m2;
+  Int_t 	Truth_W_status2;
+  Int_t		Truth_W_pdgId2;	
+  Float_t	Truth_T_pt2;
+  Float_t	Truth_T_eta2;
+  Float_t	Truth_T_phi2;
+  Float_t	Truth_T_m2;
+  Int_t 	Truth_T_status2;
+  Int_t		Truth_T_pdgId2;	
+
+  vector<float>	*Truth_Wdaughter_pt2 = 0;
+  vector<float>	*Truth_Wdaughter_eta2 = 0;
+  vector<float>	*Truth_Wdaughter_phi2 = 0;
+  vector<float>	*Truth_Wdaughter_m2 = 0;
+  vector<int>	*Truth_Wdaughter_status2 = 0;
+  vector<int>	*Truth_Wdaughter_pdgId2 = 0;
+
+  vector<float>	*Truth_Tdaughter_pt2 = 0;
+  vector<float>	*Truth_Tdaughter_eta2 = 0;
+  vector<float>	*Truth_Tdaughter_phi2 = 0;
+  vector<float>	*Truth_Tdaughter_m2 = 0;
+  vector<int>	*Truth_Tdaughter_status2 = 0;
+  vector<int>	*Truth_Tdaughter_pdgId2 = 0;
+
+  Int_t bkgEventNumber;
+  Double_t bkgEventWeight, bkgCrossSection, bkgPileupWeight;
+
+  int bkgTruth_n;//, bkg_dRmatch;
+  float bkg_pt, bkg_eta, bkg_phi, bkg_m;
+  vector<float> *bkgTruth_pt = 0;
+  vector<float> *bkgTruth_eta = 0;
+  vector<float> *bkgTruth_phi = 0;
+  vector<float> *bkgTruth_m = 0;
+//  vector<int> *bkgTruth_status = 0;
+//  vector<int> *bkgTruth_pdgId = 0;
+  int bkgReco_n;//, bkg_dRmatch;
+  float bkgR_pt, bkgR_eta, bkgR_phi, bkgR_m;
+  vector<float> *bkgReco_pt = 0;
+  vector<float> *bkgReco_eta = 0;
+  vector<float> *bkgReco_phi = 0;
+  vector<float> *bkgReco_m = 0;
+//  vector<int> *bkgReco_status = 0;
+//  vector<int> *bkgReco_pdgId = 0;
+
+  //////////////////////////////////////////////
+  //read the branch information
+  //////////////////////////////////////////////
+
+  sig_t1->SetBranchAddress("EventNumber",	  	 &sigEventNumber1);
+  sig_t1->SetBranchAddress("EventWeight",	  	 &sigEventWeight1);
+  sig_t1->SetBranchAddress("CrossSection",	  	 &sigCrossSection1);
+//  sig_t1->SetBranchAddress("PileupWeight",	  	 &sigPileupWeight1);
+  sig_t1->SetBranchAddress("ChannelNumber",	  	 &ChannelNumber1);
+  sig_t1->SetBranchAddress("PassEventSelection",	 &PassEventSelection1);
+
+  sig_t1->SetBranchAddress("AntiKt10Truth_pt",		 &sig_pt1);
+  sig_t1->SetBranchAddress("AntiKt10Truth_eta",		 &sig_eta1);
+  sig_t1->SetBranchAddress("AntiKt10Truth_phi",		 &sig_phi1);
+  sig_t1->SetBranchAddress("AntiKt10Truth_m",		 &sig_m1);
+  sig_t1->SetBranchAddress("AntiKt10Truth_constit_n",	 &sigTruth_n1);
+  sig_t1->SetBranchAddress("AntiKt10Truth_constit_pt",	 &sigTruth_pt1);
+  sig_t1->SetBranchAddress("AntiKt10Truth_constit_eta",	 &sigTruth_eta1);
+  sig_t1->SetBranchAddress("AntiKt10Truth_constit_phi",	 &sigTruth_phi1);
+  sig_t1->SetBranchAddress("AntiKt10Truth_constit_m",	 &sigTruth_m1);
+
+  sig_t1->SetBranchAddress("AntiKt10Reco_pt",		 &sigR_pt1);
+  sig_t1->SetBranchAddress("AntiKt10Reco_eta",		 &sigR_eta1);
+  sig_t1->SetBranchAddress("AntiKt10Reco_phi",		 &sigR_phi1);
+  sig_t1->SetBranchAddress("AntiKt10Reco_m",		 &sigR_m1);
+  sig_t1->SetBranchAddress("AntiKt10Reco_constit_n",	 &sigReco_n1);
+  sig_t1->SetBranchAddress("AntiKt10Reco_constit_pt",	 &sigReco_pt1);
+  sig_t1->SetBranchAddress("AntiKt10Reco_constit_eta",	 &sigReco_eta1);
+  sig_t1->SetBranchAddress("AntiKt10Reco_constit_phi",	 &sigReco_phi1);
+  sig_t1->SetBranchAddress("AntiKt10Reco_constit_m",	 &sigReco_m1);
+
+/*sig_t1->SetBranchAddress("AntiKt10LCTopo_pt",		 &sig_pt1);
+  sig_t1->SetBranchAddress("AntiKt10LCTopo_eta",	 &sig_eta1);
+  sig_t1->SetBranchAddress("AntiKt10LCTopo_phi",	 &sig_phi1);
+  sig_t1->SetBranchAddress("AntiKt10LCTopo_m",		 &sig_m1);
+  sig_t1->SetBranchAddress("AntiKt10LCTopo_constit_n",	 &sigTruth_n1);
+  sig_t1->SetBranchAddress("AntiKt10LCTopo_constit_pt",	 &sigTruth_pt1);
+  sig_t1->SetBranchAddress("AntiKt10LCTopo_constit_eta", &sigTruth_eta1);
+  sig_t1->SetBranchAddress("AntiKt10LCTopo_constit_phi", &sigTruth_phi1);
+  sig_t1->SetBranchAddress("AntiKt10LCTopo_constit_m",	 &sigTruth_m1);*/
+
+  sig_t1->SetBranchAddress("Truth_W_pt",	  	 &Truth_W_pt1);
+  sig_t1->SetBranchAddress("Truth_W_eta",	  	 &Truth_W_eta1);
+  sig_t1->SetBranchAddress("Truth_W_phi",	  	 &Truth_W_phi1);
+  sig_t1->SetBranchAddress("Truth_W_m",		 	 &Truth_W_m1);
+  sig_t1->SetBranchAddress("Truth_W_status",		 &Truth_W_status1);
+  sig_t1->SetBranchAddress("Truth_W_pdgId",		 &Truth_W_pdgId1);
+  sig_t1->SetBranchAddress("Truth_Wdaughter_pt",	 &Truth_Wdaughter_pt1);
+  sig_t1->SetBranchAddress("Truth_Wdaughter_eta",	 &Truth_Wdaughter_eta1);
+  sig_t1->SetBranchAddress("Truth_Wdaughter_phi",	 &Truth_Wdaughter_phi1);
+  sig_t1->SetBranchAddress("Truth_Wdaughter_m",		 &Truth_Wdaughter_m1);
+  sig_t1->SetBranchAddress("Truth_Wdaughter_status",     &Truth_Wdaughter_status1);
+  sig_t1->SetBranchAddress("Truth_Wdaughter_pdgId",      &Truth_Wdaughter_pdgId1);
+
+/*sig_t1->SetBranchAddress("Truth_T_pt",	 	 &Truth_T_pt1);
+  sig_t1->SetBranchAddress("Truth_T_eta",	  	 &Truth_T_eta1);
+  sig_t1->SetBranchAddress("Truth_T_phi",	  	 &Truth_T_phi1);
+  sig_t1->SetBranchAddress("Truth_T_m",	 		 &Truth_T_m1);
+  sig_t1->SetBranchAddress("Truth_T_status",	 	 &Truth_T_status1);
+  sig_t1->SetBranchAddress("Truth_T_pdgId",	 	 &Truth_T_pdgId1);
+  sig_t1->SetBranchAddress("Truth_Tdaughter_pt",	 &Truth_Tdaughter_pt1);
+  sig_t1->SetBranchAddress("Truth_Tdaughter_eta",	 &Truth_Tdaughter_eta1);
+  sig_t1->SetBranchAddress("Truth_Tdaughter_phi",	 &Truth_Tdaughter_phi1);
+  sig_t1->SetBranchAddress("Truth_Tdaughter_m",		 &Truth_Tdaughter_m1);
+  sig_t1->SetBranchAddress("Truth_Tdaughter_status",     &Truth_Tdaughter_status1);
+  sig_t1->SetBranchAddress("Truth_Tdaughter_pdgId",      &Truth_Tdaughter_pdgId1);*/
+
+  bkg_t->SetBranchAddress("EventNumber",	  	 &bkgEventNumber);
+  bkg_t->SetBranchAddress("EventWeight",	  	 &bkgEventWeight);
+  bkg_t->SetBranchAddress("CrossSection",	  	 &bkgCrossSection);
+//  bkg_t->SetBranchAddress("PileupWeight",	  	 &bkgPileupWeight);
+
+  bkg_t->SetBranchAddress("AntiKt10Truth_pt",		 &bkg_pt);
+  bkg_t->SetBranchAddress("AntiKt10Truth_eta",		 &bkg_eta);
+  bkg_t->SetBranchAddress("AntiKt10Truth_phi",		 &bkg_phi);
+  bkg_t->SetBranchAddress("AntiKt10Truth_m",		 &bkg_m);
+  bkg_t->SetBranchAddress("AntiKt10Truth_constit_n",	 &bkgTruth_n);
+  bkg_t->SetBranchAddress("AntiKt10Truth_constit_pt",	 &bkgTruth_pt);
+  bkg_t->SetBranchAddress("AntiKt10Truth_constit_eta",	 &bkgTruth_eta);
+  bkg_t->SetBranchAddress("AntiKt10Truth_constit_phi",	 &bkgTruth_phi);
+  bkg_t->SetBranchAddress("AntiKt10Truth_constit_m",	 &bkgTruth_m);
+
+  bkg_t->SetBranchAddress("AntiKt10Reco_pt",		 &bkgR_pt);
+  bkg_t->SetBranchAddress("AntiKt10Reco_eta",		 &bkgR_eta);
+  bkg_t->SetBranchAddress("AntiKt10Reco_phi",		 &bkgR_phi);
+  bkg_t->SetBranchAddress("AntiKt10Reco_m",		 &bkgR_m);
+  bkg_t->SetBranchAddress("AntiKt10Reco_constit_n",	 &bkgReco_n);
+  bkg_t->SetBranchAddress("AntiKt10Reco_constit_pt",	 &bkgReco_pt);
+  bkg_t->SetBranchAddress("AntiKt10Reco_constit_eta",	 &bkgReco_eta);
+  bkg_t->SetBranchAddress("AntiKt10Reco_constit_phi",	 &bkgReco_phi);
+  bkg_t->SetBranchAddress("AntiKt10Reco_constit_m",	 &bkgReco_m);
+
+/*bkg_t->SetBranchAddress("AntiKt10LCTopo_pt",		 &bkg_pt);
+  bkg_t->SetBranchAddress("AntiKt10LCTopo_eta",		 &bkg_eta);
+  bkg_t->SetBranchAddress("AntiKt10LCTopo_phi",		 &bkg_phi);
+  bkg_t->SetBranchAddress("AntiKt10LCTopo_m",		 &bkg_m);
+  bkg_t->SetBranchAddress("AntiKt10LCTopo_constit_n",	 &bkgTruth_n);
+  bkg_t->SetBranchAddress("AntiKt10LCTopo_constit_pt",	 &bkgTruth_pt);
+  bkg_t->SetBranchAddress("AntiKt10LCTopo_constit_eta",	 &bkgTruth_eta);
+  bkg_t->SetBranchAddress("AntiKt10LCTopo_constit_phi",	 &bkgTruth_phi);
+  bkg_t->SetBranchAddress("AntiKt10LCTopo_constit_m",	 &bkgTruth_m);*/
+
+  TH1D *Tprun_volatility_sigPlot = new TH1D("Histogram","T-pruning Volatility", 50, 0, 1.0); 
+  TH1D *Tprun_volatility_bkgPlot = new TH1D("Histogram","T-pruning Volatility", 50, 0, 1.0); 
+  TH1D *Ttrim_volatility_sigPlot = new TH1D("Histogram","T-trimming Volatility", 50, 0, 1.0); 
+  TH1D *Ttrim_volatility_bkgPlot = new TH1D("Histogram","T-trimming Volatility", 50, 0, 1.0); 
+  TH1D *TakTrecl_volatility_sigPlot = new TH1D("Histogram","T-antikT reclustering Volatility", 50, 0, 1.0); 
+  TH1D *TakTrecl_volatility_bkgPlot = new TH1D("Histogram","T-antikT reclustering Volatility", 50, 0, 1.0);
+  TH1D *TkTrecl_volatility_sigPlot = new TH1D("Histogram","T-kT reclustering Volatility", 50, 0, 1.0); 
+  TH1D *TkTrecl_volatility_bkgPlot = new TH1D("Histogram","T-kT reclustering Volatility", 50, 0, 1.0);  
+  TH1D *Tsubj_volatility_sigPlot = new TH1D("Histogram","T-subjet Volatility", 50, 0, 1.0); 
+  TH1D *Tsubj_volatility_bkgPlot = new TH1D("Histogram","T-subjet Volatility", 50, 0, 1.0); 
+  TH1D *Tsubj_angle_sigPlot = new TH1D("Histogram","T-subjet Angle", 50, 0, 1.0); 
+  TH1D *Tsubj_angle_bkgPlot = new TH1D("Histogram","T-subjet Angle", 50, 0, 1.0); 
+  TH1D *Ttau2_volatility_sigPlot = new TH1D("Histogram","T-2subjettiness Volatility", 50, 0, 3.0); 
+  TH1D *Ttau2_volatility_bkgPlot = new TH1D("Histogram","T-2subjettiness Volatility", 50, 0, 3.0); 
+  TH1D *tau21_sigPlot = new TH1D("Histogram","tau21", 50, 0, 1.0); 
+  TH1D *tau21_bkgPlot = new TH1D("Histogram","tau21", 50, 0, 1.0); 
+
+  //////////////////////////////////////////////
+  //signal
+  //////////////////////////////////////////////
+
+for (int event = 0; event < sig_t1->GetEntries(); event++) {
+    sig_t1->GetEntry(event);
+
+//	Truth_T.SetPtEtaPhiM(Truth_T_pt1,Truth_T_eta1,Truth_T_phi1,Truth_T_m1);
+//	Tdaughter1.SetPtEtaPhiM(Truth_Tdaughter_pt1->at(0),Truth_Tdaughter_eta1->at(0),Truth_Tdaughter_phi1->at(0),Truth_Tdaughter_m1->at(0));
+//	Tdaughter2.SetPtEtaPhiM(Truth_Tdaughter_pt1->at(1),Truth_Tdaughter_eta1->at(1),Truth_Tdaughter_phi1->at(1),Truth_Tdaughter_m1->at(1));
+//	fastjet::PseudoJet truth_t(Truth_T.Px(),Truth_T.Py(),Truth_T.Pz(),Truth_T.E());
+
+	Truth_W.SetPtEtaPhiM(Truth_W_pt1,Truth_W_eta1,Truth_W_phi1,Truth_W_m1);
+	Wdaughter1.SetPtEtaPhiM(Truth_Wdaughter_pt1->at(0),Truth_Wdaughter_eta1->at(0),Truth_Wdaughter_phi1->at(0),Truth_Wdaughter_m1->at(0));
+	Wdaughter2.SetPtEtaPhiM(Truth_Wdaughter_pt1->at(1),Truth_Wdaughter_eta1->at(1),Truth_Wdaughter_phi1->at(1),Truth_Wdaughter_m1->at(1));
+	fastjet::PseudoJet truth_w(Truth_W.Px(),Truth_W.Py(),Truth_W.Pz(),Truth_W.E());
+
+	double weight = sigEventWeight1 * sigCrossSection1;// * sigPileupWeight1;
+
+	total_truth.SetPxPyPzE(0,0,0,0);//to add up truth particles
+	total_reco.SetPxPyPzE(0,0,0,0);//to add up reco particles
+	total0_truth.SetPtEtaPhiM(sig_pt1,sig_eta1,sig_phi1,sig_m1);//use default truth jet information
+
+	vector<fastjet::PseudoJet> input_particles_truth;//to push back truth particles
+	vector<fastjet::PseudoJet> input_particles_reco;//to push back reco particles
+
+    for (int c = 0; c < sigTruth_n1; c++) {
+	particle.SetPtEtaPhiM(sigTruth_pt1->at(c),sigTruth_eta1->at(c),sigTruth_phi1->at(c),sigTruth_m1->at(c));
+	total_truth = total_truth + particle;
+	fastjet::PseudoJet part(particle.Px(),particle.Py(),particle.Pz(),particle.E());
+	input_particles_truth.push_back(part);
+	input_particles_truth.back().set_user_index(id);
+//	if (event == sig_event_select){
+//		EventDisplay->Fill(particle.Eta(),particle.Phi(),particle.E());
+//	}
+    }// read in .root file and push back the truth particles
+
+    for (int c = 0; c < sigReco_n1; c++) {
+	particle.SetPtEtaPhiM(sigReco_pt1->at(c),sigReco_eta1->at(c),sigReco_phi1->at(c),sigReco_m1->at(c));
+	total_reco = total_reco + particle;
+	fastjet::PseudoJet part(particle.Px(),particle.Py(),particle.Pz(),particle.E());
+	input_particles_reco.push_back(part);
+	input_particles_reco.back().set_user_index(id);
+//	if (event == sig_event_select){
+//		EventDisplay->Fill(particle.Eta(),particle.Phi(),particle.E());
+//	}
+    }// read in .root file and push back the reco particles
+
+//	cout << "Channel " << ChannelNumber << " jet " << event << endl;
+//	cout << "Truth T " << Truth_T_pt << " " << Truth_T_eta << " " << Truth_T_phi << " " << Truth_T_m << endl;
+//	cout << "Truth W " << Truth_W_pt << " " << Truth_W_eta << " " << Truth_W_phi << " " << Truth_W_m << endl;
+//	cout << "mass " << total.M() << endl;
+//	cout << "number " << sigTruth_n << endl;
+
+      //////////////////////////////////////////////////////////////////////////////////////
+      //if(input_particles_truth.size() == 0){
+      //	cout << "jet" << event << " has 0 input particles" << endl;
+      //	continue;
+      //} // tested. All jets have non-zero number of constituents
+      //////////////////////////////////////////////////////////////////////////////////////
+      //float dR = total0_truth.DeltaR(total_truth);
+      //if (dR > 0.05){
+      //cout << "jet" << event << " does not match consituents and the sum" << endl;
+      //	continue;
+      //} // tested. All jets have constituents matching the sum 
+      //////////////////////////////////////////////////////////////////////////////////////
+
+      //////////////////////////////////////////////////////////////////////////////////////
+      //dRmatch < 0.75 between Truth_T and jet
+      //
+      //
+      //float dR = Truth_T.DeltaR(total_truth);
+      //	cout << "jet" << event << " with dR = " << dR << endl;
+      //if (dR > 0.75){
+      //	cout << "jet" << event << " does not match Truth T, with dR = " << dR << endl;
+      //	continue;
+      //}
+      //bool dRmatch = true;
+      //////////////////////////////////////////////////////////////////////////////////////
+
+      //////////////////////////////////////////////////////////////////////////////////////
+      //dRmatch between Truth_Tdaughters and Truth_T
+      //
+      //for (unsigned int d = 0; d < Truth_Tdaughter_pt1->size(); d++){
+      //truth.SetPtEtaPhiM(Truth_Tdaughter_pt1->at(d),Truth_Tdaughter_eta1->at(d),Truth_Tdaughter_phi1->at(d),Truth_Tdaughter_m1->at(d));
+      // //truth = Tdaughter1 + Tdaughter2;
+      //float dR = truth.DeltaR(Truth_T);
+      // //float dR = truth.DeltaR(total_truth);
+      //if (dR > Rfat){
+      //cout << "For jet " << event << ", the distance between T daughter " << d << " and Truth_T is " << dR << endl;   
+      // //cout << "For jet " << event << ", the distance between the sum of T daughters and Truth_T is " << dR << endl;   
+      //dRmatch = false;
+      //} //this for loop goes through Tdaughters
+      //cout << "Truth Tdaughter " << Truth_Tdaughter_pt1->at(d) << " " << Truth_Tdaughter_eta1->at(d) << " " << Truth_Tdaughter_phi1->at(d) << " " << Truth_Tdaughter_m1->at(d) << endl;
+      //}
+      //////////////////////////////////////////////////////////////////////////////////////
+
+      //////////////////////////////////////////////////////////////////////////////////////
+      //dRmatch between Truth_Wdaughters and Truth_W
+      //
+      //for (unsigned int d = 0; d < Truth_Wdaughter_pt1->size(); d++){
+      //truth.SetPtEtaPhiM(Truth_Wdaughter_pt1->at(d),Truth_Wdaughter_eta1->at(d),Truth_Wdaughter_phi1->at(d),Truth_Wdaughter_m1->at(d));
+      // //truth = Wdaughter1 + Wdaughter2;
+      //float dR = truth.DeltaR(Truth_W);
+      // //float dR = truth.DeltaR(total_truth);
+      //if (dR > Rfat){
+      //cout << "For jet " << event << ", the distance between W daughter " << d << " and Truth_W is " << dR << endl;   
+      //dRmatch = false;
+      //}
+      //cout << "Truth Wdaughter " << Truth_Wdaughter_pt1->at(d) << " " << Truth_Wdaughter_eta1->at(d) << " " << Truth_Wdaughter_phi1->at(d) << " " << Truth_Wdaughter_m1->at(d) << endl;
+      //}
+      //////////////////////////////////////////////////////////////////////////////////////
+      //////////////////////////////////////////////////////////////////////////////////////
+      //if (dRmatch == false){
+      //	cout << "jet" << event << " does not dR match for the Truth T/W and T/W daughters" << endl;
+      //	continue;
+      //}
+      //////////////////////////////////////////////////////////////////////////////////////
+
+	fastjet::JetDefinition jet_def1(fastjet::antikt_algorithm, Rfat);
+	fastjet::ClusterSequence cs1(input_particles_truth,jet_def1);
+	fastjet::ClusterSequence cs1R(input_particles_reco,jet_def1);
+	vector<fastjet::PseudoJet> unpruned_jets = sorted_by_pt(cs1.inclusive_jets());
+	vector<fastjet::PseudoJet> unpruned_jetsR = sorted_by_pt(cs1R.inclusive_jets());
+
+      //////////////////////////////////////////////////////////////////////////////////////
+      //basic pruning on the leading jet
+      //////////////////////////////////////////////////////////////////////////////////////
+	fastjet::Pruner prunercut(fastjet::cambridge_algorithm, zcut, dcut0);
+	fastjet::PseudoJet pruned_jet_cut = prunercut(unpruned_jets[0]);
+//	vector<fastjet::PseudoJet> pruned_jet = pruned_jet_cut.constituents();	
+	pruned_mjet = pruned_jet_cut.m();
+	pruned_ptjet = pruned_jet_cut.perp();
+	pruned_etajet = pruned_jet_cut.eta();
+
+      //////////////////////////////////////////////////////////////////////////////////////
+      //basic trimming on the leading jet
+      //////////////////////////////////////////////////////////////////////////////////////
+	fastjet::JetDefinition trimjet_def(fastjet::kt_algorithm, Rfilt0);
+	fastjet::Filter trimmercut(trimjet_def, fastjet::SelectorPtFractionMin(fcut0));
+//	fastjet::Filter trimmercut(Rfilt0, fastjet::SelectorPtFractionMin(fcut0));
+	fastjet::PseudoJet trimmed_jet_cut = trimmercut(unpruned_jets[0]);
+	fastjet::PseudoJet trimmed_jet_cutR = trimmercut(unpruned_jetsR[0]);
+//	vector<fastjet::PseudoJet> kept = trimmed_jet_cut.pieces();   //this is to bin on the number of subjets		
+//	vector<fastjet::PseudoJet> trimmed_jet = trimmed_jet_cut.constituents();
+//	vector<fastjet::PseudoJet> trimmed_jet = trimmed_jet_cutR.constituents();
+	trimmed_mjet = trimmed_jet_cut.m();
+	trimmed_ptjet = trimmed_jet_cut.perp();
+	trimmed_etajet = trimmed_jet_cut.eta();
+	Truth_jet.SetPtEtaPhiM(trimmed_jet_cut.pt(),trimmed_jet_cut.eta(),trimmed_jet_cut.phi(),trimmed_jet_cut.m());
+
+	fastjet::PseudoJet ungroomed_jet = unpruned_jets[0];
+	fastjet::PseudoJet groomed_jet = trimmed_jet_cut;
+
+//	fastjet::PseudoJet ungroomed_jet = unpruned_jetsR[0];
+//	fastjet::PseudoJet groomed_jet = trimmed_jet_cutR;
+
+
+
+      //////////////////////////////////////////////////////////////////////////////////////
+      //used in ATLAS notes to do dR matching
+      //////////////////////////////////////////////////////////////////////////////////////
+//	double dR = Truth_T.DeltaR(Truth_jet);// uses ROOT to calculate dR between truth jet and truth W/T 
+	double dR = truth_w.delta_R(trimmed_jet_cut);// uses fastjet to calculate dR between truth jet and truth w/t
+	double dRJ = trimmed_jet_cutR.delta_R(trimmed_jet_cut);// uses fastjet to calculate dR between truth jet and reco jet
+
+	mjet = trimmed_mjet;
+	ptjet = trimmed_ptjet;
+	etajet = trimmed_etajet;
+	mjetR = trimmed_jet_cutR.m();
+	ptjetR = trimmed_jet_cutR.perp();
+	etajetR = trimmed_jet_cutR.eta();
+
+      if (ptjet > jet_pt_cut_low && ptjet < jet_pt_cut_up && mjet > jet_mass_cut_low && mjet < jet_mass_cut_up && etajet > jet_eta_cut_low && etajet < jet_eta_cut_up && Truth_W_pt1 > 150 && Truth_W_eta1 > -1.2 && Truth_W_eta1 < 1.2 && dR <= 0.75 && ptjetR > jet_pt_cut_low && ptjetR < jet_pt_cut_up && etajetR > jet_eta_cut_low && etajetR < jet_eta_cut_up && dRJ <= 0.75 ) {
+
+        TSub  T2SubOutputTrim = T_2Subjet(groomed_jet, 0.05, 0.6, 20);
+
+ 	Tprun_volatility = T_Pruning (ungroomed_jet, 0.1, 2.0, 20);
+ 	Ttrim_volatility = T_Trimming(ungroomed_jet, 0.0, 0.1, 20);
+ 	TakTrecl_volatility = T_AkTreclustering(groomed_jet, 0.05 ,0.6, 20);
+ 	TkTrecl_volatility = T_kTreclustering(groomed_jet, 0.1 ,0.6, 20);
+ 	Tsubj_volatility = T2SubOutputTrim.volatility;
+ 	Tsubj_angle = T2SubOutputTrim.min_angle;
+	Ttau2_volatility = T_Nsubjettiness(2, groomed_jet, 1.0, 3.0, 20);
+
+	Tprun_volatility_sigPlot->Fill(Tprun_volatility,weight);
+	Ttrim_volatility_sigPlot->Fill(Ttrim_volatility,weight);
+	TakTrecl_volatility_sigPlot->Fill(TakTrecl_volatility,weight);
+	TkTrecl_volatility_sigPlot->Fill(TkTrecl_volatility,weight);
+	Tsubj_volatility_sigPlot->Fill(Tsubj_volatility,weight);
+        Tsubj_angle_sigPlot->Fill(Tsubj_angle,weight);
+	Ttau2_volatility_sigPlot->Fill(Ttau2_volatility,weight);
+	tau21_sigPlot->Fill(GetTau21(groomed_jet),weight);
+
+      }// cut selections
+}// loop over events
+/*
+  TFile *Tprun_plot = new TFile("Plots/W_Tprun_volatility_AKt10_300_500_trim.root", "UPDATE");
+  Tprun_volatility_sigPlot->Write();
+  Tprun_plot->Close();
+
+  TFile *Ttrim_plot = new TFile("Plots/W_Ttrim_volatility_AKt10_300_500_trim.root", "UPDATE");
+  Ttrim_volatility_sigPlot->Write();
+  Ttrim_plot->Close();
+
+  TFile *TakTrecl_plot = new TFile("Plots/W_TakTrecl_volatility_AKt10_300_500_trim.root", "UPDATE");
+  TakTrecl_volatility_sigPlot->Write();
+  TakTrecl_plot->Close();
+
+  TFile *TkTrecl_plot = new TFile("Plots/W_TkTrecl_volatility_AKt10_300_500_trim.root", "UPDATE");
+  TkTrecl_volatility_sigPlot->Write();
+  TkTrecl_plot->Close();
+
+  TFile *Tsubj_plot1 = new TFile("Plots/W_Tsubj_volatility_AKt10_300_500_trim.root", "UPDATE");
+  Tsubj_volatility_sigPlot->Write();
+  Tsubj_plot1->Close();
+
+  TFile *Tsubj_plot2 = new TFile("Plots/W_Tsubj_angle_beta1_AKt10_300_500_trim.root", "UPDATE");
+  Tsubj_angle_sigPlot->Write();
+  Tsubj_plot2->Close();
+
+  TFile *Ttau2_plot = new TFile("Plots/W_Ttau2_volatility_AKt10_300_500_trim.root", "UPDATE");
+  Ttau2_volatility_sigPlot->Write();
+  Ttau2_plot->Close();
+
+  TFile *tau21_plot = new TFile("Plots/W_tau21_AKt10_300_500_trim.root", "UPDATE");
+  tau21_sigPlot->Write();
+  tau21_plot->Close();
+
+*/
+  TFile *Tprun_plot = new TFile("Plots/W_Tprun_volatility_AKt10_800_1000_trim.root", "UPDATE");
+  Tprun_volatility_sigPlot->Write();
+  Tprun_plot->Close();
+
+  TFile *Ttrim_plot = new TFile("Plots/W_Ttrim_volatility_AKt10_800_1000_trim.root", "UPDATE");
+  Ttrim_volatility_sigPlot->Write();
+  Ttrim_plot->Close();
+
+  TFile *TakTrecl_plot = new TFile("Plots/W_TakTrecl_volatility_AKt10_800_1000_trim.root", "UPDATE");
+  TakTrecl_volatility_sigPlot->Write();
+  TakTrecl_plot->Close();
+
+  TFile *TkTrecl_plot = new TFile("Plots/W_TkTrecl_volatility_AKt10_800_1000_trim.root", "UPDATE");
+  TkTrecl_volatility_sigPlot->Write();
+  TkTrecl_plot->Close();
+
+  TFile *Tsubj_plot1 = new TFile("Plots/W_Tsubj_volatility_AKt10_800_1000_trim.root", "UPDATE");
+  Tsubj_volatility_sigPlot->Write();
+  Tsubj_plot1->Close();
+
+  TFile *Tsubj_plot2 = new TFile("Plots/W_Tsubj_angle_beta1_AKt10_800_1000_trim.root", "UPDATE");
+  Tsubj_angle_sigPlot->Write();
+  Tsubj_plot2->Close();
+
+  TFile *Ttau2_plot = new TFile("Plots/W_Ttau2_volatility_AKt10_800_1000_trim.root", "UPDATE");
+  Ttau2_volatility_sigPlot->Write();
+  Ttau2_plot->Close();
+
+  TFile *tau21_plot = new TFile("Plots/W_tau21_AKt10_800_1000_trim.root", "UPDATE");
+  tau21_sigPlot->Write();
+  tau21_plot->Close();
+
+  //////////////////////////////////////////////
+  //background
+  //////////////////////////////////////////////
+
+for (int event = 0; event < bkg_t->GetEntries(); event++) {
+    bkg_t->GetEntry(event);
+
+	double weight = bkgEventWeight * bkgCrossSection;// * bkgPileupWeight;
+
+	total_truth.SetPxPyPzE(0,0,0,0);//to add up truth particles
+	total_reco.SetPxPyPzE(0,0,0,0);//to add up reco particles
+	total0_truth.SetPtEtaPhiM(bkg_pt,bkg_eta,bkg_phi,bkg_m);
+
+	vector<fastjet::PseudoJet> input_particles_truth;//to push back truth particles
+	vector<fastjet::PseudoJet> input_particles_reco;//to push back reco particles
+
+    for (int c = 0; c < bkgTruth_n; c++) {
+	particle.SetPtEtaPhiM(bkgTruth_pt->at(c),bkgTruth_eta->at(c),bkgTruth_phi->at(c),bkgTruth_m->at(c));
+	total_truth = total_truth + particle;
+	fastjet::PseudoJet part(particle.Px(),particle.Py(),particle.Pz(),particle.E());
+	input_particles_truth.push_back(part);
+	input_particles_truth.back().set_user_index(id);
+//	if (event == bkg_event_select){
+//		EventDisplay->Fill(particle.Eta(),particle.Phi(),particle.E());
+//	}
+    }// read in .root file and push back the truth particles
+
+    for (int c = 0; c < bkgReco_n; c++) {
+	particle.SetPtEtaPhiM(bkgReco_pt->at(c),bkgReco_eta->at(c),bkgReco_phi->at(c),bkgReco_m->at(c));
+	total_reco = total_reco + particle;
+	fastjet::PseudoJet part(particle.Px(),particle.Py(),particle.Pz(),particle.E());
+	input_particles_reco.push_back(part);
+	input_particles_reco.back().set_user_index(id);
+//	if (event == bkg_event_select){
+//		EventDisplay->Fill(particle.Eta(),particle.Phi(),particle.E());
+//	}
+    }// read in .root file and push back the reco particles
+
+        if(input_particles_truth.size() == 0)	continue;
+
+	fastjet::JetDefinition jet_def1(fastjet::antikt_algorithm, Rfat);
+	fastjet::ClusterSequence cs1(input_particles_truth,jet_def1);
+	fastjet::ClusterSequence cs1R(input_particles_reco,jet_def1);
+	vector<fastjet::PseudoJet> unpruned_jets = sorted_by_pt(cs1.inclusive_jets());
+	vector<fastjet::PseudoJet> unpruned_jetsR = sorted_by_pt(cs1R.inclusive_jets());
+
+      //////////////////////////////////////////////////////////////////////////////////////
+      //basic pruning on the leading jet
+      //////////////////////////////////////////////////////////////////////////////////////
+	fastjet::Pruner prunercut(fastjet::cambridge_algorithm, zcut, dcut0);
+	fastjet::PseudoJet pruned_jet_cut = prunercut(unpruned_jets[0]);
+//	vector<fastjet::PseudoJet> pruned_jet = pruned_jet_cut.constituents();	
+	pruned_mjet = pruned_jet_cut.m();
+	pruned_ptjet = pruned_jet_cut.perp();
+	pruned_etajet = pruned_jet_cut.eta();
+
+      //////////////////////////////////////////////////////////////////////////////////////
+      //basic trimming on the leading jet
+      //////////////////////////////////////////////////////////////////////////////////////
+	fastjet::JetDefinition trimjet_def(fastjet::kt_algorithm, Rfilt0);
+	fastjet::Filter trimmercut(trimjet_def, fastjet::SelectorPtFractionMin(fcut0));
+//	fastjet::Filter trimmercut(Rfilt0, fastjet::SelectorPtFractionMin(fcut0));
+	fastjet::PseudoJet trimmed_jet_cut = trimmercut(unpruned_jets[0]);
+	fastjet::PseudoJet trimmed_jet_cutR = trimmercut(unpruned_jetsR[0]);
+//	vector<fastjet::PseudoJet> kept = trimmed_jet_cut.pieces();   //this is to bin on the number of subjets		
+//	vector<fastjet::PseudoJet> trimmed_jet = trimmed_jet_cut.constituents();
+//	vector<fastjet::PseudoJet> trimmed_jet = trimmed_jet_cutR.constituents();
+	trimmed_mjet = trimmed_jet_cut.m();
+	trimmed_ptjet = trimmed_jet_cut.perp();
+	trimmed_etajet = trimmed_jet_cut.eta();
+	Truth_jet.SetPtEtaPhiM(trimmed_jet_cut.pt(),trimmed_jet_cut.eta(),trimmed_jet_cut.phi(),trimmed_jet_cut.m());
+
+	fastjet::PseudoJet ungroomed_jet = unpruned_jets[0];
+	fastjet::PseudoJet groomed_jet = trimmed_jet_cut;
+
+//	fastjet::PseudoJet ungroomed_jet = unpruned_jetsR[0];
+//	fastjet::PseudoJet groomed_jet = trimmed_jet_cutR;
+
+      //////////////////////////////////////////////////////////////////////////////////////
+      //used in ATLAS notes to do dR matching
+      //////////////////////////////////////////////////////////////////////////////////////
+	double dRJ = trimmed_jet_cutR.delta_R(trimmed_jet_cut);// uses fastjet to calculate dR between truth jet and reco jet
+
+	mjet = trimmed_mjet;
+	ptjet = trimmed_ptjet;
+	etajet = trimmed_etajet;
+	mjetR = trimmed_jet_cutR.m();
+	ptjetR = trimmed_jet_cutR.perp();
+	etajetR = trimmed_jet_cutR.eta();
+
+      if (ptjet > jet_pt_cut_low && ptjet < jet_pt_cut_up && mjet > jet_mass_cut_low && mjet < jet_mass_cut_up && etajet > jet_eta_cut_low && etajet < jet_eta_cut_up && ptjetR > jet_pt_cut_low && ptjetR < jet_pt_cut_up && etajetR > jet_eta_cut_low && etajetR < jet_eta_cut_up && dRJ <= 0.75 ) {
+
+        TSub  T2SubOutputTrim = T_2Subjet(groomed_jet, 0.05, 0.6, 20);
+
+ 	Tprun_volatility = T_Pruning (ungroomed_jet, 0.1, 2.0, 20);
+ 	Ttrim_volatility = T_Trimming(ungroomed_jet, 0.0, 0.1, 20);
+ 	TakTrecl_volatility = T_AkTreclustering(groomed_jet, 0.05, 0.6, 20);
+ 	TkTrecl_volatility = T_kTreclustering(groomed_jet, 0.1, 0.6, 20);
+ 	Tsubj_volatility = T2SubOutputTrim.volatility;
+ 	Tsubj_angle = T2SubOutputTrim.min_angle;
+	Ttau2_volatility = T_Nsubjettiness(2, groomed_jet, 1.0, 3.0, 20);
+
+	Tprun_volatility_bkgPlot->Fill(Tprun_volatility,weight);
+	Ttrim_volatility_bkgPlot->Fill(Ttrim_volatility,weight);
+	TakTrecl_volatility_bkgPlot->Fill(TakTrecl_volatility,weight);
+	TkTrecl_volatility_bkgPlot->Fill(TkTrecl_volatility,weight);
+	Tsubj_volatility_bkgPlot->Fill(Tsubj_volatility,weight);
+        Tsubj_angle_bkgPlot->Fill(Tsubj_angle,weight);
+	Ttau2_volatility_bkgPlot->Fill(Ttau2_volatility,weight);
+	tau21_bkgPlot->Fill(GetTau21(groomed_jet),weight);
+
+      }// cut selections
+}// loop over events
+/*
+  TFile *Tprun_bkg_plot = new TFile("Plots/W_Tprun_volatility_AKt10_300_500_trim_bkg.root", "UPDATE");
+  Tprun_volatility_bkgPlot->Write();
+  Tprun_bkg_plot->Close();
+
+  TFile *Ttrim_bkg_plot = new TFile("Plots/W_Ttrim_volatility_AKt10_300_500_trim_bkg.root", "UPDATE");
+  Ttrim_volatility_bkgPlot->Write();
+  Ttrim_bkg_plot->Close();
+
+  TFile *TakTrecl_bkg_plot = new TFile("Plots/W_TakTrecl_volatility_AKt10_300_500_trim_bkg.root", "UPDATE");
+  TakTrecl_volatility_bkgPlot->Write();
+  TakTrecl_bkg_plot->Close();
+
+  TFile *TkTrecl_bkg_plot = new TFile("Plots/W_TkTrecl_volatility_AKt10_300_500_trim_bkg.root", "UPDATE");
+  TkTrecl_volatility_bkgPlot->Write();
+  TkTrecl_bkg_plot->Close();
+
+  TFile *Tsubj_bkg_plot1 = new TFile("Plots/W_Tsubj_volatility_AKt10_300_500_trim_bkg.root", "UPDATE");
+  Tsubj_volatility_bkgPlot->Write();
+  Tsubj_bkg_plot1->Close();
+
+  TFile *Tsubj_bkg_plot2 = new TFile("Plots/W_Tsubj_angle_beta1_AKt10_300_500_trim_bkg.root", "UPDATE");
+  Tsubj_angle_bkgPlot->Write();
+  Tsubj_bkg_plot2->Close();
+
+  TFile *Ttau2_bkg_plot = new TFile("Plots/W_Ttau2_volatility_AKt10_300_500_trim_bkg.root", "UPDATE");
+  Ttau2_volatility_bkgPlot->Write();
+  Ttau2_bkg_plot->Close();
+
+  TFile *tau21_bkg_plot = new TFile("Plots/W_tau21_AKt10_300_500_trim_bkg.root", "UPDATE");
+  tau21_bkgPlot->Write();
+  tau21_bkg_plot->Close();
+*/
+  TFile *Tprun_bkg_plot = new TFile("Plots/W_Tprun_volatility_AKt10_800_1000_trim_bkg.root", "UPDATE");
+  Tprun_volatility_bkgPlot->Write();
+  Tprun_bkg_plot->Close();
+
+  TFile *Ttrim_bkg_plot = new TFile("Plots/W_Ttrim_volatility_AKt10_800_1000_trim_bkg.root", "UPDATE");
+  Ttrim_volatility_bkgPlot->Write();
+  Ttrim_bkg_plot->Close();
+
+  TFile *TakTrecl_bkg_plot = new TFile("Plots/W_TakTrecl_volatility_AKt10_800_1000_trim_bkg.root", "UPDATE");
+  TakTrecl_volatility_bkgPlot->Write();
+  TakTrecl_bkg_plot->Close();
+
+  TFile *TkTrecl_bkg_plot = new TFile("Plots/W_TkTrecl_volatility_AKt10_800_1000_trim_bkg.root", "UPDATE");
+  TkTrecl_volatility_bkgPlot->Write();
+  TkTrecl_bkg_plot->Close();
+
+  TFile *Tsubj_bkg_plot1 = new TFile("Plots/W_Tsubj_volatility_AKt10_800_1000_trim_bkg.root", "UPDATE");
+  Tsubj_volatility_bkgPlot->Write();
+  Tsubj_bkg_plot1->Close();
+
+  TFile *Tsubj_bkg_plot2 = new TFile("Plots/W_Tsubj_angle_beta1_AKt10_800_1000_trim_bkg.root", "UPDATE");
+  Tsubj_angle_bkgPlot->Write();
+  Tsubj_bkg_plot2->Close();
+
+  TFile *Ttau2_bkg_plot = new TFile("Plots/W_Ttau2_volatility_AKt10_800_1000_trim_bkg.root", "UPDATE");
+  Ttau2_volatility_bkgPlot->Write();
+  Ttau2_bkg_plot->Close();
+
+  TFile *tau21_bkg_plot = new TFile("Plots/W_tau21_AKt10_800_1000_trim_bkg.root", "UPDATE");
+  tau21_bkgPlot->Write();
+  tau21_bkg_plot->Close();
+
+
 
 
   //////////////////////////////////////////////

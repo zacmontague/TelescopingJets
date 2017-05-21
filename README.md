@@ -80,7 +80,35 @@ optional arguments:
                        False)
 meehan:Ana_EventGeneration >
 ```
+To compile the _NTuplerTest_, 
+```
+source compile_ntupler_test.sh
+```
+after which run the executable as
+```
+./NTuplerTest.exe ww pythia_ww.root ntuple_ww.root
+```
+_NTuplerTest_ does exactly the same thing as _NTupler_, with the addition of the part from line 157 to line 906. It reads in Alex's samples and calculates various Telescoping jet volatilities and other jet observables. It also outputs histograms as .root files. Actually, we don't need this part because the MiniNTupleAnalysis will do. That's only for Yang-Ting to cross-check plots in his BOOST 2015 talk.
 
+Alex's samples are available at the UW TeV cluster (tev01.phys.washington.edu) in the folder /ytchien/AlexSample. There are five of them:
+```
+mc12_8TeV.14791X.Pythia8_AU2CT10_jetjet_JZXW.leading_jets.root
+mc12_8TeV.158864.Pythia8_AU2MSTW2008LO_Wprime_WZ_llqq_m1000.leading_jets.root
+mc12_8TeV.158874.Pythia8_AU2MSTW2008LO_Wprime_WZ_llqq_m2000.leading_jets.root
+mc12_8TeV.110903.Pythia8_AU2MSTW2008LO_zprime1000_tt.leading_jets.root
+mc12_8TeV.110907.Pythia8_AU2MSTW2008LO_zprime2000_tt.leading_jets.root
+```
+for QCD (1st), W (2nd and 3rd), top (4th and 5th) samples. Yang-Ting used the first three to reproduce the BOOST 2015 results. Two pT bins are considered: 1) 300 GeV to 500 Gev, and 2) 800 Gev to 1000 GeV.
+
+For the (300, 500) bin, the sample
+```
+mc12_8TeV.158864.Pythia8_AU2MSTW2008LO_Wprime_WZ_llqq_m1000.leading_jets.root
+```
+is used. Also, `Rfilt = 0.2` in T-trimming and `R_min = 0.1` in T-reclustering and T-subjet. For the (800, 1000) bin, the following one
+```
+mc12_8TeV.158874.Pythia8_AU2MSTW2008LO_Wprime_WZ_llqq_m2000.leading_jets.root
+```
+is used, and `Rfilt = 0.1` in T-trimming and `R_min = 0.05` in T-reclustering and T-subjet.
 
 # Running MiniNTupleAnalysis
 
