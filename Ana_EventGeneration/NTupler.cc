@@ -155,6 +155,43 @@ int main(int argc, char* argv[]){
   treeout->Branch("TruthRawTrim_TJet_m1",       &TruthRawTrim_TJet_m1);
   treeout->Branch("TruthRawTrim_TJet_m2",       &TruthRawTrim_TJet_m2);
 
+  treeout->Branch("RecoRaw_flavor",        &RecoRaw_flavor);
+  treeout->Branch("RecoRaw_pt",            &RecoRaw_pt);
+  treeout->Branch("RecoRaw_eta",           &RecoRaw_eta);
+  treeout->Branch("RecoRaw_phi",           &RecoRaw_phi);
+  treeout->Branch("RecoRaw_m",             &RecoRaw_m);
+  treeout->Branch("RecoRaw_Tau21",         &RecoRaw_Tau21);
+  treeout->Branch("RecoRaw_Tau32",         &RecoRaw_Tau32);
+  treeout->Branch("RecoRaw_D2",            &RecoRaw_D2);
+  treeout->Branch("RecoRaw_T2jet_angle",   &RecoRaw_T2jet_angle);
+  treeout->Branch("RecoRaw_T2jet",         &RecoRaw_T2jet);
+  treeout->Branch("RecoRaw_T3jet_angle",   &RecoRaw_T3jet_angle);
+  treeout->Branch("RecoRaw_T3jet",         &RecoRaw_T3jet);
+  treeout->Branch("RecoRaw_Tpruning",      &RecoRaw_Tpruning);
+  treeout->Branch("RecoRaw_Ttrimming",     &RecoRaw_Ttrimming);
+  treeout->Branch("RecoRaw_Taktreclustering",	&RecoRaw_Taktreclustering);
+  treeout->Branch("RecoRaw_Tktreclustering",	&RecoRaw_Tktreclustering);
+  treeout->Branch("RecoRaw_TJet_m1",       &RecoRaw_TJet_m1);
+  treeout->Branch("RecoRaw_TJet_m2",       &RecoRaw_TJet_m2);
+
+  treeout->Branch("RecoRawTrim_flavor",        &RecoRawTrim_flavor);
+  treeout->Branch("RecoRawTrim_pt",            &RecoRawTrim_pt);
+  treeout->Branch("RecoRawTrim_eta",           &RecoRawTrim_eta);
+  treeout->Branch("RecoRawTrim_phi",           &RecoRawTrim_phi);
+  treeout->Branch("RecoRawTrim_m",             &RecoRawTrim_m);
+  treeout->Branch("RecoRawTrim_Tau21",         &RecoRawTrim_Tau21);
+  treeout->Branch("RecoRawTrim_Tau32",         &RecoRawTrim_Tau32);
+  treeout->Branch("RecoRawTrim_D2",            &RecoRawTrim_D2);
+  treeout->Branch("RecoRawTrim_T2jet_angle",   &RecoRawTrim_T2jet_angle);
+  treeout->Branch("RecoRawTrim_T2jet",         &RecoRawTrim_T2jet);
+  treeout->Branch("RecoRawTrim_T3jet_angle",   &RecoRawTrim_T3jet_angle);
+  treeout->Branch("RecoRawTrim_T3jet",         &RecoRawTrim_T3jet);
+  treeout->Branch("RecoRawTrim_Tpruning",      &RecoRawTrim_Tpruning);
+  treeout->Branch("RecoRawTrim_Ttrimming",     &RecoRawTrim_Ttrimming);
+  treeout->Branch("RecoRawTrim_Taktreclustering",	&RecoRawTrim_Taktreclustering);
+  treeout->Branch("RecoRawTrim_Tktreclustering",	&RecoRawTrim_Tktreclustering);
+  treeout->Branch("RecoRawTrim_TJet_m1",       &RecoRawTrim_TJet_m1);
+  treeout->Branch("RecoRawTrim_TJet_m2",       &RecoRawTrim_TJet_m2);
 
   //////////////////////////////////////////////
   //random number generator for pileup
@@ -242,14 +279,14 @@ int main(int argc, char* argv[]){
       input_particles_Pileup.push_back(PseudoJet(px,py,pz,E));
 
     }
-
+*/
 
     //////////////////////////////////////////////
     //make pseudocalorimeter cells
     //////////////////////////////////////////////
     vector<PseudoJet> calo_cells        = ToyCalorimeter(input_particles);
-    vector<PseudoJet> calo_cells_Pileup = ToyCalorimeter(input_particles_Pileup);
-*/
+    //vector<PseudoJet> calo_cells_Pileup = ToyCalorimeter(input_particles_Pileup);
+
 
     //////////////////////////////////////////////
     // get the resulting jets ordered in pt
@@ -258,12 +295,12 @@ int main(int argc, char* argv[]){
 
     fastjet::ClusterSequence clust_seq_TruthRaw(input_particles, jet_def);
     vector<fastjet::PseudoJet> inclusive_jets_TruthRaw = sorted_by_pt(clust_seq_TruthRaw.inclusive_jets(5.0));
-/*
-    fastjet::ClusterSequence clust_seq_TruthPileup(input_particles_Pileup, jet_def);
-    vector<fastjet::PseudoJet> inclusive_jets_TruthPileup = sorted_by_pt(clust_seq_TruthPileup.inclusive_jets(5.0));
 
     fastjet::ClusterSequence clust_seq_RecoRaw(calo_cells, jet_def);
     vector<fastjet::PseudoJet> inclusive_jets_RecoRaw = sorted_by_pt(clust_seq_RecoRaw.inclusive_jets(5.0));
+/*
+    fastjet::ClusterSequence clust_seq_TruthPileup(input_particles_Pileup, jet_def);
+    vector<fastjet::PseudoJet> inclusive_jets_TruthPileup = sorted_by_pt(clust_seq_TruthPileup.inclusive_jets(5.0));
 
     fastjet::ClusterSequence clust_seq_RecoPileup(calo_cells_Pileup, jet_def);
     vector<fastjet::PseudoJet> inclusive_jets_RecoPileup = sorted_by_pt(clust_seq_RecoPileup.inclusive_jets(5.0));
@@ -337,6 +374,9 @@ int main(int argc, char* argv[]){
       jetflavor = GetJetTruthFlavor(jettemp, truth_t1, truth_t2, truth_W1, truth_W2, truth_H, debug);
       if(debug) cout<<"FillingJet Raw   : flav="<<jetflavor<<"  pt="<<jettemp.Pt()<<"  m="<<jettemp.M()<<endl;
 
+      if(jetflavor==-1)
+        continue;
+
       /////////////////////////////////
       //Fill variables that will go into ntuple
       /////////////////////////////////
@@ -363,10 +403,6 @@ int main(int argc, char* argv[]){
       tempJet_Tktreclustering = T_kTreclustering(inclusive_jets_TruthRaw[ijet], 0.05, 0.6, 20);
       tempJet_TJet_m1        = T_Mass(1,inclusive_jets_TruthRaw[ijet]);
       tempJet_TJet_m2        = T_Mass(2,inclusive_jets_TruthRaw[ijet]);
-
-
-      if(tempJet_flavor==-1)
-        continue;
 
       TruthRaw_flavor     .push_back(tempJet_flavor);
       TruthRaw_pt         .push_back(tempJet_pt);
@@ -407,7 +443,7 @@ int main(int argc, char* argv[]){
       jetflavor = GetJetTruthFlavor(jettemp, truth_t1, truth_t2, truth_W1, truth_W2, truth_H, debug);
       if(debug) cout<<"FillingJet Trimmed: flav="<<jetflavor<<"  pt="<<jettemp.Pt()<<"  m="<<jettemp.M()<<endl;
 
-      if(tempJet_flavor==-1)
+      if(jetflavor==-1)
         continue;
 
       /////////////////////////////////
@@ -457,6 +493,142 @@ int main(int argc, char* argv[]){
       TruthRawTrim_TJet_m2    .push_back(tempJet_TJet_m2);
     }
 
+
+    /////////////////////////////
+    //RecoRaw
+    /////////////////////////////
+    if(debug) cout<<"RecoRaw jet"<<endl;
+    for(int ijet=0; ijet<inclusive_jets_RecoRaw.size(); ijet++){
+      TLorentzVector jettemp;
+      jettemp.SetPtEtaPhiM(inclusive_jets_RecoRaw.at(ijet).pt(),
+                           inclusive_jets_RecoRaw.at(ijet).eta(),
+                           inclusive_jets_RecoRaw.at(ijet).phi(),
+                           inclusive_jets_RecoRaw.at(ijet).m());
+
+      /////////////////////////////////
+      //Getting truth label for filling into ntuple
+      /////////////////////////////////
+      jetflavor = GetJetTruthFlavor(jettemp, truth_t1, truth_t2, truth_W1, truth_W2, truth_H, debug);
+      if(debug) cout<<"FillingJet Raw   : flav="<<jetflavor<<"  pt="<<jettemp.Pt()<<"  m="<<jettemp.M()<<endl;
+
+      if(jetflavor==-1)
+        continue;
+
+      /////////////////////////////////
+      //Fill variables that will go into ntuple
+      /////////////////////////////////
+      tempJet_flavor         = jetflavor;
+      tempJet_pt             = jettemp.Pt();
+      tempJet_eta            = jettemp.Eta();
+      tempJet_phi            = jettemp.Phi();
+      tempJet_m              = jettemp.M();
+      tempJet_Tau21          = GetTau21(inclusive_jets_RecoRaw[ijet]);
+      tempJet_Tau32          = GetTau32(inclusive_jets_RecoRaw[ijet]);
+      tempJet_D2             = ecfD2(inclusive_jets_RecoRaw[ijet]);
+
+      TSub  T2SubOutput     = T_2Subjet(inclusive_jets_RecoRaw[ijet], 0.05, 0.6, 20);
+      tempJet_T2jet_angle    = T2SubOutput.min_angle;
+      tempJet_T2jet          = T2SubOutput.volatility;
+
+      TSub  T3SubOutput     = T_3Subjet(inclusive_jets_RecoRaw[ijet], 0.05, 0.6, 20);
+      tempJet_T3jet_angle    = T3SubOutput.min_angle;
+      tempJet_T3jet          = T3SubOutput.volatility;
+
+      tempJet_Tpruning       = T_Pruning (inclusive_jets_RecoRaw[ijet], 0.1, 2.0, 20);
+      tempJet_Ttrimming      = T_Trimming(inclusive_jets_RecoRaw[ijet], 0.0, 0.1, 20);
+      tempJet_Taktreclustering = T_AkTreclustering(inclusive_jets_RecoRaw[ijet], 0.05, 0.6, 20);
+      tempJet_Tktreclustering = T_kTreclustering(inclusive_jets_RecoRaw[ijet], 0.05, 0.6, 20);
+      tempJet_TJet_m1        = T_Mass(1,inclusive_jets_RecoRaw[ijet]);
+      tempJet_TJet_m2        = T_Mass(2,inclusive_jets_RecoRaw[ijet]);
+
+      RecoRaw_flavor     .push_back(tempJet_flavor);
+      RecoRaw_pt         .push_back(tempJet_pt);
+      RecoRaw_eta        .push_back(tempJet_eta);
+      RecoRaw_phi        .push_back(tempJet_phi);
+      RecoRaw_m          .push_back(tempJet_m);
+      RecoRaw_Tau21      .push_back(tempJet_Tau21);
+      RecoRaw_Tau32      .push_back(tempJet_Tau32);
+      RecoRaw_D2         .push_back(tempJet_D2);
+      RecoRaw_T2jet_angle.push_back(tempJet_T2jet_angle);
+      RecoRaw_T2jet      .push_back(tempJet_T2jet);
+      RecoRaw_T3jet_angle.push_back(tempJet_T3jet_angle);
+      RecoRaw_T3jet      .push_back(tempJet_T3jet);
+      RecoRaw_Tpruning   .push_back(tempJet_Tpruning);
+      RecoRaw_Ttrimming  .push_back(tempJet_Ttrimming);
+      RecoRaw_Taktreclustering.push_back(tempJet_Taktreclustering);
+      RecoRaw_Tktreclustering.push_back(tempJet_Tktreclustering);
+      RecoRaw_TJet_m1    .push_back(tempJet_TJet_m1);
+      RecoRaw_TJet_m2    .push_back(tempJet_TJet_m2);
+    }
+
+
+    /////////////////////////////
+    //RecoRawTrim
+    /////////////////////////////
+    for (unsigned int ijet = 0; ijet < inclusive_jets_RecoRaw.size(); ijet++) {
+      PseudoJet groomed_jet = f(inclusive_jets_RecoRaw[ijet]);
+
+      TLorentzVector jettemp;
+      jettemp.SetPtEtaPhiM(groomed_jet.pt(),
+                           groomed_jet.eta(),
+                           groomed_jet.phi(),
+                           groomed_jet.m());
+
+      /////////////////////////////////
+      //Getting truth label for filling into ntuple
+      /////////////////////////////////
+      jetflavor = GetJetTruthFlavor(jettemp, truth_t1, truth_t2, truth_W1, truth_W2, truth_H, debug);
+      if(debug) cout<<"FillingJet Trimmed: flav="<<jetflavor<<"  pt="<<jettemp.Pt()<<"  m="<<jettemp.M()<<endl;
+
+      if(jetflavor==-1)
+        continue;
+
+      /////////////////////////////////
+      //Fill variables that will go into ntuple
+      /////////////////////////////////
+      tempJet_flavor         = jetflavor;
+      tempJet_pt             = jettemp.Pt();
+      tempJet_eta            = jettemp.Eta();
+      tempJet_phi            = jettemp.Phi();
+      tempJet_m              = jettemp.M();
+      tempJet_Tau21          = GetTau21(groomed_jet);
+      tempJet_Tau32          = GetTau32(groomed_jet);
+      tempJet_D2             = ecfD2(groomed_jet);
+
+      TSub  T2SubOutputTrim = T_2Subjet(groomed_jet, 0.05, 0.6, 20);
+      tempJet_T2jet_angle    = T2SubOutputTrim.min_angle;
+      tempJet_T2jet          = T2SubOutputTrim.volatility;
+
+      TSub  T3SubOutputTrim = T_3Subjet(groomed_jet, 0.05, 0.6, 20);
+      tempJet_T3jet_angle    = T3SubOutputTrim.min_angle;
+      tempJet_T3jet          = T3SubOutputTrim.volatility;
+
+      tempJet_Tpruning       = T_Pruning (groomed_jet, 0.1, 2.0, 20);
+      tempJet_Ttrimming      = T_Trimming(groomed_jet, 0.0, 0.1, 20);
+      tempJet_Taktreclustering = T_AkTreclustering(groomed_jet, 0.05, 0.6, 20);
+      tempJet_Tktreclustering = T_kTreclustering(groomed_jet, 0.05, 0.6, 20);
+      tempJet_TJet_m1        = T_Mass(1,groomed_jet);
+      tempJet_TJet_m2        = T_Mass(2,groomed_jet);
+
+      RecoRawTrim_flavor     .push_back(tempJet_flavor);
+      RecoRawTrim_pt         .push_back(tempJet_pt);
+      RecoRawTrim_eta        .push_back(tempJet_eta);
+      RecoRawTrim_phi        .push_back(tempJet_phi);
+      RecoRawTrim_m          .push_back(tempJet_m);
+      RecoRawTrim_Tau21      .push_back(tempJet_Tau21);
+      RecoRawTrim_Tau32      .push_back(tempJet_Tau32);
+      RecoRawTrim_D2         .push_back(tempJet_D2);
+      RecoRawTrim_T2jet_angle.push_back(tempJet_T2jet_angle);
+      RecoRawTrim_T2jet      .push_back(tempJet_T2jet);
+      RecoRawTrim_T3jet_angle.push_back(tempJet_T3jet_angle);
+      RecoRawTrim_T3jet      .push_back(tempJet_T3jet);
+      RecoRawTrim_Tpruning   .push_back(tempJet_Tpruning);
+      RecoRawTrim_Ttrimming  .push_back(tempJet_Ttrimming);
+      RecoRawTrim_Taktreclustering .push_back(tempJet_Taktreclustering);
+      RecoRawTrim_Tktreclustering .push_back(tempJet_Tktreclustering);
+      RecoRawTrim_TJet_m1    .push_back(tempJet_TJet_m1);
+      RecoRawTrim_TJet_m2    .push_back(tempJet_TJet_m2);
+    }
 
     //////////////////////////////////////
     //Fill event into tree
@@ -523,6 +695,43 @@ void ResetBranches(){
   TruthRawTrim_TJet_m1.clear();
   TruthRawTrim_TJet_m2.clear();
 
+  RecoRaw_flavor.clear();
+  RecoRaw_pt.clear();
+  RecoRaw_eta.clear();
+  RecoRaw_phi.clear();
+  RecoRaw_m.clear();
+  RecoRaw_Tau21.clear();
+  RecoRaw_Tau32.clear();
+  RecoRaw_D2.clear();
+  RecoRaw_T2jet_angle.clear();
+  RecoRaw_T2jet.clear();
+  RecoRaw_T3jet_angle.clear();
+  RecoRaw_T3jet.clear();
+  RecoRaw_Tpruning.clear();
+  RecoRaw_Ttrimming.clear();
+  RecoRaw_Taktreclustering.clear();
+  RecoRaw_Tktreclustering.clear();
+  RecoRaw_TJet_m1.clear();
+  RecoRaw_TJet_m2.clear();
+
+  RecoRawTrim_flavor.clear();
+  RecoRawTrim_pt.clear();
+  RecoRawTrim_eta.clear();
+  RecoRawTrim_phi.clear();
+  RecoRawTrim_m.clear();
+  RecoRawTrim_Tau21.clear();
+  RecoRawTrim_Tau32.clear();
+  RecoRawTrim_D2.clear();
+  RecoRawTrim_T2jet_angle.clear();
+  RecoRawTrim_T2jet.clear();
+  RecoRawTrim_T3jet_angle.clear();
+  RecoRawTrim_T3jet.clear();
+  RecoRawTrim_Tpruning.clear();
+  RecoRawTrim_Ttrimming.clear();
+  RecoRawTrim_Taktreclustering.clear();
+  RecoRawTrim_Tktreclustering.clear();
+  RecoRawTrim_TJet_m1.clear();
+  RecoRawTrim_TJet_m2.clear();
 }
 
 
@@ -578,7 +787,9 @@ double T_Pruning(PseudoJet& input, double dcut_min, double dcut_max, int N_dcut)
   if(Tmass > M0){ms.push_back(Tmass);}
   }
   // getVolatility function provided by TelescopingJets
-  return getVolatility(ms);
+  if(ms.size()>0) return getVolatility(ms);
+  std::cout << "WARNING: zero entries for T_Pruning "<<dcut_min<<" "<<dcut_max<<" "<<N_dcut<<std::endl;
+  return -1;
 }
 
 
@@ -598,7 +809,9 @@ double T_Trimming(PseudoJet& input, double fcut_min, double fcut_max, int N_fcut
   if(Tmass > M0){ms.push_back(Tmass);}
   }
   // getVolatility function provided by TelescopingJets
-  return getVolatility(ms);
+  if(ms.size()>0) return getVolatility(ms);
+  std::cout << "WARNING: zero entries for T_Trimming "<<fcut_min<<" "<<fcut_max<<" "<<N_fcut<<std::endl;
+  return -1;
 }
 
 
@@ -638,7 +851,9 @@ double T_AkTreclustering(PseudoJet& input, double R_min, double R_max, int N_R) 
     R += deltaR;
   }
   // getVolatility function provided by TelescopingJets
-  return getVolatility(ms);
+  if(ms.size()>0) return getVolatility(ms);
+  std::cout << "WARNING: zero entries for T_AkTreclustering "<<R_min<<" "<<R_max<<" "<<N_R<<std::endl;
+  return -1;
 }
 
 
@@ -677,7 +892,9 @@ double T_kTreclustering(PseudoJet& input, double R_min, double R_max, int N_R) {
     R += deltaR;     
   }
   // getVolatility function provided by TelescopingJets
-  return getVolatility(ms);
+  if(ms.size()>0) return getVolatility(ms);
+  std::cout << "WARNING: zero entries for T_kTreclustering "<<R_min<<" "<<R_max<<" "<<N_R<<std::endl;
+  return -1;
 }
 
 
@@ -723,7 +940,11 @@ TSub T_2Subjet(PseudoJet& input, double R_min, double R_max, int N_R){
   }
   TSub result;
   result.min_angle = D_min;
-  result.volatility = getVolatility(m12s);
+  if(m12s.size()>0) result.volatility = getVolatility(m12s);
+  else {
+    result.volatility = -1;
+    std::cout << "WARNING: zero entries for T_2Subjet "<<R_min<<" "<<R_max<<" "<<N_R<<std::endl;
+  }
   return result;
 }
 
@@ -779,7 +1000,11 @@ TSub T_3Subjet(PseudoJet& input, double R_min, double R_max, int N_R){
   }
   TSub result;
   result.min_angle = D_min;
-  result.volatility = getVolatility(m123s);
+  if(m123s.size()>0) result.volatility = getVolatility(m123s);
+  else {
+    result.volatility = -1;
+    std::cout << "WARNING: zero entries for T_3Subjet "<<R_min<<" "<<R_max<<" "<<N_R<<std::endl;
+  }
   return result;
 }
 
@@ -797,7 +1022,9 @@ double T_Nsubjettiness(int N, PseudoJet& input, double beta_min, double beta_max
     taus.push_back(nsub(input));
   }
   // getVolatility function provided by TelescopingJets
-  return getVolatility(taus);
+  if(taus.size()>0) return getVolatility(taus);
+  std::cout << "WARNING: zero entries for T_Nsubjettiness "<<beta_min<<" "<<beta_max<<" "<<N_beta<<std::endl;
+  return -1;
 }
 
 double T_NsubjettinessRatio(int N_num, int N_den, PseudoJet& input, double beta_min, double beta_max, int N_beta) {
@@ -821,7 +1048,9 @@ double T_NsubjettinessRatio(int N_num, int N_den, PseudoJet& input, double beta_
 
   }
   // getVolatility function provided by TelescopingJets
-  return getVolatility(taus);
+  if(taus.size()>0) return getVolatility(taus);
+  std::cout << "WARNING: zero entries for T_NsubjettinessRatio "<<beta_min<<" "<<beta_max<<" "<<N_beta<<std::endl;
+  return -1;
 }
 
 
@@ -836,7 +1065,9 @@ double T_EnergyCorrelator_C2(PseudoJet& input, double beta_min, double beta_max,
     ecfs.push_back(ecf(input));
   }
   // getVolatility function provided by TelescopingJets
-  return getVolatility(ecfs);
+  if(ecfs.size()>0) return getVolatility(ecfs);
+  std::cout << "WARNING: zero entries for T_EnergyCorrelator_C2 "<<beta_min<<" "<<beta_max<<" "<<N_beta<<std::endl;
+  return -1;
 }
 
 double T_EnergyCorrelator_D2(PseudoJet& input, double beta_min, double beta_max, int N_beta) {
@@ -847,7 +1078,9 @@ double T_EnergyCorrelator_D2(PseudoJet& input, double beta_min, double beta_max,
     ecfs.push_back(ecf(input));
   }
   // getVolatility function provided by TelescopingJets
-  return getVolatility(ecfs);
+  if(ecfs.size()>0) return getVolatility(ecfs);
+  std::cout << "WARNING: zero entries for T_EnergyCorrelator_D2 "<<beta_min<<" "<<beta_max<<" "<<N_beta<<std::endl;
+  return -1;
 }
 
 double T_EnergyCorrelator_C3(PseudoJet& input, double beta_min, double beta_max, int N_beta) {
@@ -858,7 +1091,9 @@ double T_EnergyCorrelator_C3(PseudoJet& input, double beta_min, double beta_max,
     ecfs.push_back(ecf(input));
   }
   // getVolatility function provided by TelescopingJets
-  return getVolatility(ecfs);
+  if(ecfs.size()>0) return getVolatility(ecfs);
+  std::cout << "WARNING: zero entries for T_EnergyCorrelator_C3 "<<beta_min<<" "<<beta_max<<" "<<N_beta<<std::endl;
+  return -1;
 }
 
 ///========================================

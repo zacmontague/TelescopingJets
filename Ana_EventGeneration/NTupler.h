@@ -213,6 +213,44 @@ vector<double> TruthRawTrim_Ttrimming;
 vector<double> TruthRawTrim_Taktreclustering;
 vector<double> TruthRawTrim_Tktreclustering;
 
+vector<int>    RecoRaw_flavor;
+vector<double> RecoRaw_pt;
+vector<double> RecoRaw_eta;
+vector<double> RecoRaw_phi;
+vector<double> RecoRaw_m;
+vector<double> RecoRaw_Tau21;
+vector<double> RecoRaw_Tau32;
+vector<double> RecoRaw_D2;
+vector<double> RecoRaw_TJet_m1;
+vector<double> RecoRaw_TJet_m2;
+vector<double> RecoRaw_T2jet_angle;
+vector<double> RecoRaw_T2jet;
+vector<double> RecoRaw_T3jet_angle;
+vector<double> RecoRaw_T3jet;
+vector<double> RecoRaw_Tpruning;
+vector<double> RecoRaw_Ttrimming;
+vector<double> RecoRaw_Taktreclustering;
+vector<double> RecoRaw_Tktreclustering;
+
+vector<int>    RecoRawTrim_flavor;
+vector<double> RecoRawTrim_pt;
+vector<double> RecoRawTrim_eta;
+vector<double> RecoRawTrim_phi;
+vector<double> RecoRawTrim_m;
+vector<double> RecoRawTrim_Tau21;
+vector<double> RecoRawTrim_Tau32;
+vector<double> RecoRawTrim_D2;
+vector<double> RecoRawTrim_TJet_m1;
+vector<double> RecoRawTrim_TJet_m2;
+vector<double> RecoRawTrim_T2jet_angle;
+vector<double> RecoRawTrim_T2jet;
+vector<double> RecoRawTrim_T3jet_angle;
+vector<double> RecoRawTrim_T3jet;
+vector<double> RecoRawTrim_Tpruning;
+vector<double> RecoRawTrim_Ttrimming;
+vector<double> RecoRawTrim_Taktreclustering;
+vector<double> RecoRawTrim_Tktreclustering;
+
 ///////////////////////////
 //extra functions
 ///////////////////////////
