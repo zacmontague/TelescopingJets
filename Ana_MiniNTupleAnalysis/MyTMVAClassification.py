@@ -32,15 +32,18 @@ def usage():
 # Main routine
 def main():
 
+    NTupName   = "JetTree"
+    alg        = "TruthRawTrim"
+    cuts       =  ["eta>-1.2","eta<1.2","pt>800","pt<1000","m>61","m<85"]
+    vars       = ["Tau21","T2jet"]
 
-
-    NTupName   = "varTree"    
+    #NTupName   = "varTree"    
     verbose    = True
     
-    alg        = "AK10LCTRIMF5R20"
+    #alg        = "AK10LCTRIMF5R20"
     spectators = ["m"]
-    cuts       = ["eta>-1.2","eta<1.2","pt>200","pt<350","m>61","m<85","TruthRecoMatch==1"]
-    vars       = ["TauWTA2TauWTA1","ZCUT12","Dip23","TJetVol","ActiveArea","PullC10","Angularity"]
+    #cuts       = ["eta>-1.2","eta<1.2","pt>200","pt<350","m>61","m<85","TruthRecoMatch==1"]
+    #vars       = ["TauWTA2TauWTA1","ZCUT12","Dip23","TJetVol","ActiveArea","PullC10","Angularity"]
     methods    = "Likelihood"
 
     print "Starting and getting arguments:"
@@ -77,10 +80,13 @@ def main():
     #===============================
     #Read training and test data
     #===============================
-    InputDir = "Data/20150709/"
+    #InputDir = "../gen_20170529/"
+    InputDir = "../gen_20170627/"
     print "Getting inputs from: ",InputDir
-    s1 = TFile(InputDir+"wprime1000_wprime2000.root");
-    b1 = TFile(InputDir+"dijet.root");
+    #s1 = TFile(InputDir+"ntuple_ttbar_2000.root");
+    #b1 = TFile(InputDir+"ntuple_dijet_800_1400.root");
+    s1 = TFile(InputDir+"ntuple_ttbar.root");
+    b1 = TFile(InputDir+"ntuple_dijet.root");
 
     # Output file
     OutFileName="testout.root"
@@ -95,13 +101,16 @@ def main():
     # Set verbosity
     factory.SetVerbose( verbose )
 
+    # data loader
+    dataloader=TMVA.DataLoader("dataset")
+
 #     weight=""
 #     weight+="pass_selection*EventWeight*CrossSection*("
-#     weight+="akt10"+alg+"_trim_pt>"+pt1+" && "
-#     weight+="akt10"+alg+"_trim_pt<"+pt2
+#     weight+=alg+"_pt>"+pt1+" && "
+#     weight+=alg+"_pt<"+pt2
 #     if m1!="0":
-#         weight+=" && akt10"+alg+"_trim_mass>"+m1+" && "
-#         weight+="akt10"+alg+"_trim_mass<"+m2
+#         weight+=" && "+alg+"_m>"+m1+" && "
+#         weight+=alg+"_m<"+m2
 #     weight+=")"
 #     
 #     #Get signal and background histograms
@@ -118,8 +127,8 @@ def main():
 
     for cut in cuts:
         placecut=cut
-        if cut[:2]=="pt" or cut[:3]=="eta" or cut[:4]=="mass":
-            placecut = "* (akt10"+alg+"_trim_"+cut+")"
+        if cut[:2]=="pt" or cut[:3]=="eta" or cut[:4]=="m":
+            placecut = "* ("+alg+"_"+cut+")"
         else:
             placecut="* ("+cut+") "
         mycuts += placecut
@@ -133,18 +142,18 @@ def main():
     #Spectator variables from tree
     #=====================================
     for spec in spectators:
-        factory.AddSpectator( spec , 'F' )
+        dataloader.AddSpectator( spec, 'F' )
         
     #===================================
     #MVA variables from tree
     #=====================================
     for var in vars:
-        factory.AddVariable( var , 'F' )
+        dataloader.AddVariable( var , 'F' )
 
     #===============================
     #Read training and test data
     #===============================
-    print "Getting trees ..."
+    print "Getting trees ... ",NTupName
     st1 = s1.Get(NTupName)
     bt1 = b1.Get(NTupName)
 
@@ -157,11 +166,12 @@ def main():
     #=========================================
     # You can add an arbitrary number of signal or background trees
     #=========================================
-    factory.AddSignalTree    ( st1, ws1 );
-    factory.SetSignalWeightExpression("EventWeight*CrossSection");
+    dataloader.AddSignalTree    ( st1, ws1 );
+    #SCHSU
+    #dataloader.SetSignalWeightExpression("EventWeight*CrossSection");
 
-    factory.AddBackgroundTree( bt1, wb1 );
-    factory.SetBackgroundWeightExpression("EventWeight*CrossSection");
+    dataloader.AddBackgroundTree( bt1, wb1 );
+    #dataloader.SetBackgroundWeightExpression("EventWeight*CrossSection");
     
     # Here, the relevant variables are copied over in new, slim trees that are
     # used for TMVA training and testing
@@ -170,7 +180,7 @@ def main():
     mycutSig = TCut(mycuts)
     mycutBkg = TCut(mycutb)
     
-    factory.PrepareTrainingAndTestTree( mycutSig, mycutBkg,
+    dataloader.PrepareTrainingAndTestTree( mycutSig, mycutBkg,
                                         "nTrain_Signal=0:nTrain_Background=0:SplitMode=Random:NormMode=NumEvents:!V" )
 
     # --------------------------------------------------------------------------------------------------
@@ -184,48 +194,48 @@ def main():
 
     # Cut optimisation
     if "Cuts" in mlist:
-        factory.BookMethod( TMVA.Types.kCuts, "Cuts",
+        factory.BookMethod( dataloader, TMVA.Types.kCuts, "Cuts",
                             "!H:!V:FitMethod=MC:EffSel:SampleSize=200000:VarProp=FSmart" )
 
     if "CutsD" in mlist:
-        factory.BookMethod( TMVA.Types.kCuts, "CutsD",
+        factory.BookMethod( dataloader, TMVA.Types.kCuts, "CutsD",
                             "!H:!V:FitMethod=MC:EffSel:SampleSize=200000:VarProp=FSmart:VarTransform=Decorrelate" )
 
     if "CutsPCA" in mlist:
-        factory.BookMethod( TMVA.Types.kCuts, "CutsPCA",
+        factory.BookMethod( dataloader, TMVA.Types.kCuts, "CutsPCA",
                             "!H:!V:FitMethod=MC:EffSel:SampleSize=200000:VarProp=FSmart:VarTransform=PCA" )
 
     if "CutsGA" in mlist:
-        factory.BookMethod( TMVA.Types.kCuts, "CutsGA",
+        factory.BookMethod( dataloader, TMVA.Types.kCuts, "CutsGA",
                             "H:!V:FitMethod=GA:CutRangeMin[0]=-10:CutRangeMax[0]=10:VarProp[1]=FMax:EffSel:Steps=30:Cycles=3:PopSize=400:SC_steps=10:SC_rate=5:SC_factor=0.95" )
 
     if "CutsSA" in mlist:
-        factory.BookMethod( TMVA.Types.kCuts, "CutsSA",
+        factory.BookMethod( dataloader, TMVA.Types.kCuts, "CutsSA",
                             "!H:!V:FitMethod=SA:EffSel:MaxCalls=150000:KernelTemp=IncAdaptive:InitialTemp=1e+6:MinTemp=1e-6:Eps=1e-10:UseDefaultScale" )
 
     # Likelihood ("naive Bayes estimator")
     if "Likelihood" in mlist:
-        factory.BookMethod( TMVA.Types.kLikelihood, "Likelihood",
+        factory.BookMethod( dataloader, TMVA.Types.kLikelihood, "Likelihood",
                             "H:!V:!TransformOutput:PDFInterpol=Spline2:NSmoothSig[0]=20:NSmoothBkg[0]=20:NSmoothBkg[1]=10:NSmooth=1:NAvEvtPerBin=50" )
 
     # Decorrelated likelihood
     if "LikelihoodD" in mlist:
-        factory.BookMethod( TMVA.Types.kLikelihood, "LikelihoodD",
+        factory.BookMethod( dataloader, TMVA.Types.kLikelihood, "LikelihoodD",
                             "!H:!V:TransformOutput:PDFInterpol=Spline2:NSmoothSig[0]=20:NSmoothBkg[0]=20:NSmooth=5:NAvEvtPerBin=50:VarTransform=Decorrelate" )
 
     # PCA-transformed likelihood
     if "LikelihoodPCA" in mlist:
-        factory.BookMethod( TMVA.Types.kLikelihood, "LikelihoodPCA",
+        factory.BookMethod( dataloader, TMVA.Types.kLikelihood, "LikelihoodPCA",
                             "!H:!V:!TransformOutput:PDFInterpol=Spline2:NSmoothSig[0]=20:NSmoothBkg[0]=20:NSmooth=5:NAvEvtPerBin=50:VarTransform=PCA" ) 
 
     # Use a kernel density estimator to approximate the PDFs
     if "LikelihoodKDE" in mlist:
-        factory.BookMethod( TMVA.Types.kLikelihood, "LikelihoodKDE",
+        factory.BookMethod( dataloader, TMVA.Types.kLikelihood, "LikelihoodKDE",
                             "!H:!V:!TransformOutput:PDFInterpol=KDE:KDEtype=Gauss:KDEiter=Adaptive:KDEFineFactor=0.3:KDEborder=None:NAvEvtPerBin=50" ) 
 
     # Use a variable-dependent mix of splines and kernel density estimator
     if "LikelihoodMIX" in mlist:
-        factory.BookMethod( TMVA.Types.kLikelihood, "LikelihoodMIX",
+        factory.BookMethod( dataloader, TMVA.Types.kLikelihood, "LikelihoodMIX",
                             "!H:!V:!TransformOutput:PDFInterpolSig[0]=KDE:PDFInterpolBkg[0]=KDE:PDFInterpolSig[1]=KDE:PDFInterpolBkg[1]=KDE:PDFInterpolSig[2]=Spline2:PDFInterpolBkg[2]=Spline2:PDFInterpolSig[3]=Spline2:PDFInterpolBkg[3]=Spline2:KDEtype=Gauss:KDEiter=Nonadaptive:KDEborder=None:NAvEvtPerBin=50" ) 
 
     # Test the multi-dimensional probability density estimator
@@ -234,124 +244,123 @@ def main():
     #      "!H:!V:VolumeRangeMode=RMS:DeltaFrac=3:KernelEstimator=Gauss:GaussSigma=0.3" );
     if "PDERS" in mlist:
 # DEFAULT
-#         factory.BookMethod( TMVA.Types.kPDERS, "PDERS",
+#         factory.BookMethod( dataloader, TMVA.Types.kPDERS, "PDERS",
 #                             "!H:!V:NormTree=T:VolumeRangeMode=Adaptive:KernelEstimator=Gauss:GaussSigma=0.3:NEventsMin=400:NEventsMax=600" )
 # CHOOSE RIGID VOLUME SO IT DOESNT TAKE SO LONG
-        factory.BookMethod( TMVA.Types.kPDERS, "PDERS",
+        factory.BookMethod( dataloader, TMVA.Types.kPDERS, "PDERS",
                             "!H:!V:NormTree=T:VolumeRangeMode=Unscaled:KernelEstimator=Gauss:GaussSigma=0.3:NEventsMin=400:NEventsMax=600" )
 
 
-
     if "PDERSD" in mlist:
-        factory.BookMethod( TMVA.Types.kPDERS, "PDERSD",
+        factory.BookMethod( dataloader, TMVA.Types.kPDERS, "PDERSD",
                             "!H:!V:VolumeRangeMode=Adaptive:KernelEstimator=Gauss:GaussSigma=0.3:NEventsMin=400:NEventsMax=600:VarTransform=Decorrelate" )
 
     if "PDERSPCA" in mlist:
-        factory.BookMethod( TMVA.Types.kPDERS, "PDERSPCA",
+        factory.BookMethod( dataloader, TMVA.Types.kPDERS, "PDERSPCA",
                              "!H:!V:VolumeRangeMode=Adaptive:KernelEstimator=Gauss:GaussSigma=0.3:NEventsMin=400:NEventsMax=600:VarTransform=PCA" )
 
    # Multi-dimensional likelihood estimator using self-adapting phase-space binning
     if "PDEFoam" in mlist:
-        factory.BookMethod( TMVA.Types.kPDEFoam, "PDEFoam",
+        factory.BookMethod( dataloader, TMVA.Types.kPDEFoam, "PDEFoam",
                             "!H:!V:SigBgSeparate=F:TailCut=0.001:VolFrac=0.0666:nActiveCells=500:nSampl=2000:nBin=5:Nmin=100:Kernel=None:Compress=T" )
 
     if "PDEFoamBoost" in mlist:
-        factory.BookMethod( TMVA.Types.kPDEFoam, "PDEFoamBoost",
+        factory.BookMethod( dataloader, TMVA.Types.kPDEFoam, "PDEFoamBoost",
                             "!H:!V:Boost_Num=30:Boost_Transform=linear:SigBgSeparate=F:MaxDepth=4:UseYesNoCell=T:DTLogic=MisClassificationError:FillFoamWithOrigWeights=F:TailCut=0:nActiveCells=500:nBin=20:Nmin=400:Kernel=None:Compress=T" )
 
     # K-Nearest Neighbour classifier (KNN)
     if "KNN" in mlist:
-        factory.BookMethod( TMVA.Types.kKNN, "KNN",
+        factory.BookMethod( dataloader, TMVA.Types.kKNN, "KNN",
                             "H:nkNN=20:ScaleFrac=0.8:SigmaFact=1.0:Kernel=Gaus:UseKernel=F:UseWeight=T:!Trim" )
 
     # H-Matrix (chi2-squared) method
     if "HMatrix" in mlist:
-        factory.BookMethod( TMVA.Types.kHMatrix, "HMatrix", "!H:!V" )
+        factory.BookMethod( dataloader, TMVA.Types.kHMatrix, "HMatrix", "!H:!V" )
 
     # Linear discriminant (same as Fisher discriminant)
     if "LD" in mlist:
-        factory.BookMethod( TMVA.Types.kLD, "LD", "H:!V:VarTransform=None:CreateMVAPdfs:PDFInterpolMVAPdf=Spline2:NbinsMVAPdf=50:NsmoothMVAPdf=10" )
+        factory.BookMethod( dataloader, TMVA.Types.kLD, "LD", "H:!V:VarTransform=None:CreateMVAPdfs:PDFInterpolMVAPdf=Spline2:NbinsMVAPdf=50:NsmoothMVAPdf=10" )
 
     # Fisher discriminant (same as LD)
     if "Fisher" in mlist:
-        factory.BookMethod( TMVA.Types.kFisher, "Fisher", "H:!V:Fisher:CreateMVAPdfs:PDFInterpolMVAPdf=Spline2:NbinsMVAPdf=50:NsmoothMVAPdf=10" )
+        factory.BookMethod( dataloader, TMVA.Types.kFisher, "Fisher", "H:!V:Fisher:CreateMVAPdfs:PDFInterpolMVAPdf=Spline2:NbinsMVAPdf=50:NsmoothMVAPdf=10" )
 
     # Fisher with Gauss-transformed input variables
     if "FisherG" in mlist:
-        factory.BookMethod( TMVA.Types.kFisher, "FisherG", "H:!V:VarTransform=Gauss" )
+        factory.BookMethod( dataloader, TMVA.Types.kFisher, "FisherG", "H:!V:VarTransform=Gauss" )
 
     # Composite classifier: ensemble (tree) of boosted Fisher classifiers
     if "BoostedFisher" in mlist:
-        factory.BookMethod( TMVA.Types.kFisher, "BoostedFisher", 
+        factory.BookMethod( dataloader, TMVA.Types.kFisher, "BoostedFisher", 
                             "H:!V:Boost_Num=20:Boost_Transform=log:Boost_Type=AdaBoost:Boost_AdaBoostBeta=0.2" )
 
     # Function discrimination analysis (FDA) -- test of various fitters - the recommended one is Minuit (or GA or SA)
     if "FDA_MC" in mlist:
-        factory.BookMethod( TMVA.Types.kFDA, "FDA_MC",
+        factory.BookMethod( dataloader, TMVA.Types.kFDA, "FDA_MC",
                             "H:!V:Formula=(0)+(1)*x0+(2)*x1+(3)*x2+(4)*x3:ParRanges=(-1,1)(-10,10);(-10,10);(-10,10);(-10,10):FitMethod=MC:SampleSize=100000:Sigma=0.1" );
 
     if "FDA_GA" in mlist:
-        factory.BookMethod( TMVA.Types.kFDA, "FDA_GA",
+        factory.BookMethod( dataloader, TMVA.Types.kFDA, "FDA_GA",
                             "H:!V:Formula=(0)+(1)*x0+(2)*x1+(3)*x2+(4)*x3:ParRanges=(-1,1)(-10,10);(-10,10);(-10,10);(-10,10):FitMethod=GA:PopSize=300:Cycles=3:Steps=20:Trim=True:SaveBestGen=1" );
 
     if "FDA_SA" in mlist:
-        factory.BookMethod( TMVA.Types.kFDA, "FDA_SA",
+        factory.BookMethod( dataloader, TMVA.Types.kFDA, "FDA_SA",
                             "H:!V:Formula=(0)+(1)*x0+(2)*x1+(3)*x2+(4)*x3:ParRanges=(-1,1)(-10,10);(-10,10);(-10,10);(-10,10):FitMethod=SA:MaxCalls=15000:KernelTemp=IncAdaptive:InitialTemp=1e+6:MinTemp=1e-6:Eps=1e-10:UseDefaultScale" );
 
     if "FDA_MT" in mlist:
-        factory.BookMethod( TMVA.Types.kFDA, "FDA_MT",
+        factory.BookMethod( dataloader, TMVA.Types.kFDA, "FDA_MT",
                             "H:!V:Formula=(0)+(1)*x0+(2)*x1+(3)*x2+(4)*x3:ParRanges=(-1,1)(-10,10);(-10,10);(-10,10);(-10,10):FitMethod=MINUIT:ErrorLevel=1:PrintLevel=-1:FitStrategy=2:UseImprove:UseMinos:SetBatch" );
 
     if "FDA_GAMT" in mlist:
-        factory.BookMethod( TMVA.Types.kFDA, "FDA_GAMT",
+        factory.BookMethod( dataloader, TMVA.Types.kFDA, "FDA_GAMT",
                             "H:!V:Formula=(0)+(1)*x0+(2)*x1+(3)*x2+(4)*x3:ParRanges=(-1,1)(-10,10);(-10,10);(-10,10);(-10,10):FitMethod=GA:Converger=MINUIT:ErrorLevel=1:PrintLevel=-1:FitStrategy=0:!UseImprove:!UseMinos:SetBatch:Cycles=1:PopSize=5:Steps=5:Trim" );
 
     if "FDA_MCMT" in mlist:
-        factory.BookMethod( TMVA.Types.kFDA, "FDA_MCMT",
+        factory.BookMethod( dataloader, TMVA.Types.kFDA, "FDA_MCMT",
                             "H:!V:Formula=(0)+(1)*x0+(2)*x1+(3)*x2+(4)*x3:ParRanges=(-1,1)(-10,10);(-10,10);(-10,10);(-10,10):FitMethod=MC:Converger=MINUIT:ErrorLevel=1:PrintLevel=-1:FitStrategy=0:!UseImprove:!UseMinos:SetBatch:SampleSize=20" );
 
     # TMVA ANN: MLP (recommended ANN) -- all ANNs in TMVA are Multilayer Perceptrons
     if "MLP" in mlist:
-        factory.BookMethod( TMVA.Types.kMLP, "MLP", "H:!V:NeuronType=tanh:VarTransform=N:NCycles=600:HiddenLayers=N+5:TestRate=5:!UseRegulator" )
+        factory.BookMethod( dataloader, TMVA.Types.kMLP, "MLP", "H:!V:NeuronType=tanh:VarTransform=N:NCycles=600:HiddenLayers=N+5:TestRate=5:!UseRegulator" )
 
     if "MLPBFGS" in mlist:
-        factory.BookMethod( TMVA.Types.kMLP, "MLPBFGS", "H:!V:NeuronType=tanh:VarTransform=N:NCycles=600:HiddenLayers=N+5:TestRate=5:TrainingMethod=BFGS:!UseRegulator" )
+        factory.BookMethod( dataloader, TMVA.Types.kMLP, "MLPBFGS", "H:!V:NeuronType=tanh:VarTransform=N:NCycles=600:HiddenLayers=N+5:TestRate=5:TrainingMethod=BFGS:!UseRegulator" )
 
     if "MLPBNN" in mlist:
-        factory.BookMethod( TMVA.Types.kMLP, "MLPBNN", "H:!V:NeuronType=tanh:VarTransform=N:NCycles=600:HiddenLayers=N+5:TestRate=5:TrainingMethod=BFGS:UseRegulator" ) # BFGS training with bayesian regulators
+        factory.BookMethod( dataloader, TMVA.Types.kMLP, "MLPBNN", "H:!V:NeuronType=tanh:VarTransform=N:NCycles=600:HiddenLayers=N+5:TestRate=5:TrainingMethod=BFGS:UseRegulator" ) # BFGS training with bayesian regulators
 
     # CF(Clermont-Ferrand)ANN
     if "CFMlpANN" in mlist:
-        factory.BookMethod( TMVA.Types.kCFMlpANN, "CFMlpANN", "!H:!V:NCycles=2000:HiddenLayers=N+1,N"  ) # n_cycles:#nodes:#nodes:...  
+        factory.BookMethod( dataloader, TMVA.Types.kCFMlpANN, "CFMlpANN", "!H:!V:NCycles=2000:HiddenLayers=N+1,N"  ) # n_cycles:#nodes:#nodes:...  
 
     # Tmlp(Root)ANN
     if "TMlpANN" in mlist:
-        factory.BookMethod( TMVA.Types.kTMlpANN, "TMlpANN", "!H:!V:NCycles=200:HiddenLayers=N+1,N:LearningMethod=BFGS:ValidationFraction=0.3"  ) # n_cycles:#nodes:#nodes:...
+        factory.BookMethod( dataloader, TMVA.Types.kTMlpANN, "TMlpANN", "!H:!V:NCycles=200:HiddenLayers=N+1,N:LearningMethod=BFGS:ValidationFraction=0.3"  ) # n_cycles:#nodes:#nodes:...
 
     # Support Vector Machine
     if "SVM" in mlist:
-        factory.BookMethod( TMVA.Types.kSVM, "SVM", "Gamma=0.25:Tol=0.001:VarTransform=Norm" )
+        factory.BookMethod( dataloader, TMVA.Types.kSVM, "SVM", "Gamma=0.25:Tol=0.001:VarTransform=Norm" )
 
     # Boosted Decision Trees
     if "BDTG" in mlist:
-        factory.BookMethod( TMVA.Types.kBDT, "BDTG",
+        factory.BookMethod( dataloader, TMVA.Types.kBDT, "BDTG",
                             "!H:!V:NTrees=1000:MinNodeSize=1.5%:BoostType=Grad:Shrinkage=0.10:UseBaggedBoost:BaggedSampleFraction=0.5:nCuts=20:MaxDepth=2" )                        
 
     if "BDT" in mlist:
-        factory.BookMethod( TMVA.Types.kBDT, "BDT",
+        factory.BookMethod( dataloader, TMVA.Types.kBDT, "BDT",
                            "!H:!V:NTrees=850:MinNodeSize=2.5%:MaxDepth=3:BoostType=AdaBoost:AdaBoostBeta=0.5:UseBaggedBoost:BaggedSampleFraction=0.5:SeparationType=GiniIndex:nCuts=20" )
 
     if "BDTB" in mlist:
-        factory.BookMethod( TMVA.Types.kBDT, "BDTB",
+        factory.BookMethod( dataloader, TMVA.Types.kBDT, "BDTB",
                            "!H:!V:NTrees=400:BoostType=Bagging:SeparationType=GiniIndex:nCuts=20" )
 
     if "BDTD" in mlist:
-        factory.BookMethod( TMVA.Types.kBDT, "BDTD",
+        factory.BookMethod( dataloader, TMVA.Types.kBDT, "BDTD",
                            "!H:!V:NTrees=400:MinNodeSize=5%:MaxDepth=3:BoostType=AdaBoost:SeparationType=GiniIndex:nCuts=20:VarTransform=Decorrelate" )
 
     # RuleFit -- TMVA implementation of Friedman's method
     if "RuleFit" in mlist:
-        factory.BookMethod( TMVA.Types.kRuleFit, "RuleFit",
+        factory.BookMethod( dataloader, TMVA.Types.kRuleFit, "RuleFit",
                             "H:!V:RuleFitModule=RFTMVA:Model=ModRuleLinear:MinImp=0.001:RuleMinDist=0.001:NTrees=20:fEventsMin=0.01:fEventsMax=0.5:GDTau=-1.0:GDTauPrec=0.01:GDStep=0.01:GDNSteps=10000:GDErrScale=1.02" )
 
     # --------------------------------------------------------------------------------------------------
