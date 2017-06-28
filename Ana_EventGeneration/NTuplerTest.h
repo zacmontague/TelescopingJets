@@ -13,6 +13,8 @@
 #include "TChain.h"
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <vector>
 #include <string>
 #include <cstdio>
@@ -96,6 +98,9 @@ vector<double>* fspart_m;
 TTree *treeout;
 TFile *fileout;
 
+ifstream data_file;
+ofstream Tjet_variable_file;
+
 ///////////////////////////
 //for temporary storage
 ///////////////////////////
@@ -110,9 +115,14 @@ TLorentzVector truth_H;
 TLorentzVector tau_axis1;
 TLorentzVector tau_axis2;
 TLorentzVector tau_axis3;
+TLorentzVector tau_axis4;
+TLorentzVector tau_axis5;
 TLorentzVector Tsubjet1;
 TLorentzVector Tsubjet2;
 TLorentzVector Tsubjet3;
+TLorentzVector Tsubjet4;
+TLorentzVector Tsubjet5;
+
 TLorentzVector particle;
 TLorentzVector truth;
 
@@ -139,10 +149,11 @@ double Tprun_volatility, Ttrim_volatility, TakTrecl_volatility, TkTrecl_volatili
 double Tsubj_angle;
 
 const double M0 = 0.1;
+const double mW = 80.4;
 const double Rfat = 1.0;
 const double zcut = 0.1, dcut0 = 0.5;
 const double Rfilt0 = 0.3, fcut0 = 0.05;
-const double jet_pt_cut_low = 800, jet_pt_cut_up = 1000;
+const double jet_pt_cut_low = 350, jet_pt_cut_up = 500;
 const double jet_eta_cut_low = -1.2, jet_eta_cut_up = 1.2;
 const double jet_mass_cut_low = 70, jet_mass_cut_up = 90;
 ///////////////////////////////////////////////////////////////
@@ -161,10 +172,20 @@ double tempJet_D2;
 double tempJet_TJet_m1;
 double tempJet_TJet_m2;
 
+double tempJet_T1jet_angle;
+double tempJet_T1jet;
 double tempJet_T2jet_angle;
 double tempJet_T2jet;
 double tempJet_T3jet_angle;
+double tempJet_T3jet_angle1;
+double tempJet_T3jet_angle2;
 double tempJet_T3jet;
+double tempJet_T3jet_W;
+double tempJet_T3jet_mW;
+double tempJet_T4jet_angle;
+double tempJet_T4jet;
+double tempJet_T5jet_angle;
+double tempJet_T5jet;
 double tempJet_Tpruning;
 double tempJet_Ttrimming;
 double tempJet_Taktreclustering;
@@ -185,10 +206,20 @@ vector<double> TruthRaw_Tau32;
 vector<double> TruthRaw_D2;
 vector<double> TruthRaw_TJet_m1;
 vector<double> TruthRaw_TJet_m2;
+vector<double> TruthRaw_T1jet_angle;
+vector<double> TruthRaw_T1jet;
 vector<double> TruthRaw_T2jet_angle;
 vector<double> TruthRaw_T2jet;
 vector<double> TruthRaw_T3jet_angle;
+vector<double> TruthRaw_T3jet_angle1;
+vector<double> TruthRaw_T3jet_angle2;
 vector<double> TruthRaw_T3jet;
+vector<double> TruthRaw_T3jet_W;
+vector<double> TruthRaw_T3jet_mW;
+vector<double> TruthRaw_T4jet_angle;
+vector<double> TruthRaw_T4jet;
+vector<double> TruthRaw_T5jet_angle;
+vector<double> TruthRaw_T5jet;
 vector<double> TruthRaw_Tpruning;
 vector<double> TruthRaw_Ttrimming;
 vector<double> TruthRaw_Taktreclustering;
@@ -204,10 +235,20 @@ vector<double> TruthRawTrim_Tau32;
 vector<double> TruthRawTrim_D2;
 vector<double> TruthRawTrim_TJet_m1;
 vector<double> TruthRawTrim_TJet_m2;
+vector<double> TruthRawTrim_T1jet_angle;
+vector<double> TruthRawTrim_T1jet;
 vector<double> TruthRawTrim_T2jet_angle;
 vector<double> TruthRawTrim_T2jet;
 vector<double> TruthRawTrim_T3jet_angle;
+vector<double> TruthRawTrim_T3jet_angle1;
+vector<double> TruthRawTrim_T3jet_angle2;
 vector<double> TruthRawTrim_T3jet;
+vector<double> TruthRawTrim_T3jet_W;
+vector<double> TruthRawTrim_T3jet_mW;
+vector<double> TruthRawTrim_T4jet_angle;
+vector<double> TruthRawTrim_T4jet;
+vector<double> TruthRawTrim_T5jet_angle;
+vector<double> TruthRawTrim_T5jet;
 vector<double> TruthRawTrim_Tpruning;
 vector<double> TruthRawTrim_Ttrimming;
 vector<double> TruthRawTrim_Taktreclustering;
@@ -247,8 +288,21 @@ struct TSub{
   double volatility;
 };
 
+struct T3Sub{
+    double min_angle;
+    double mid_angle;
+    double max_angle;
+    double volatility;
+    double mass_W;
+    double volatility_mass_W;
+};
+
+TSub T_1Subjet(PseudoJet& input, double R_min, double R_max, int N_R);
 TSub T_2Subjet(PseudoJet& input, double R_min, double R_max, int N_R);
-TSub T_3Subjet(PseudoJet& input, double R_min, double R_max, int N_R);
+T3Sub T_3Subjet(PseudoJet& input, double R_min, double R_max, int N_R);
+TSub T_4Subjet(PseudoJet& input, double R_min, double R_max, int N_R);
+TSub T_5Subjet(PseudoJet& input, double R_min, double R_max, int N_R);
+
 
 double T_Pruning(PseudoJet& input, double dcut_min, double dcut_max, int N_dcut);
 double T_Trimming(PseudoJet& input, double fcut_min, double fcut_max, int N_fcut);
