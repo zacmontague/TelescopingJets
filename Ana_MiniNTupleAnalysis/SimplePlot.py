@@ -7,9 +7,8 @@ from AtlasStyle import *
 SetAtlasStyle();
 gStyle.SetPalette(1)
 
-
 #where are the data stored
-InputDir="../Ana_EventGeneration/GenNTuple/20170428/"
+InputDir="../Ana_EventGeneration/GenNTuple/20170830/"
 
 #where will you put the plots
 outputdir = "myPlots/"
@@ -17,8 +16,8 @@ outputdir = MakeNewDir(outputdir)
 
 c = TCanvas("c","c",200,200)
 
-variable = "TruthRaw_TJet_m1"
-range    = "100,0,4"
+variable = "TruthRaw_pt"
+range    = "100,0,1000"
 
 h1 = GetHist1D(InputDir+"ntuple_ww_0.root",    "JetTree", variable, range, "TruthRawTrim_m>60")
 h2 = GetHist1D(InputDir+"ntuple_dijet_0.root", "JetTree", variable, range, "TruthRawTrim_m>60")

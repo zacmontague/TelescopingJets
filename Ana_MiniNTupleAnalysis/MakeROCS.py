@@ -7,6 +7,11 @@ from AtlasStyle import *
 SetAtlasStyle();
 gStyle.SetPalette(1)
 
+#sigFile="ntuple_ttbar_2000.root"
+#bkgFile="ntuple_dijet_800_1400.root"
+sigFile="ntuple_ttbar.root"
+bkgFile="ntuple_dijet.root"
+
 
 def SignalBGCompare1D(InputDir, alg, variable, range, logy, pt1, pt2, m1, m2, outputdir):
     '''Implementation of simple signal and background comparison'''
@@ -28,8 +33,8 @@ def SignalBGCompare1D(InputDir, alg, variable, range, logy, pt1, pt2, m1, m2, ou
     #Get signal and background histograms
     histname = alg+"_"+variable
     print histname
-    hsig = GetHist1D(InputDir+"ntuple_wz.root",    "JetTree", histname, range, weight+"*("+alg+"_flavor==1)")
-    hbkg = GetHist1D(InputDir+"ntuple_dijet.root", "JetTree", histname, range, weight+"*("+alg+"_flavor==-1)")
+    hsig = GetHist1D(InputDir+sigFile,    "JetTree", histname, range, weight+"*("+alg+"_flavor==3)")
+    hbkg = GetHist1D(InputDir+bkgFile, "JetTree", histname, range, weight+"*("+alg+"_flavor==0)")
 
     #Normalize them to unity
     hsig = NormalizeHist(hsig)
@@ -110,8 +115,8 @@ def SignalBGCompare1D(InputDir, alg, variable, range, logy, pt1, pt2, m1, m2, ou
     ATLASLabel(   0.20,0.85,1,0.1,0.03,"#sqrt{s}=13 TeV")
     myText(       0.20,0.80,1,0.03, TranslateAlg(alg))
     myText(       0.20,0.75,1,0.03, TranslateRegion(pt1,pt2,m1,m2))
-    rocbox3=myLineBoxText(0.70, 0.85, 4, 1, 1, 0, 0.1, 0.08, "W jets")
-    rocbox4=myLineBoxText(0.70, 0.80, 2, 1, 1, 0, 0.1, 0.08, "QCD jets")
+    rocbox3=myLineBoxText(0.70, 0.85, 4, 1, 1, 0, 0.1, 0.08, "Top Jets")
+    rocbox4=myLineBoxText(0.70, 0.80, 2, 1, 1, 0, 0.1, 0.08, "QCD Jets")
     c.SetLogy(logy)
     c.SaveAs(outputdir+"SignalBGCompare_"+alg+"_"+variable+"_pt"+pt1+pt2+".eps")
 
@@ -127,8 +132,8 @@ def GetMassEffs(InputDir, alg, m1, m2, outputdir):
     #Get signal and background histograms
     histname=alg+"_m"
     print histname
-    hsig = GetHist1D(InputDir+"ntuple_wz.root",    "JetTree", histname, range, weight+"*("+alg+"_flavor==1)")
-    hbkg = GetHist1D(InputDir+"ntuple_dijet.root", "JetTree", histname, range, weight+"*("+alg+"_flavor==-1)")
+    hsig = GetHist1D(InputDir+sigFile,    "JetTree", histname, range, weight+"*("+alg+"_flavor==3)")
+    hbkg = GetHist1D(InputDir+bkgFile, "JetTree", histname, range, weight+"*("+alg+"_flavor==0)")
 
     #Normalize them to unity
     hsig = NormalizeHist(hsig)
@@ -741,7 +746,7 @@ def Make2DROC(alg, varX, varXcutdir, varY, varYcutdir, sig, bkg, rankMetric, sta
     sig.GetYaxis().SetTitle(TranslateVar(varY))
     sig.Draw("colz")
     ATLASLabel(   0.20,0.90,1,0.12,0.04,"#sqrt{s}=13 TeV")
-    myText(       0.20,0.80,1,0.04, "W Jets")
+    myText(       0.20,0.80,1,0.04, "Top Jets")
     myText(       0.50,0.90,1,0.04, TranslateAlg(alg))
     myText(       0.20,0.70,1,0.04, TranslateRegion(pt1,pt2,m1,m2))
     myText(       0.50,0.80,1,0.04, "corr = "+str(round(corrsig,4)))
@@ -784,7 +789,7 @@ def Make2DROC(alg, varX, varXcutdir, varY, varYcutdir, sig, bkg, rankMetric, sta
         sig.Draw("colz")
         ATLASLabel(   0.18,0.90,1,0.09,0.030,"#sqrt{s}=13 TeV")
         myText(       0.20,0.70,1,0.04, TranslateRegion(pt1,pt2,m1,m2))        
-        myText(       0.46,0.90,1,0.030, "W Jets")
+        myText(       0.46,0.90,1,0.030, "Top Jets")
         myText(       0.46,0.86,1,0.030, TranslateAlg(alg))
         csep.SetLogz(1)
         csep.SaveAs(outputdir+"2DSpectrum_"+alg+"_"+varX+"_"+varY+"_pt"+pt1+pt2+"_sig_log.eps")
@@ -851,7 +856,7 @@ def SignalBGCompare2D(InputDir, alg, var1, var1cutdir, var2, var2cutdir, range1,
 
     weight=""
     weight+="("
-    weight+=alg+"__pt>"+pt1+" && "
+    weight+=alg+"_pt>"+pt1+" && "
     weight+=alg+"_pt<"+pt2
     if m1!="0":
         weight+=" && "+alg+"_m>"+m1+" && "
@@ -859,8 +864,8 @@ def SignalBGCompare2D(InputDir, alg, var1, var1cutdir, var2, var2cutdir, range1,
     weight+=")"
     
     #Get signal and background histograms
-    hsig = GetHist2D(InputDir+"ntuple_wz.root",    "JetTree", alg+"_"+var1, alg+"_"+var2, range1, range2, weight+"*("+alg+"_flavor==1)")
-    hbkg = GetHist2D(InputDir+"ntuple_dijet.root", "JetTree", alg+"_"+var1, alg+"_"+var2, range1, range2, weight+"*("+alg+"_flavor==1)")
+    hsig = GetHist2D(InputDir+sigFile, "JetTree", alg+"_"+var1, alg+"_"+var2, range1, range2, weight+"*("+alg+"_flavor==3)")
+    hbkg = GetHist2D(InputDir+bkgFile, "JetTree", alg+"_"+var1, alg+"_"+var2, range1, range2, weight+"*("+alg+"_flavor==0)")
 
     # rebin and normalize
     rebinX=2
@@ -894,7 +899,7 @@ def SignalBGCompare2D(InputDir, alg, var1, var1cutdir, var2, var2cutdir, range1,
     hsig.GetXaxis().SetTitle(var1)
     hsig.GetYaxis().SetTitle(var2)
     ATLASLabel(   0.20,0.90,1,0.12,0.04,"#sqrt{s}=13 TeV")
-    myText(       0.20,0.80,1,0.04, "W Jets")
+    myText(       0.20,0.80,1,0.04, "Top Jets")
     myText(       0.20,0.75,1,0.04, TranslateAlg(alg))
     myText(       0.20,0.80,1,0.04, TranslateRegion(pt1,pt2,m1,m2))
     myText(       0.20,0.65,1,0.04, "corr = "+str(corrsig))
@@ -948,8 +953,8 @@ def SignalBGCompare2D(InputDir, alg, var1, var1cutdir, var2, var2cutdir, range1,
 
     ATLASLabel(    0.20,0.90,1,0.1,0.03,"#sqrt{s}=13 TeV")
     myText(       0.20,0.80,1,0.04, TranslateRegion(pt1,pt2,m1,m2))
-    box0=myLineBoxText(0.67, 0.80, 2, 2, 2, 3004, 0.1, 0.1, "QCD jets")
-    box1=myLineBoxText(0.67, 0.75, 4, 1, 4, 3005, 0.1, 0.1, "W jets")
+    box0=myLineBoxText(0.67, 0.80, 2, 2, 2, 3004, 0.1, 0.1, "QCD Jets")
+    box1=myLineBoxText(0.67, 0.75, 4, 1, 4, 3005, 0.1, 0.1, "Top Jets")
     myText(        0.60,0.70,1,0.03, "2D Likelihood")
     myText(        0.60,0.65,1,0.03, "0 = Signal-like")
     myText(        0.60,0.60,1,0.03, "1 = Background-like")
@@ -995,8 +1000,8 @@ def GetCorrelationAndSeparationSigBG(InputDir, alg, var1, var2, range1, range2, 
     weight+=alg+"_pt<"+pt2+")"
     
     #Get signal and background histograms
-    hsig = GetHist2D(InputDir+"ntuple_wz.root",    "JetTree", alg+"_"+var1, alg+"_"+var2, range1, range2, weight+"*("+alg+"_flavor==1)")
-    hbkg = GetHist2D(InputDir+"ntuple_dijet.root", "JetTree", alg+"_"+var1, alg+"_"+var2, range1, range2, weight+"*("+alg+"_flavor==1)")
+    hsig = GetHist2D(InputDir+sigFile, "JetTree", alg+"_"+var1, alg+"_"+var2, range1, range2, weight+"*("+alg+"_flavor==3)")
+    hbkg = GetHist2D(InputDir+bkgFile, "JetTree", alg+"_"+var1, alg+"_"+var2, range1, range2, weight+"*("+alg+"_flavor==0)")
 
     
     # NORMALIZE
@@ -1026,7 +1031,7 @@ def GetCorrelationAndSeparationSigBG(InputDir, alg, var1, var2, range1, range2, 
     hsig.GetXaxis().SetTitle(var1)
     hsig.GetYaxis().SetTitle(var2)
     ATLASLabel(   0.20,0.90,1,0.12,0.04,"#sqrt{s}=13 TeV")
-    myText(       0.20,0.80,1,0.04, "W Jets")
+    myText(       0.20,0.80,1,0.04, "Top Jets")
     myText(       0.20,0.75,1,0.04, TranslateAlg(alg))
     myText(       0.20,0.80,1,0.04, TranslateRegion(pt1,pt2,m1,m2))
     myText(       0.20,0.65,1,0.04, "corr = "+str(corrsig))
@@ -1045,7 +1050,7 @@ def GetCorrelationAndSeparationSigBG(InputDir, alg, var1, var2, range1, range2, 
     proj1_bkg.Draw("hist")
     proj1_sig.Draw("histsame")
     ATLASLabel(   0.20,0.90,1,0.12,0.04,"#sqrt{s}=13 TeV")
-    bx1=myLineBoxText(0.56, 0.80, 2, 2, 0, 0, 0.08, 0.08, "W Jets")
+    bx1=myLineBoxText(0.56, 0.80, 2, 2, 0, 0, 0.08, 0.08, "Top Jets")
     bx2=myLineBoxText(0.75, 0.75, 4, 1, 0, 0, 0.08, 0.08, "QCD Jets")
     myText(       0.20,0.75,1,0.04, TranslateAlg(alg))
     myText(       0.20,0.65,1,0.04, "corr = "+str(corrbkg))
@@ -1056,7 +1061,7 @@ def GetCorrelationAndSeparationSigBG(InputDir, alg, var1, var2, range1, range2, 
     proj2_bkg.Draw("hist")
     proj2_sig.Draw("histsame")
     ATLASLabel(   0.20,0.90,1,0.12,0.04,"#sqrt{s}=13 TeV")
-    bx1=myLineBoxText(0.50, 0.80, 2, 2, 0, 0, 0.08, 0.08, "W Jets")
+    bx1=myLineBoxText(0.50, 0.80, 2, 2, 0, 0, 0.08, 0.08, "Top Jets")
     bx2=myLineBoxText(0.50, 0.75, 4, 1, 0, 0, 0.08, 0.08, "QCD Jets")
     myText(       0.20,0.75,1,0.04, TranslateAlg(alg))
     myText(       0.20,0.80,1,0.04, TranslateRegion(pt1,pt2,m1,m2))
@@ -1115,7 +1120,7 @@ def MakeMVAROCS(outfilename,outputdir,mvatypes):
     print outfilename
     fin = TFile(outfilename)
     fin.ls()
-    PlotTree = fin.Get("TestTree")
+    PlotTree = fin.Get("dataset/TestTree")
     PlotTree.Print()
 
     c = TCanvas("c","c",300,300)
@@ -1150,7 +1155,7 @@ def MakeMVAROCS(outfilename,outputdir,mvatypes):
         ATLASLabel(   0.20,0.85,1,0.12,0.04,"#sqrt{s}=13 TeV")
         myText(       0.20,0.80,1,0.03, TranslateAlg(alg))
         myText(       0.20,0.75,1,0.03, TranslateRegion(pt1,pt2,m1,m2))
-        bx1=myLineBoxText(0.70, 0.85, 2, 1, 0, 0, 0.08, 0.1, "W Jets")
+        bx1=myLineBoxText(0.70, 0.85, 2, 1, 0, 0, 0.08, 0.1, "Top Jets")
         bx2=myLineBoxText(0.70, 0.80, 4, 1, 0, 0, 0.08, 0.1, "QCD Jets")
 
         c.SaveAs(outputdir+"SigBG_pt"+pt1+pt2+"_"+mvatype+".eps")
@@ -1213,7 +1218,7 @@ def OverlayROCS(outputdir1,outputdir2,outputdir3,outputdir4,alg,var0,var1,pt1,pt
     
     path = outputdir3+"TMVAOutput__"+alg+"__"+var0+"."+var1+"__pt"+pt1+pt2+"_ROCSBDT.root"
     f7   = TFile(path)
-    roc7 = f5.Get("ROC_L")
+    roc7 = f7.Get("ROC_L")
     roc7.SetFillColor(95)
     roc7.SetLineColor(95)
     roc7.SetFillStyle(3001)
@@ -1243,6 +1248,85 @@ def OverlayROCS(outputdir1,outputdir2,outputdir3,outputdir4,alg,var0,var1,pt1,pt
     rocbox4=myLineBoxText(0.26, 0.45, 95, 1, 1, 0, 0.1, 0.08, "Boosted Decision Tree")
     cgr.SaveAs(outputdir4+"FullROCComparison_"+alg+"_"+var0+"_"+var1+"_pt"+pt1+pt2+".eps")
 
+
+def OverlayTJetROCS(outputdir1,outputdir2,outputdir3,outputdir4,alg,pt1,pt2,m1,m2,mvatypes,VarsAndRanges):
+
+
+    path = outputdir1+"ROC_"+alg+"_Tau32_pt"+pt1+pt2+".root"
+    f1   = TFile(path)
+    roc1 = f1.Get("ROC_L")
+    roc1.SetFillColor(2)
+    roc1.SetLineColor(2)
+    roc1.SetFillStyle(3001)
+
+    path = outputdir1+"ROC_"+alg+"_T2jet_pt"+pt1+pt2+".root"
+    f2   = TFile(path)
+    roc2 = f2.Get("ROC_R")
+    roc2.SetFillColor(4)
+    roc2.SetLineColor(4)
+    roc2.SetFillStyle(3001)
+
+    path = outputdir1+"ROC_"+alg+"_T2jet_angle_pt"+pt1+pt2+".root"
+    f3   = TFile(path)
+    roc3 = f3.Get("ROC_L")
+    roc3.SetFillColor(3)
+    roc3.SetLineColor(3)
+    roc3.SetFillStyle(3001)
+
+    path = outputdir1+"ROC_"+alg+"_T3jet_pt"+pt1+pt2+".root"
+    f4   = TFile(path)
+    roc4 = f4.Get("ROC_L")
+    roc4.SetFillColor(1)
+    roc4.SetLineColor(1)
+    roc4.SetFillStyle(3001)
+
+    path = outputdir1+"ROC_"+alg+"_T3jet_angle_pt"+pt1+pt2+".root"
+    f5   = TFile(path)
+    roc5 = f5.Get("ROC_R")
+    roc5.SetFillColor(6)
+    roc5.SetLineColor(6)
+    roc5.SetFillStyle(3001)
+
+    path = outputdir1+"ROC_"+alg+"_Tau21_pt"+pt1+pt2+".root"
+    f6   = TFile(path)
+    roc6 = f6.Get("ROC_R")
+    roc6.SetFillColor(9)
+    roc6.SetLineColor(9)
+    roc6.SetFillStyle(3001)
+
+
+    path = outputdir3+"TMVAOutput__"+alg+"__BDTAllTjet__pt"+pt1+pt2+"_ROCSBDT.root"
+    f7   = TFile(path)
+    roc7 = f7.Get("ROC_L")
+    roc7.SetFillColor(95)
+    roc7.SetLineColor(95)
+    roc7.SetFillStyle(3001)
+
+    cgr = TCanvas("cgr","cgr",500,500);
+    gr=MakeReferenceGraph(1)
+    gr.Draw("ACE3")
+
+    roc1.Draw("CE3same")
+    roc6.Draw("CE3same")
+    roc2.Draw("CE3same")
+    roc3.Draw("CE3same")
+    roc4.Draw("CE3same")
+    roc5.Draw("CE3same")
+    roc7.Draw("CE3same")
+
+    ATLASLabel(   0.20,0.90,1,0.1,0.03,"#sqrt{s}=13 TeV")
+    myText(       0.20,0.85,1,0.03, TranslateAlg(alg))
+    myText(       0.20,0.80,1,0.03, TranslateRegion(pt1,pt2,m1,m2))
+    rocbox1=myLineBoxText(0.26, 0.75, 2, 1, 2, 0, 0.1, 0.08, TranslateVar("Tau32"))
+    rocbox6=myLineBoxText(0.26, 0.70, 9, 1, 1, 0, 0.1, 0.08, TranslateVar("Tau21"))
+    rocbox2=myLineBoxText(0.26, 0.65, 4, 1, 4, 0, 0.1, 0.08, TranslateVar("T2jet"))
+    rocbox3=myLineBoxText(0.26, 0.60, 3, 1, 1, 0, 0.1, 0.08, TranslateVar("T2jet_angle"))
+    rocbox4=myLineBoxText(0.26, 0.55, 1, 1, 1, 0, 0.1, 0.08, TranslateVar("T3jet"))
+    rocbox5=myLineBoxText(0.26, 0.50, 6, 1, 1, 0, 0.1, 0.08, TranslateVar("T3jet_angle"))
+    rocbox7=myLineBoxText(0.26, 0.45, 95, 1, 1, 0, 0.1, 0.08, "Boosted Decision Tree")
+    cgr.SaveAs(outputdir4+"FullROCComparison_"+alg+"_BDTAllTjet_pt"+pt1+pt2+".eps")
+
+
 ############################
 #
 #
@@ -1251,15 +1335,16 @@ def OverlayROCS(outputdir1,outputdir2,outputdir3,outputdir4,alg,var0,var1,pt1,pt
 #
 ############################
 
-flag_singlevariable  = True
-flag_2variable_hand  = False
-flag_2variable_tmva  = False
-flag_rocoverlay      = False
+flag_singlevariable  = True     
+flag_2variable_hand  = True
+flag_AllTjet_tmva    = True
+flag_rocoverlay      = True
 
 #==========================
 #Set output directory name
 #==========================
-InputDir="../Data/"
+#InputDir="../gen_20170529/"
+InputDir="../gen_20170627/"
 
 outputdir1 = "OutputSingleVariable/"
 outputdir2 = "OutputTwoVariableByHand/"
@@ -1273,12 +1358,22 @@ outputdir4 = MakeNewDir(outputdir4)
 
 #ALGORITHMS
 algs=[]
-algs.append("TruthRaw")
-algs.append("RecoRaw")
+algs.append("TruthRawTrim")
+#algs.append("RecoRaw")
 
 # VARIABLES AND RANGES
 VarsAndRanges={}
-VarsAndRanges["Tau21"]      = [0, "100,0,1", "100,0,1" ,"L"]
+VarsAndRanges["Tau21"]      = [0, "100,0,1", "100,0,1" ,"R"]
+VarsAndRanges["Tau32"]      = [0, "100,0,1", "100,0,1" ,"L"]
+VarsAndRanges["T1jet"]      = [0, "100,0,1", "100,0,1" ,"R"]
+VarsAndRanges["T2jet"]      = [0, "100,0,1", "100,0,1" ,"R"]
+VarsAndRanges["T2jet_angle"]  = [0, "100,0,1.0", "100,0,0.5" ,"L"]
+VarsAndRanges["T3jet"]      = [0, "100,0,1", "100,0,1" ,"L"]
+VarsAndRanges["T3jet_mW"]      = [0, "100,0,1", "100,0,1" ,"L"]
+VarsAndRanges["T3jet_W"]      = [0, "100,40,120", "100,40,120" ,"L"]
+VarsAndRanges["T3jet_angle"]  = [0, "100,0,0.5", "100,0,0.5" ,"R"]
+#VarsAndRanges["T3jet_angle1"]  = [0, "100,0,0.5", "100,0,0.5" ,"L"]
+#VarsAndRanges["T3jet_angle2"]  = [0, "100,0,0.5", "100,0,0.5" ,"L"]
 # VarsAndRanges["D2"]         = [0, "100,0,5", "100,0,5" ,"L"]
 # VarsAndRanges["C2"]         = [0, "100,0,1", "100,0,1" ,"L"]
 # VarsAndRanges["TJet_Tau21"]      = [0, "100,0,1", "100,0,1" ,"L"]
@@ -1295,14 +1390,14 @@ for alg in algs:
 
     print "\n\nGetting mass optimization"
     CutRegions=[]
-    CutRegions.append("1")
-    #CutRegions.append("2")
+    #CutRegions.append("1")
+    CutRegions.append("3")
 
     for CutRegion in CutRegions:
 
         if CutRegion=="1": pt1="350"; pt2="500";   m1="60"; m2="100";
-        if CutRegion=="2": pt1="600"; pt2="1000";  m1="60"; m2="100";
-
+        if CutRegion=="2": pt1="800"; pt2="1000";  m1="140"; m2="220";
+        if CutRegion=="3": pt1="800"; pt2="1000";  m1="160"; m2="190"; #YT
         ##################################################################
         # Get mass window efficiency
         ##################################################################
@@ -1322,13 +1417,14 @@ for alg in algs:
         # ROC curves for two variable combinations defined below
         ##################################################################
         TwoVarCombos = []
-        TwoVarCombos.append(["TJet_Tau21","Tau21"])
+        #TwoVarCombos.append(["Tau21","T2jet_angle"])
+        TwoVarCombos.append(["Tau32","T3jet"])
 
         for combo in TwoVarCombos:
-        
+        #if 1:
             var0 = combo[0]
             var1 = combo[1]
-            
+
             print var0,var1
 
             if flag_2variable_hand:
@@ -1340,19 +1436,21 @@ for alg in algs:
                 #Do simple likelihood combination
                 SignalBGCompare2D(InputDir, alg, var0, VarsAndRanges[var0][3], var1, VarsAndRanges[var1][3], VarsAndRanges[var0][int(CutRegion)], VarsAndRanges[var1][int(CutRegion)], pt1, pt2, m1, m2, outputdir2)
 
-            if flag_2variable_tmva:
+            if flag_AllTjet_tmva:
                 #######################
                 #TMVA combination
-                mvatypes="Likelihood,MLP,BDT,KNN"
-            
+                #mvatypes="Likelihood,MLP,BDT,KNN"
+                mvatypes="BDT"
+ 
                 tmvacommand =  " python MyTMVAClassification.py  "
                 tmvacommand += " "+alg+" "
-                tmvacommand += " akt10"+alg+"_pt,"+alg+"_m"
-                tmvacommand += " \"pt>"+str(pt1)+",pt<"+str(pt2)+",m>"+str(m1)+",m<"+str(m2)+"\" "
-                tmvacommand += " \""+alg+"_"+var0+","+alg+"_"+var1+"\" " 
+                tmvacommand += alg+"_pt,"+alg+"_m"
+                tmvacommand += " \"pt>"+str(pt1)+",pt<"+str(pt2)+","+alg+"_m>"+str(m1)+","+alg+"_m<"+str(m2)+"\" "
+                #tmvacommand += " \"TruthRawTrim_T2jet,TruthRawTrim_T2jet_angle,TruthRawTrim_T3jet,TruthRawTrim_T3jet_angle\" "
+                tmvacommand += " \"TruthRawTrim_T2jet,TruthRawTrim_T2jet_angle,TruthRawTrim_T3jet,TruthRawTrim_T3jet_angle, TruthRawTrim_T3jet_W, TruthRawTrim_T3jet_mW\" "
                 tmvacommand += " "+mvatypes+" "
 
-                outfilename=outputdir3+"TMVAOutput__"+alg+"__"+var0+"."+var1+"__pt"+pt1+pt2+".root"
+                outfilename=outputdir3+"TMVAOutput__"+alg+"__BDTAllTjet__pt"+pt1+pt2+".root"
                 print "Running TMVA: ",tmvacommand
                 os.system(tmvacommand)
  
@@ -1365,9 +1463,10 @@ for alg in algs:
                 MakeMVAROCS(outfilename,outputdir3,mvatypes)
         
             if flag_rocoverlay:
+                mvatypes="BDT"
                 #Overlay all ROC curves relevant here
-                OverlayROCS(outputdir1,outputdir2,outputdir3,outputdir4,alg,var0,var1,pt1,pt2,m1,m2,mvatypes,VarsAndRanges)
-            
+                #OverlayROCS(outputdir1,outputdir2,outputdir3,outputdir4,alg,var0,var1,pt1,pt2,m1,m2,mvatypes,VarsAndRanges)
+                OverlayTJetROCS(outputdir1,outputdir2,outputdir3,outputdir4,alg,pt1,pt2,m1,m2,mvatypes,VarsAndRanges) 
             
             
             

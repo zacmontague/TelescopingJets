@@ -8,6 +8,8 @@ Beams:idB = 2212 ! second beam is also a proton.
 HardQCD:qg2qg = on 
 HardQCD:qq2qq = on 
 HardQCD:qqbar2gg = on 
+HardQCD:gg2gg = on
+HardQCD:gg2qqbar = on
 
 ! Modify the region of phase space in which events are generated
 PhaseSpace:pTHatMin = 200.0 

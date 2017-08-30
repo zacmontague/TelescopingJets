@@ -33,10 +33,4 @@ void CheckTruthMatch(){
   h2->Draw();
   c->cd(4);
   h3->Draw();
-
-
-
-
-
-
 }
